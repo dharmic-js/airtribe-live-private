@@ -49,7 +49,7 @@ export default function EventsPage() {
 
   return (
     <div className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      
+
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto mb-16">
         <span className="text-xs font-bold uppercase tracking-widest text-brand-400 mb-3 block">
@@ -139,3 +139,4 @@ export default function EventsPage() {
     </div>
   );
 }
+

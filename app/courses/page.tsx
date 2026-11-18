@@ -3,18 +3,18 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useApplyModal } from '@/components/ApplyModalContext';
-import { 
-  Sparkles, 
-  Code, 
-  Layers, 
-  Cpu, 
-  Palette, 
-  Search, 
-  Clock, 
-  Calendar, 
-  ArrowRight, 
-  CheckCircle2, 
-  Star 
+import {
+  Sparkles,
+  Code,
+  Layers,
+  Cpu,
+  Palette,
+  Search,
+  Clock,
+  Calendar,
+  ArrowRight,
+  CheckCircle2,
+  Star
 } from 'lucide-react';
 
 const allCourses = [
@@ -107,15 +107,15 @@ export default function CoursesPage() {
 
   const filtered = allCourses.filter((c) => {
     const matchesCategory = activeCategory === 'all' || c.category === activeCategory;
-    const matchesSearch = c.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          c.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          c.skills.some(s => s.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesSearch = c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.skills.some(s => s.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
 
   return (
     <div className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      
+
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto mb-14">
         <span className="text-xs font-bold uppercase tracking-widest text-brand-400 mb-3 block">
@@ -131,7 +131,7 @@ export default function CoursesPage() {
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-white/10">
-        
+
         {/* Category Pills */}
         <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
           {[
@@ -144,11 +144,10 @@ export default function CoursesPage() {
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
-                activeCategory === cat.id
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${activeCategory === cat.id
                   ? 'bg-brand-500 text-white shadow-md shadow-brand-500/30'
                   : 'bg-dark-850 text-gray-400 hover:text-white border border-white/5 hover:border-white/10'
-              }`}
+                }`}
             >
               {cat.label}
             </button>
@@ -255,3 +254,4 @@ export default function CoursesPage() {
     </div>
   );
 }
+

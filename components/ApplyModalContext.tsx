@@ -35,3 +35,4 @@ export const ApplyModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     </ApplyModalContext.Provider>
   );
 };
+

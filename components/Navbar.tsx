@@ -1,329 +1,239 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useApplyModal } from './ApplyModalContext';
-import { 
-  ChevronDown, 
-  Menu, 
-  X, 
-  Sparkles, 
-  Code2, 
-  Cpu, 
-  Briefcase, 
-  Layers, 
-  BookOpen, 
-  Award, 
-  Building2, 
-  Users 
-} from 'lucide-react';
+import { AirtribeButton } from './AirtribeButton';
+import { ChevronDown, X, Sparkles, Code2, Briefcase } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { openModal } = useApplyModal();
-  const [scrolled, setScrolled] = useState(false);
-  const [coursesOpen, setCoursesOpen] = useState(false);
-  const [resourcesOpen, setResourcesOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const [programsOpen, setProgramsOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-dark-950/85 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/40 py-3' 
-          : 'bg-transparent py-5'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+    <>
+      <header className="sticky top-0 z-50 w-full bg-black border-b border-[#232328]">
+        <nav className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between px-4 sm:px-8 lg:px-12">
           
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative h-8 w-32 flex items-center">
+          {/* Left: Logo */}
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+            <div className="relative h-6 w-9 flex items-center justify-center">
               <Image
-                src="/logo.svg"
-                alt="Airtribe"
-                width={140}
-                height={32}
-                className="h-7 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+                src="/airtribe-icon.svg"
+                alt="Airtribe Icon"
+                width={36}
+                height={22}
+                className="h-5 w-auto object-contain"
                 priority
               />
             </div>
-            <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-brand-500/10 text-brand-400 border border-brand-500/20">
-              LIVE COHORTS
-            </span>
+            <div className="relative h-6 w-24 flex items-center">
+              <Image
+                src="/airtribe-wordmark.svg"
+                alt="Airtribe"
+                width={96}
+                height={22}
+                className="h-5 w-auto object-contain"
+                priority
+              />
+            </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
-            
-            {/* Courses Dropdown */}
+          {/* Center: Desktop Nav */}
+          <div className="hidden md:flex items-center gap-10">
+            {/* Programs Dropdown */}
             <div 
               className="relative"
-              onMouseEnter={() => setCoursesOpen(true)}
-              onMouseLeave={() => setCoursesOpen(false)}
+              onMouseEnter={() => setProgramsOpen(true)}
+              onMouseLeave={() => setProgramsOpen(false)}
             >
-              <button className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-300 hover:text-white rounded-lg hover:bg-white/5 transition-colors">
-                <span>Cohorts</span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${coursesOpen ? 'rotate-180 text-brand-400' : ''}`} />
+              <button 
+                type="button"
+                className="flex items-center gap-1.5 text-[15px] font-normal text-white hover:text-gray-300 transition-colors py-2"
+              >
+                <span>Programs</span>
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" className={`transition-transform duration-200 ${programsOpen ? 'rotate-180' : ''}`}>
+                  <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </button>
 
-              {coursesOpen && (
-                <div className="absolute top-full left-0 w-80 p-3 mt-1 bg-dark-900/95 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 px-3 py-1.5">
-                    Flagship Programs
+              {programsOpen && (
+                <div className="absolute top-full -left-6 w-80 p-3 mt-1 bg-black border border-[#232328] shadow-2xl rounded-xl z-50">
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 px-3 py-1.5">
+                    Flagship Cohorts
                   </div>
-                  
                   <Link 
                     href="/courses/generative-ai-launchpad"
-                    className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group"
+                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-zinc-900 transition-colors group"
                   >
-                    <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400 group-hover:bg-purple-500/20">
-                      <Sparkles className="w-5 h-5" />
+                    <div className="p-2 rounded bg-purple-500/10 text-purple-400">
+                      <Sparkles className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-white group-hover:text-brand-300 flex items-center gap-1.5">
+                      <div className="text-sm font-medium text-white group-hover:text-[#a5b4fc] flex items-center gap-2">
                         GenAI Launchpad
-                        <span className="text-[10px] bg-red-500/20 text-red-300 px-1.5 py-0.2 rounded font-medium">HOT</span>
+                        <span className="text-[9px] bg-red-500/20 text-red-300 px-1 py-0.5 rounded">NEW</span>
                       </div>
-                      <p className="text-xs text-gray-400 mt-0.5">LLMs, LangChain, RAG & Agents</p>
+                      <p className="text-xs text-zinc-400 mt-0.5">Autonomous agents & RAG</p>
                     </div>
                   </Link>
 
                   <Link 
                     href="/courses/backend-engineering-launchpad"
-                    className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group"
+                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-zinc-900 transition-colors group"
                   >
-                    <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20">
-                      <Code2 className="w-5 h-5" />
+                    <div className="p-2 rounded bg-blue-500/10 text-blue-400">
+                      <Code2 className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-white group-hover:text-brand-300">
+                      <div className="text-sm font-medium text-white group-hover:text-[#a5b4fc]">
                         AI-First Software Engg
                       </div>
-                      <p className="text-xs text-gray-400 mt-0.5">Distributed backends & microservices</p>
+                      <p className="text-xs text-zinc-400 mt-0.5">Distributed systems at scale</p>
                     </div>
                   </Link>
 
                   <Link 
                     href="/courses/product-management-launchpad"
-                    className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group"
+                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-zinc-900 transition-colors group"
                   >
-                    <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20">
-                      <Briefcase className="w-5 h-5" />
+                    <div className="p-2 rounded bg-emerald-500/10 text-emerald-400">
+                      <Briefcase className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-white group-hover:text-brand-300">
+                      <div className="text-sm font-medium text-white group-hover:text-[#a5b4fc]">
                         AI-First Product Mgmt
                       </div>
-                      <p className="text-xs text-gray-400 mt-0.5">Product strategy, AI PRDs & metrics</p>
+                      <p className="text-xs text-zinc-400 mt-0.5">Product strategy & AI PRDs</p>
                     </div>
                   </Link>
 
-                  <div className="pt-2 border-t border-white/5 mt-1">
-                    <Link 
-                      href="/courses"
-                      className="block text-center text-xs font-medium text-brand-400 hover:text-brand-300 py-1"
-                    >
-                      View All 8+ Cohorts & Tracks &rarr;
+                  <div className="pt-2 border-t border-[#232328] mt-1">
+                    <Link href="/courses" className="block text-center text-xs text-zinc-400 hover:text-white py-1">
+                      View All Programs &rarr;
                     </Link>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Free Resources Dropdown */}
-            <div 
-              className="relative"
-              onMouseEnter={() => setResourcesOpen(true)}
-              onMouseLeave={() => setResourcesOpen(false)}
-            >
-              <button className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-300 hover:text-white rounded-lg hover:bg-white/5 transition-colors">
-                <span>Free Resources</span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${resourcesOpen ? 'rotate-180 text-brand-400' : ''}`} />
-              </button>
+            <Link href="/reviews" className="text-[15px] font-normal text-white hover:text-gray-300 transition-colors">
+              Reviews
+            </Link>
 
-              {resourcesOpen && (
-                <div className="absolute top-full left-0 w-72 p-3 mt-1 bg-dark-900/95 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
-                  <Link 
-                    href="/upskill-for-free"
-                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/5 text-sm text-gray-200 hover:text-white transition-colors"
-                  >
-                    <BookOpen className="w-4 h-4 text-brand-400" />
-                    <span>DSA 450 Sheet & AI Prompts</span>
-                  </Link>
-                  <Link 
-                    href="/project-showcase"
-                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/5 text-sm text-gray-200 hover:text-white transition-colors"
-                  >
-                    <Layers className="w-4 h-4 text-emerald-400" />
-                    <span>Cohort Projects Showcase</span>
-                  </Link>
-                  <Link 
-                    href="/events"
-                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/5 text-sm text-gray-200 hover:text-white transition-colors"
-                  >
-                    <Users className="w-4 h-4 text-purple-400" />
-                    <span>Live Masterclasses & AMAs</span>
-                  </Link>
+            <Link href="/business" className="text-[15px] font-normal text-white hover:text-gray-300 transition-colors">
+              Business
+            </Link>
+          </div>
+
+          {/* Right: Sign Up Button + Hamburger */}
+          <div className="flex items-center gap-4 sm:gap-6">
+            <AirtribeButton
+              text="Sign up"
+              onClick={() => openModal()}
+            />
+
+            <button
+              type="button"
+              onClick={() => setDrawerOpen(!drawerOpen)}
+              aria-label="Toggle menu"
+              className="flex items-center justify-center p-1 text-white hover:opacity-80 transition-opacity"
+            >
+              <Image
+                src="/menu.svg"
+                alt="Menu"
+                width={26}
+                height={20}
+                className="h-5 w-auto"
+              />
+            </button>
+          </div>
+
+        </nav>
+      </header>
+
+      {/* Slide-over Drawer Menu */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm">
+          <div className="w-full max-w-sm bg-black border-l border-[#232328] h-full p-6 sm:p-8 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-200">
+            <div>
+              <div className="flex items-center justify-between pb-6 border-b border-[#232328] mb-8">
+                <span className="text-2xl font-light text-white tracking-tight">Menu</span>
+                <button
+                  onClick={() => setDrawerOpen(false)}
+                  className="p-2 text-zinc-400 hover:text-white"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <div className="text-xs uppercase tracking-wider text-zinc-500 font-semibold mb-3">
+                    Programs
+                  </div>
+                  <div className="space-y-2.5 pl-2 text-sm">
+                    <Link href="/courses/generative-ai-launchpad" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      The GenAI Launchpad
+                    </Link>
+                    <Link href="/courses/backend-engineering-launchpad" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      AI-First Software Engineering
+                    </Link>
+                    <Link href="/courses/product-management-launchpad" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      AI-First Product Management
+                    </Link>
+                    <Link href="/courses" onClick={() => setDrawerOpen(false)} className="block text-[#a5b4fc] font-medium pt-1">
+                      View all cohorts &rarr;
+                    </Link>
+                  </div>
                 </div>
-              )}
+
+                <div className="pt-4 border-t border-[#232328]">
+                  <div className="text-xs uppercase tracking-wider text-zinc-500 font-semibold mb-3">
+                    Resources & Company
+                  </div>
+                  <div className="space-y-2.5 pl-2 text-sm">
+                    <Link href="/reviews" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      Wall of Love (Reviews)
+                    </Link>
+                    <Link href="/business" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      For Business (Hire Talent)
+                    </Link>
+                    <Link href="/upskill-for-free" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      Free Resources & DSA
+                    </Link>
+                    <Link href="/project-showcase" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      Capstone Projects
+                    </Link>
+                    <Link href="/events" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      Live Events & AMAs
+                    </Link>
+                    <Link href="/about-us" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      About Us
+                    </Link>
+                    <Link href="/contact-us" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      Contact & FAQ
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <Link 
-              href="/reviews" 
-              className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
-            >
-              Wall of Love
-            </Link>
-
-            <Link 
-              href="/business" 
-              className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
-            >
-              For Business
-            </Link>
-
-            <Link 
-              href="/about-us" 
-              className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
-            >
-              About
-            </Link>
-          </nav>
-
-          {/* Desktop Right CTAs */}
-          <div className="hidden md:flex items-center gap-3">
-            <Link 
-              href="/contact-us"
-              className="px-3.5 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
-            >
-              Contact
-            </Link>
-            
-            <button
-              onClick={() => openModal()}
-              className="px-5 py-2 rounded-xl text-sm font-semibold text-white bg-brand-500 hover:bg-brand-600 transition-all duration-200 shadow-md shadow-brand-500/25 active:scale-95"
-            >
-              Apply for Cohort
-            </button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center gap-2">
-            <button
-              onClick={() => openModal()}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-brand-500"
-            >
-              Apply
-            </button>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-
-        </div>
-      </div>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-dark-900 border-b border-white/10 px-4 pt-3 pb-6 space-y-3">
-          <div className="font-semibold text-xs text-gray-400 uppercase tracking-wider px-2">
-            Cohorts
-          </div>
-          <Link 
-            href="/courses/generative-ai-launchpad" 
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm rounded-lg hover:bg-white/5 text-gray-200"
-          >
-            ⚡ GenAI Launchpad
-          </Link>
-          <Link 
-            href="/courses/backend-engineering-launchpad" 
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm rounded-lg hover:bg-white/5 text-gray-200"
-          >
-            💻 AI-First Software Engineering
-          </Link>
-          <Link 
-            href="/courses/product-management-launchpad" 
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm rounded-lg hover:bg-white/5 text-gray-200"
-          >
-            📊 AI-First Product Management
-          </Link>
-          <Link 
-            href="/courses" 
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 text-sm rounded-lg text-brand-400 font-medium"
-          >
-            View All Courses &rarr;
-          </Link>
-
-          <div className="border-t border-white/10 pt-3 space-y-1">
-            <Link 
-              href="/reviews" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm rounded-lg hover:bg-white/5 text-gray-200"
-            >
-              Wall of Love (Reviews)
-            </Link>
-            <Link 
-              href="/business" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm rounded-lg hover:bg-white/5 text-gray-200"
-            >
-              For Business (Hire Talent)
-            </Link>
-            <Link 
-              href="/upskill-for-free" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm rounded-lg hover:bg-white/5 text-gray-200"
-            >
-              Free Resources & DSA
-            </Link>
-            <Link 
-              href="/project-showcase" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm rounded-lg hover:bg-white/5 text-gray-200"
-            >
-              Project Showcase
-            </Link>
-            <Link 
-              href="/events" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm rounded-lg hover:bg-white/5 text-gray-200"
-            >
-              Live Events & AMAs
-            </Link>
-            <Link 
-              href="/about-us" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm rounded-lg hover:bg-white/5 text-gray-200"
-            >
-              About Us
-            </Link>
-            <Link 
-              href="/contact-us" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 text-sm rounded-lg hover:bg-white/5 text-gray-200"
-            >
-              Contact Us
-            </Link>
+            <div className="pt-6 border-t border-[#232328]">
+              <AirtribeButton
+                text="Apply for Batch"
+                onClick={() => {
+                  setDrawerOpen(false);
+                  openModal();
+                }}
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 };
