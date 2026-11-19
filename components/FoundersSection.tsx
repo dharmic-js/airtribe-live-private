@@ -72,18 +72,19 @@ export default function FoundersSection() {
   return (
     <>
       {/* SECTION 8: FOUNDERS' NOTE */}
-      <section className="bg-black w-full border-t border-[#232328] py-28 px-4 md:px-8 relative overflow-hidden">
-        {/* Subtle grid background */}
-        <div
-          className="absolute inset-0 opacity-[0.03] pointer-events-none"
-          style={{
-            backgroundImage:
-              'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
-        />
+      <section className="bg-black w-full border-t border-[#232328]">
+        <div className="max-w-[1440px] mx-auto border-x border-[#232328] py-24 sm:py-28 px-4 sm:px-8 relative overflow-hidden">
+          {/* Subtle grid background */}
+          <div
+            className="absolute inset-0 opacity-[0.03] pointer-events-none"
+            style={{
+              backgroundImage:
+                'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+              backgroundSize: '40px 40px',
+            }}
+          />
 
-        <div className="max-w-3xl mx-auto relative z-10">
+          <div className="max-w-3xl mx-auto relative z-10">
           {/* Top Label */}
           <div className="flex items-center gap-2 mb-6">
             <span className="font-mono text-xs uppercase tracking-widest text-zinc-500 bg-[#121216] border border-[#232328] px-2.5 py-1 rounded">
@@ -139,11 +140,12 @@ export default function FoundersSection() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* SECTION 9: BEHIND AIRTRIBE (FOUNDERS & INVESTORS) */}
-      <section className="bg-black w-full border-t border-[#232328] py-24 px-4 md:px-8 relative">
-        <div className="max-w-[1360px] mx-auto">
+      <section className="bg-black w-full border-t border-[#232328]">
+        <div className="max-w-[1440px] mx-auto border-x border-[#232328] py-24 sm:py-28 px-4 sm:px-8 relative">
           {/* Header */}
           <div className="text-center mb-16">
             <h2 className="text-[36px] md:text-[52px] font-bold tracking-tight text-white leading-tight">

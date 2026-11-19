@@ -46,15 +46,16 @@ export default function HomePage() {
       <FoundersSection />
 
       {/* 10. FINAL CALL TO ACTION BANNER */}
-      <section className="w-full bg-black border-t border-[#232328] py-24 sm:py-32 text-center relative overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at center, #a78bfa 0%, transparent 70%)',
-          }}
-        />
-        <div className="max-w-3xl mx-auto px-6 relative z-10">
+      <section className="w-full bg-black border-t border-[#232328]">
+        <div className="max-w-[1440px] mx-auto border-x border-[#232328] py-24 sm:py-32 text-center relative overflow-hidden">
+          <div
+            className="absolute inset-0 opacity-[0.04] pointer-events-none"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle at center, #a78bfa 0%, transparent 70%)',
+            }}
+          />
+          <div className="max-w-3xl mx-auto px-6 relative z-10">
           <span className="font-mono text-xs uppercase tracking-widest text-[#a78bfa] bg-[#1a1728] border border-[#3b355c] px-3 py-1 rounded-full mb-6 inline-block">
             Next Cohorts Starting Soon
           </span>
@@ -76,7 +77,8 @@ export default function HomePage() {
             />
           </div>
         </div>
-      </section>
+      </div>
+    </section>
     </div>
   );
 }

@@ -128,7 +128,7 @@ export const TracksSection: React.FC = () => {
 
   // Staggered card translations:
   // Cards start completely below the viewport
-  const cardStartTravel = viewportHeight * 0.95;
+  const cardStartTravel = viewportHeight * 1.05;
 
   // Card 1 (Left): enters first
   const card1T = clamp((scrollProgress - 0.08) / 0.54, 0, 1);
@@ -158,17 +158,15 @@ export const TracksSection: React.FC = () => {
             : 'w-full bg-black border-b border-[#232328]'
         }`}
       >
-        {/* Background is pure solid black with no grid lines behind the text */}
-
-        {/* Content Wrapper */}
+        {/* Continuous Left and Right Border Container: max-w-[1440px] mx-auto border-x border-[#232328] */}
         <div
-          className={`relative z-10 max-w-[1440px] mx-auto w-full ${
+          className={`relative z-10 max-w-[1440px] mx-auto w-full border-x border-[#232328] ${
             isDesktop
               ? 'h-full flex flex-col justify-between px-6 sm:px-10 lg:px-12 pt-14 sm:pt-16 pb-8 sm:pb-10'
               : 'px-4 sm:px-8'
           }`}
         >
-          {/* Section Header: Starts full-page centered, then moves up */}
+          {/* Section Header: Starts full-page centered, then smoothly moves up */}
           <div
             className={`w-full flex justify-center ${
               isDesktop ? 'will-change-transform' : 'mb-14 sm:mb-18'
@@ -186,14 +184,17 @@ export const TracksSection: React.FC = () => {
             </h2>
           </div>
 
-          {/* Staggered Rising Cards Container */}
-          <div className="w-full max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-0 border border-[#232328] bg-black shadow-2xl">
+          {/* Staggered Rising Cards:
+              NO outer bounding box border! Only the cards themselves carry borders,
+              ensuring zero empty outline box appears before the cards scroll up.
+          */}
+          <div className="w-full max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-0 overflow-hidden">
             {tracksData.map((track, idx) => (
               <div
                 key={track.title}
-                className={`p-5 sm:p-7 flex flex-col justify-between bg-black ${
-                  idx < 2 ? 'lg:border-r border-[#232328]' : ''
-                } border-b lg:border-b-0 border-[#232328] ${
+                className={`p-5 sm:p-7 flex flex-col justify-between bg-[#0a0a0c] border border-[#232328] ${
+                  idx > 0 ? 'lg:-ml-[1px]' : ''
+                } shadow-2xl ${
                   isDesktop ? 'will-change-transform' : ''
                 }`}
                 style={{

@@ -39,4 +39,5 @@ next-env.d.ts
 # Local raw media bundles
 media_copy/
 airtribe_extracted/
+scratch/
 *.py

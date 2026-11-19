@@ -44,8 +44,8 @@ const stories = [
 
 export const StoriesSection: React.FC = () => {
   return (
-    <section className="w-full bg-black border-b border-[#232328] py-20 sm:py-28">
-      <div className="max-w-[1440px] mx-auto border-x border-[#232328]">
+    <section className="w-full bg-black border-b border-[#232328]">
+      <div className="max-w-[1440px] mx-auto border-x border-[#232328] py-20 sm:py-28">
         
         {/* Section Header */}
         <div className="text-center px-4 sm:px-8 mb-16 sm:mb-20">

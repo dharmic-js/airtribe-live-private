@@ -142,8 +142,8 @@ export default function JourneysSection() {
   const [filter, setFilter] = useState<'all' | 'engineering' | 'product'>('all');
 
   return (
-    <section className="bg-black w-full border-t border-[#232328] py-20 px-4 md:px-8 relative overflow-hidden">
-      <div className="max-w-[1360px] mx-auto flex flex-col items-center">
+    <section className="bg-black w-full border-t border-[#232328]">
+      <div className="max-w-[1440px] mx-auto border-x border-[#232328] py-20 sm:py-28 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center">
         {/* Header */}
         <div className="text-center mb-14">
           <h2 className="text-[36px] md:text-[52px] font-bold tracking-tight text-white leading-tight">
