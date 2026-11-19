@@ -158,12 +158,7 @@ export const TracksSection: React.FC = () => {
             : 'w-full bg-black border-b border-[#232328]'
         }`}
       >
-        {/* Subtle Architectural Background Grid Lines */}
-        <div className="absolute inset-0 pointer-events-none max-w-[1440px] mx-auto border-x border-[#232328] grid grid-cols-1 lg:grid-cols-3 z-0">
-          <div className="hidden lg:block border-r border-[#232328]/50 h-full" />
-          <div className="hidden lg:block border-r border-[#232328]/50 h-full" />
-          <div className="h-full" />
-        </div>
+        {/* Background is pure solid black with no grid lines behind the text */}
 
         {/* Content Wrapper */}
         <div
