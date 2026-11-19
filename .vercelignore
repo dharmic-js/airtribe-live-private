@@ -1,0 +1,7 @@
+media_copy
+airtribe_extracted
+*.mp4.bak
+.git
+.next
+node_modules
+*.py
