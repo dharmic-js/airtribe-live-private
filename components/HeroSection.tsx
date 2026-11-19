@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+import React, { useState } from 'react';
 import { useApplyModal } from './ApplyModalContext';
 import { AirtribeButton } from './AirtribeButton';
 
@@ -22,21 +21,27 @@ export const HeroSection: React.FC = () => {
   const { openModal } = useApplyModal();
   const [currentEra, setCurrentEra] = useState('1984 / Macintosh');
 
+  const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement>) => {
+    const t = e.currentTarget.currentTime;
+    if (t < 7) {
+      setCurrentEra('1984 / Macintosh');
+    } else if (t < 14) {
+      setCurrentEra('1995 / World Wide Web');
+    } else if (t < 21) {
+      setCurrentEra('2007 / iPhone');
+    } else if (t < 28) {
+      setCurrentEra('2023 / Generative AI');
+    } else {
+      setCurrentEra('2024 / Starship');
+    }
+  };
+
   return (
     <section className="w-full bg-black border-b border-[#232328]">
       <div className="max-w-[1440px] mx-auto border-x border-[#232328]">
 
         {/* Top Headline Block */}
         <div className="relative pt-12 sm:pt-16 lg:pt-20 pb-10 sm:pb-14 px-6 sm:px-12 lg:px-14">
-
-          {/* Era Tag (Top Right) */}
-          <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-10">
-            <div className="border border-[#232328] bg-[#121214] text-zinc-400 text-xs px-3.5 py-1.5 font-normal tracking-wide flex items-center gap-1.5">
-              <span>{currentEra}</span>
-            </div>
-          </div>
-
-          {/* Large Headline */}
           <h1 className="flex flex-col items-start text-[44px] sm:text-[72px] lg:text-[96px] leading-[0.98] tracking-[-0.04em] max-w-5xl">
             <span className="font-normal text-white">
               Every era gets its{' '}
@@ -46,14 +51,20 @@ export const HeroSection: React.FC = () => {
               Now is your turn
             </span>
           </h1>
-
         </div>
 
-        {/* Split Grid Box: Left (Text & CTA) + Right (Retro ASCII Macintosh) */}
-        <div className="border-t border-[#232328] grid grid-cols-1 md:grid-cols-12 min-h-[380px]">
+        {/* Split Grid Box: Left (Text & CTA) + Right (Retro ASCII Evolution Video) */}
+        <div className="relative border-t border-[#232328] grid grid-cols-1 md:grid-cols-12 min-h-[360px] sm:min-h-[420px]">
+
+          {/* Evolution Timeline Badge: Positioned right on top of the video's top-right border */}
+          <div className="absolute right-0 bottom-full z-20 flex h-9 sm:h-10 items-center px-4 bg-[#18181c] border border-[#232328] border-r-0 border-b-0">
+            <span className="text-zinc-300 text-xs sm:text-[13px] font-mono tracking-wider">
+              {currentEra}
+            </span>
+          </div>
 
           {/* Left Cell */}
-          <div className="md:col-span-5 border-b md:border-b-0 md:border-r border-[#232328] p-8 sm:p-12 lg:p-14 flex flex-col justify-between">
+          <div className="md:col-span-5 border-b md:border-b-0 md:border-r border-[#232328] p-8 sm:p-12 lg:p-14 flex flex-col justify-between bg-black z-10">
             <p className="text-zinc-300 text-[16px] sm:text-[18px] leading-[1.6] max-w-sm font-normal">
               This era runs on AI. Learn to build with it from practitioners who do it every day, and a tribe that builds with you.
             </p>
@@ -70,28 +81,19 @@ export const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Cell: ASCII Macintosh Computer */}
-          <div className="md:col-span-7 relative bg-black flex items-center justify-center overflow-hidden min-h-[320px] sm:min-h-[380px]">
-            {/* The looping ASCII computer video */}
+          {/* Right Cell: Clean ASCII Evolution Video with NO extra overlay */}
+          <div className="md:col-span-7 relative bg-black flex items-center justify-center overflow-hidden min-h-[320px] sm:min-h-[420px]">
             <video
               autoPlay
               muted
               loop
               playsInline
-              poster="/macintosh-1984.png"
-              className="absolute inset-0 w-full h-full object-cover opacity-90"
+              onTimeUpdate={handleTimeUpdate}
+              className="w-full h-full object-cover object-center block"
             >
+              <source src="/ascii-1x.1a3b7ac9.mp4" type="video/mp4" />
               <source src="/hero-ascii.mp4" type="video/mp4" />
             </video>
-
-            {/* Static fallback graphic overlay */}
-            <div className="relative z-10 pointer-events-none p-4 max-w-md">
-              <img
-                src="/macintosh-1984.png"
-                alt="1984 Macintosh with hello screen"
-                className="w-auto max-h-[300px] object-contain mx-auto"
-              />
-            </div>
           </div>
 
         </div>
@@ -160,4 +162,3 @@ export const HeroSection: React.FC = () => {
     </section>
   );
 };
-
