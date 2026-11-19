@@ -279,7 +279,6 @@ export const AirtribeWaySection: React.FC = () => {
     }
     glRef.current = gl;
 
-    // Compile Vertex & Fragment shaders
     const createShader = (type: number, src: string) => {
       const s = gl.createShader(type);
       if (!s) throw new Error('Failed to create shader');
@@ -364,13 +363,14 @@ export const AirtribeWaySection: React.FC = () => {
     const p = scrollProgress;
 
     // Slot computation:
-    // Sized so that hand spans across the whole container!
-    // Arm originates top-left (passing behind the card) and lower hand is at bottom-right
+    // Placed so upper arm originates top-center and passes right behind the right half of the card (left: 90px, width: 540px)
+    // and lower hand enters from bottom-right, exactly matching the alignment reference!
     const A = 880 / 1604;
-    const fh = stageH * 1.36;
+    const isMobile = stageW < 1024;
+    const fh = isMobile ? stageH * 1.3 : stageH * 1.45;
     const fw = fh * A;
-    const slotX = (stageW - fw) * 0.35; // Positioned behind left card & extending right
-    const slotY = -stageH * 0.08;
+    const slotX = isMobile ? (stageW - fw) * 0.5 : (stageW > 1200 ? 430 : (stageW - fw) * 0.45);
+    const slotY = -stageH * 0.12;
 
     gl.uniform4f(locs.uSlot, slotX, slotY, fw, fh);
     gl.uniform2f(locs.uFeather, 150, 0);
@@ -418,11 +418,7 @@ export const AirtribeWaySection: React.FC = () => {
     gl.uniform1f(locs.uWipe, wipe);
     gl.uniform1f(locs.uHasInk, videoUploadedRef.current ? 1.0 : 0.0);
 
-    // Dither & Outline Silhouette parameters:
-    // Cell size: 1.5 device pixels
-    // Pattern 0: Bayer 4x4 dither
-    // Mix 0.85: 85% dither quantization -> crisp pixelated outlined look!
-    // Fill 0.45: Silhouette outline
+    // Dither & Outline Silhouette parameters
     gl.uniform1f(locs.uCell, Math.max(1, Math.round(1.5 * dpr)));
     gl.uniform1f(locs.uPattern, 0.0);
     gl.uniform1f(locs.uMix, 0.85);
@@ -431,19 +427,16 @@ export const AirtribeWaySection: React.FC = () => {
     gl.uniform1f(locs.uEdge, 0.5);
 
     // Minimalistic 45° background pixel dot lattice
-    gl.uniform4f(locs.uDot, 0.42, 0.75, 7.0, 0.42);
+    gl.uniform4f(locs.uDot, 0.40, 0.75, 7.0, 0.40);
     gl.uniform2f(locs.uField, 55.0, 0.0);
     gl.uniform1f(locs.uStageFade, 40.0);
 
-    // CORNER-TO-CORNER REACHING MOVEMENT:
-    // Upper hand starts deep in top-left corner (-X, -Y)
-    // Lower hand starts deep in bottom-right corner (+X, +Y)
-    // As progress goes from 0 to 0.22, l drops from 340px to 0, gliding hands to center!
+    // Corner-to-corner reaching movement
     const reachProgress = clamp(p / 0.22, 0, 1);
     const l = (1 - smoothstepEase(reachProgress)) * 340.0;
     gl.uniform4f(locs.uReach, -0.629 * l, -0.777 * l, 0.992 * l, 0.124 * l);
 
-    // Upper arm dissolution along its length
+    // Upper arm fade along length
     const armProgress = clamp((p - 0.2) / 0.06, 0, 1);
     const armWhole = 1 - smoothstepEase(armProgress);
     gl.uniform3f(locs.uArm, armWhole, 760 - 580, 460);
@@ -507,7 +500,7 @@ export const AirtribeWaySection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Video scrub loop (with seek-locking to prevent decode thrashing / stutter loops)
+  // Video scrub loop
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -542,7 +535,7 @@ export const AirtribeWaySection: React.FC = () => {
     };
   }, [uploadVideoTexture]);
 
-  // Scroll handler: computes progress and maps to video timestamps
+  // Scroll handler
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -555,7 +548,6 @@ export const AirtribeWaySection: React.FC = () => {
       const progress = clamp(currentScroll / scrollableDist, 0, 1);
       setScrollProgress(progress);
 
-      // Map to video time (starts at 2.8s)
       targetTimeRef.current = getTargetVideoTime(progress);
     };
 
@@ -569,7 +561,7 @@ export const AirtribeWaySection: React.FC = () => {
     renderWebGL();
   }, [scrollProgress, renderWebGL]);
 
-  // Active stage determination (for indicator dots)
+  // Active stage determination
   let activeIdx = 0;
   if (scrollProgress >= 0.70) {
     activeIdx = 2;
@@ -577,8 +569,7 @@ export const AirtribeWaySection: React.FC = () => {
     activeIdx = 1;
   }
 
-  // Cards Float-In from Below Completely Out of Frame:
-  // Card 1: Settled at start; tucks upward as Card 2 arrives
+  // Cards Float-In from Below Completely Out of Frame
   let card1Y = 0;
   let card1Scale = 1;
   let card1Opacity = 1;
@@ -603,7 +594,6 @@ export const AirtribeWaySection: React.FC = () => {
     card1Z = 10;
   }
 
-  // Card 2: Starts completely out of frame below (+100vh / 650px); floats up in parallel as color shifts to Orange
   let card2Y = 650;
   let card2Scale = 1;
   let card2Opacity = 0;
@@ -630,7 +620,6 @@ export const AirtribeWaySection: React.FC = () => {
     card2Z = 25;
   }
 
-  // Card 3: Starts completely out of frame below (+100vh / 650px); floats up in parallel as color shifts to Blue
   let card3Y = 650;
   let card3Scale = 1;
   let card3Opacity = 0;
@@ -669,146 +658,129 @@ export const AirtribeWaySection: React.FC = () => {
         className="hidden"
       />
 
-      {/* Pinned Scroll Track */}
+      {/* STATIC HEADING ABOVE TRACK:
+          In the original Airtribe site, the heading scrolls naturally in document flow above the track.
+          Once scrolled by, the sticky stage locks in with the clean card and pixelated hands!
+      */}
+      <div
+        ref={headerRef}
+        className="w-full pt-20 sm:pt-28 pb-14 sm:pb-16 px-6 sm:px-12 text-center relative z-20 bg-[#ffffff] border-b border-[#e8e8ec]"
+      >
+        <div className="max-w-[1440px] mx-auto border-x border-transparent">
+          <h2 className="text-[44px] sm:text-[60px] lg:text-[76px] font-normal leading-[1.0] tracking-[-0.04em] text-black flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
+            <span
+              className={`inline-block transition-all duration-700 ease-out transform ${
+                headerInView
+                  ? 'opacity-100 translate-x-0 blur-0'
+                  : 'opacity-0 -translate-x-12 blur-sm'
+              }`}
+            >
+              The
+            </span>
+
+            <span
+              className={`inline-block transition-all duration-700 ease-out transform font-editorial italic text-zinc-900 ${
+                headerInView
+                  ? 'opacity-100 translate-x-0 blur-0'
+                  : 'opacity-0 -translate-x-12 blur-sm'
+              }`}
+              style={{ transitionDelay: '140ms' }}
+            >
+              Airtribe
+            </span>
+
+            <span
+              className={`inline-block transition-all duration-700 ease-out transform ${
+                headerInView
+                  ? 'opacity-100 translate-x-0 blur-0'
+                  : 'opacity-0 -translate-x-12 blur-sm'
+              }`}
+              style={{ transitionDelay: '280ms' }}
+            >
+              way
+            </span>
+          </h2>
+        </div>
+      </div>
+
+      {/* PINNED SCROLL TRACK:
+          Locks into place with the full-bleed WebGL canvas and card alignment matching reference image
+      */}
       <div
         ref={containerRef}
         className="relative w-full"
-        style={{ height: '380vh' }}
+        style={{ height: '420vh' }}
       >
-        {/* Sticky Viewport Frame with continuous left & right vertical border: max-w-[1440px] mx-auto border-x border-[#232328] */}
         <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#ffffff] border-b border-[#d8d8dc]">
           
-          <div className="max-w-[1440px] mx-auto w-full h-full border-x border-[#232328] relative flex flex-col justify-between overflow-hidden">
+          <div className="max-w-[1440px] mx-auto w-full h-full border-x border-[#232328] relative overflow-hidden">
             
             {/* FULL-BLEED WEBGL2 DITHER CANVAS:
-                - Renders authentic pixelated outlined hands with dither stipple patterns
-                - Hands move corner-to-corner (Top-Left to Bottom-Right) without distortion
-                - Minimalistic 45° pixelated dot lattice background that changes color with each stage
-                - Abstract wavy lines background completely removed!
+                Renders authentic pixelated outlined hands with dither stipple patterns,
+                corner-to-corner movement, and minimalistic dot lattice background!
             */}
             <canvas
               ref={canvasRef}
               className="absolute inset-0 w-full h-full pointer-events-none z-10"
             />
 
-            {/* "The Airtribe way" Heading:
-                Placed lower down closer to the cards
+            {/* CARD STACK CONTAINER:
+                Positioned at left: 90px (on desktop), vertically centered, with exact 540x380 proportions!
+                The green upper arm in the canvas originates top-center and passes right behind the right half
+                of the card, emerging into the fingertips on the right!
             */}
-            <div
-              ref={headerRef}
-              className="w-full pt-14 sm:pt-18 pb-2 px-6 sm:px-12 text-center relative z-20 pointer-events-none"
-            >
-              <h2 className="text-[38px] sm:text-[52px] lg:text-[66px] font-normal leading-[1.0] tracking-[-0.04em] text-black flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
-                {/* 'The' */}
-                <span
-                  className={`inline-block transition-all duration-700 ease-out transform ${
-                    headerInView
-                      ? 'opacity-100 translate-x-0 blur-0'
-                      : 'opacity-0 -translate-x-12 blur-sm'
-                  }`}
-                >
-                  The
-                </span>
-
-                {/* 'Airtribe' */}
-                <span
-                  className={`inline-block transition-all duration-700 ease-out transform font-editorial italic text-zinc-900 ${
-                    headerInView
-                      ? 'opacity-100 translate-x-0 blur-0'
-                      : 'opacity-0 -translate-x-12 blur-sm'
-                  }`}
-                  style={{ transitionDelay: '140ms' }}
-                >
-                  Airtribe
-                </span>
-
-                {/* 'way' */}
-                <span
-                  className={`inline-block transition-all duration-700 ease-out transform ${
-                    headerInView
-                      ? 'opacity-100 translate-x-0 blur-0'
-                      : 'opacity-0 -translate-x-12 blur-sm'
-                  }`}
-                  style={{ transitionDelay: '280ms' }}
-                >
-                  way
-                </span>
-              </h2>
-            </div>
-
-            {/* Card Stack Container:
-                Cards sit on z-20 on top of the hands canvas.
-                Upper arm passes behind the card cleanly into the top-left corner.
-                Each card floats up in parallel from out of frame below as colors transition!
-            */}
-            <div className="relative z-20 w-full flex-1 px-6 sm:px-10 lg:px-16 flex items-center justify-start pb-8">
+            <div className="absolute inset-0 pointer-events-none z-20 flex items-center px-4 sm:px-8 lg:px-[90px]">
               
-              <div className="w-full max-w-[440px] sm:max-w-[480px] relative">
-                <div className="relative w-full h-[400px] sm:h-[430px]">
-                  {stages.map((stage, idx) => {
-                    const { y, scale, opacity, z } = cardTransforms[idx];
+              <div className="w-full max-w-[540px] h-[380px] relative pointer-events-auto">
+                {stages.map((stage, idx) => {
+                  const { y, scale, opacity, z } = cardTransforms[idx];
 
-                    return (
-                      <div
-                        key={stage.num}
-                        className="absolute inset-0 shadow-2xl p-7 sm:p-9 flex flex-col justify-between text-white overflow-hidden will-change-transform"
-                        style={{
-                          backgroundColor: stage.bgColor,
-                          transform: `translate3d(0, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`,
-                          zIndex: z,
-                          opacity: opacity,
-                          pointerEvents: opacity > 0.5 ? 'auto' : 'none',
-                          transition: 'opacity 0.2s ease-out, transform 0.08s linear',
-                        }}
-                      >
-                        {/* Card Surface Dither Texture */}
-                        <div className="absolute inset-0 pointer-events-none opacity-25 mix-blend-luminosity">
-                          <Image
-                            src={stage.texture}
-                            alt=""
-                            fill
-                            className="object-cover"
-                            unoptimized
-                          />
-                        </div>
-
-                        {/* Top Content: Number + Body */}
-                        <div className="relative z-10">
-                          <span className="text-[32px] sm:text-[36px] font-bold block mb-4 tracking-wider leading-none">
-                            {stage.num}
-                          </span>
-                          <p className="text-white/95 text-sm sm:text-base leading-relaxed max-w-sm font-normal">
-                            {stage.body}
-                          </p>
-                        </div>
-
-                        {/* Bottom Title: Dual Typography */}
-                        <div className="relative z-10 pt-10">
-                          <h3 className="text-[32px] sm:text-[40px] font-medium leading-[1.08] tracking-tight">
-                            {stage.title1}{' '}
-                            <span className="font-editorial italic font-normal block mt-1">
-                              {stage.title2}
-                            </span>
-                          </h3>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Progress Indicators */}
-                <div className="flex items-center gap-2 mt-6 justify-center sm:justify-start">
-                  {stages.map((_, i) => (
+                  return (
                     <div
-                      key={i}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        i === activeIdx
-                          ? 'w-8 bg-zinc-800'
-                          : 'w-2 bg-zinc-300'
-                      }`}
-                    />
-                  ))}
-                </div>
+                      key={stage.num}
+                      className="absolute inset-0 shadow-2xl p-7 sm:p-9 flex flex-col justify-between text-white overflow-hidden will-change-transform"
+                      style={{
+                        backgroundColor: stage.bgColor,
+                        transform: `translate3d(0, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`,
+                        zIndex: z,
+                        opacity: opacity,
+                        pointerEvents: opacity > 0.5 ? 'auto' : 'none',
+                        transition: 'opacity 0.2s ease-out, transform 0.08s linear',
+                      }}
+                    >
+                      {/* Card Surface Dither Texture */}
+                      <div className="absolute inset-0 pointer-events-none opacity-25 mix-blend-luminosity">
+                        <Image
+                          src={stage.texture}
+                          alt=""
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      </div>
+
+                      {/* Top Content: Number + Body */}
+                      <div className="relative z-10">
+                        <span className="text-[32px] sm:text-[36px] font-bold block mb-3.5 tracking-wider leading-none">
+                          {stage.num}
+                        </span>
+                        <p className="text-white/95 text-[16px] sm:text-[18px] leading-[1.38] max-w-[460px] font-medium">
+                          {stage.body}
+                        </p>
+                      </div>
+
+                      {/* Bottom Title: Exact Dual Typography Matching Reference Screenshot */}
+                      <div className="relative z-10 pt-6">
+                        <h3 className="text-[46px] sm:text-[58px] lg:text-[64px] font-medium leading-[0.98] tracking-tight">
+                          {stage.title1}
+                          <span className="font-editorial italic font-normal block mt-0.5 text-[48px] sm:text-[60px] lg:text-[66px]">
+                            {stage.title2}
+                          </span>
+                        </h3>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
             </div>
