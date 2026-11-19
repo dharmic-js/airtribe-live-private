@@ -39,16 +39,15 @@ const stages: CardStage[] = [
   },
 ];
 
-// Mathematical easing
+// Easing and clamp helpers
 const easeOutCubic = (x: number): number => 1 - Math.pow(1 - x, 3);
 const clamp = (val: number, min: number, max: number): number => Math.min(Math.max(val, min), max);
+const smoothstepEase = (e: number): number => e * e * (3 - 2 * e);
 
-// Exact Airtribe video scrubbing keyframes:
-// Starts at 2.8s to SKIP the repetitive finger movements at 0.0s-2.8s!
-// Hands come closer pointing at each other from 2.8s to 6.4s
+// Video keyframe milestones (starts at 2.8s to omit raw warmup finger wiggles)
 const videoKeyframes = [
   [0.0, 2.8],
-  [0.24, 2.8],
+  [0.22, 2.8],
   [0.44, 6.4],
   [0.62, 9.6],
   [0.82, 13.3],
@@ -68,139 +67,410 @@ function getTargetVideoTime(p: number): number {
   return 14.0;
 }
 
-// Compute active color (r, g, b) with smooth transitions
-function getStageColor(progress: number): { r: number; g: number; b: number; activeIdx: number } {
-  const c1 = [0, 118, 74];   // #00764a Emerald Green
-  const c2 = [255, 114, 90]; // #ff725a Coral Orange
-  const c3 = [53, 128, 249]; // #3580f9 Electric Blue
-
-  if (progress < 0.26) {
-    return { r: c1[0], g: c1[1], b: c1[2], activeIdx: 0 };
-  } else if (progress < 0.44) {
-    const t = (progress - 0.26) / (0.44 - 0.26);
-    const easeT = t * t * (3 - 2 * t);
-    const r = Math.round(c1[0] + (c2[0] - c1[0]) * easeT);
-    const g = Math.round(c1[1] + (c2[1] - c1[1]) * easeT);
-    const b = Math.round(c1[2] + (c2[2] - c1[2]) * easeT);
-    return { r, g, b, activeIdx: t > 0.5 ? 1 : 0 };
-  } else if (progress < 0.62) {
-    return { r: c2[0], g: c2[1], b: c2[2], activeIdx: 1 };
-  } else if (progress < 0.80) {
-    const t = (progress - 0.62) / (0.80 - 0.62);
-    const easeT = t * t * (3 - 2 * t);
-    const r = Math.round(c2[0] + (c3[0] - c2[0]) * easeT);
-    const g = Math.round(c2[1] + (c3[1] - c2[1]) * easeT);
-    const b = Math.round(c2[2] + (c3[2] - c2[2]) * easeT);
-    return { r, g, b, activeIdx: t > 0.5 ? 2 : 1 };
-  } else {
-    return { r: c3[0], g: c3[1], b: c3[2], activeIdx: 2 };
-  }
+// WebGL2 Shaders
+const VERTEX_SHADER = `#version 300 es
+in vec2 a;
+void main() {
+  gl_Position = vec4(a, 0.0, 1.0);
 }
+`;
+
+const FRAGMENT_SHADER = `#version 300 es
+precision highp float;
+uniform sampler2D uInk;
+uniform vec2 uRes;
+uniform float uDpr;
+uniform vec4 uSlot;
+uniform vec2 uFeather;
+uniform vec3 uPaper, uBand, uAccA, uAccB;
+uniform float uWipe, uHasInk;
+uniform float uCell;
+uniform float uPattern;
+uniform float uMix, uGamma, uFill, uEdge;
+uniform vec4 uDot;
+uniform vec2 uField;
+uniform vec4 uReach;
+uniform vec3 uArm;
+uniform float uStageFade;
+uniform vec4 uAppear;
+uniform vec3 uOrigin;
+uniform float uSweep;
+out vec4 o;
+
+const float INK_LO = 0.035;
+const float GAP = 16.0;
+const float TOP_BLEND = 160.0;
+const vec3 SPLIT = vec3(0.7826, 0.6225, 928.4);
+const vec2 ARM = vec2(0.629, 0.777), PERP = vec2(-0.777, 0.629);
+const float ARM_BAND = 545.0, ARM_REP = 50.0, ARM_MID = 323.0, ARM_SPREAD = 0.0007;
+const float ARM_BLUR = 30.0;
+const vec2 TAPS[6] = vec2[6](vec2(0.289, 0.0), vec2(-0.369, 0.338), vec2(0.056, -0.643), vec2(0.465, 0.606), vec2(-0.854, -0.151), vec2(0.808, -0.514));
+
+float bayer2(vec2 a){ a = floor(a); return fract(dot(a, vec2(0.5, a.y * 0.75))); }
+float bayer4(vec2 a){ return bayer2(0.5 * a) * 0.25 + bayer2(a); }
+float bayer8(vec2 a){ return bayer4(0.5 * a) * 0.25 + bayer2(a); }
+const float B4[16] = float[16](0.0, 8.0, 2.0, 10.0, 12.0, 4.0, 14.0, 6.0, 3.0, 11.0, 1.0, 9.0, 15.0, 7.0, 13.0, 5.0);
+float thr4(vec2 c){ ivec2 i = ivec2(mod(c, 4.0)); return (B4[i.y * 4 + i.x] + 0.5) / 16.0; }
+float thr8(vec2 c){ return bayer8(mod(c, 8.0)) + 0.5 / 64.0; }
+
+float screen3(vec2 c){
+  int x = int(mod(c.x, 3.0)), y = int(mod(c.y, 3.0));
+  const float T[9] = float[9](0.0, 1.0, 3.0, 2.0, 5.0, 7.0, 4.0, 8.0, 6.0);
+  return (T[y * 3 + x] + 0.5) / 9.0;
+}
+
+vec2 take(vec2 q, vec2 ts, float pw){
+  if (q.x < 0.0 || q.y < 0.0 || q.x > pw || q.y > ts.y) return vec2(0.0);
+  float u = clamp(q.x, 0.5, pw - 0.5);
+  float v = q.y / ts.y;
+  return vec2(texture(uInk, vec2(u / ts.x, v)).r, texture(uInk, vec2((u + pw + GAP) / ts.x, v)).r);
+}
+
+float tone(vec2 k){
+  return max(pow(clamp((k.x - INK_LO) / (1.0 - INK_LO), 0.0, 1.0), uGamma), uFill * k.y);
+}
+
+float hash12(vec2 p){
+  vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.x + p3.y) * p3.z);
+}
+float vnoise(vec2 x){
+  vec2 i = floor(x), f = fract(x), u = f * f * (3.0 - 2.0 * f);
+  float a = hash12(i), b = hash12(i + vec2(1, 0)), c = hash12(i + vec2(0, 1)), d = hash12(i + vec2(1, 1));
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+float fbm(vec2 x){
+  return 0.45 * vnoise(x) + 0.27 * vnoise(x * 2.03 + 7.1) + 0.18 * vnoise(x * 4.1 + 1.7) + 0.1 * vnoise(x * 8.3 + 4.4);
+}
+
+void main(){
+  vec2 f = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y);
+  vec2 q = f / uDpr;
+  vec2 S = uRes / uDpr;
+  float H = S.y;
+
+  float thr = (1.0 - uEdge) * (1.0 - q.y / H) + uEdge * bayer8(mod(f, 8.0));
+  vec3 acc = uWipe > thr ? uAccB : uAccA;
+
+  float rev = 1.0, cell = uCell;
+  vec2 qs = q;
+  bool entering = uAppear.x > -0.5;
+  float spark = uOrigin.z > 0.0 ? smoothstep(uOrigin.z, 0.0, distance(q, uOrigin.xy)) : 0.0;
+  if (entering) {
+    float d = (uSweep < 0.5 ? distance(q, uOrigin.xy) : H - q.y) + (fbm(q / 46.0) - 0.5) * 90.0;
+    rev = clamp((uAppear.x - d) / uAppear.y, 0.0, 1.0);
+    if (spark <= 0.0) {
+      cell = uCell * exp2(floor((1.0 - rev) * 3.999));
+      qs = (floor(f / cell) + 0.5) * cell / uDpr;
+    }
+  }
+
+  float ink = 0.0;
+  vec2 uv = (qs - uSlot.xy) / uSlot.zw;
+  if (uHasInk > 0.5) {
+    vec2 ts = vec2(1776.0, 1604.0);
+    float pw = (ts.x - GAP) * 0.5;
+    vec2 tq = uv * vec2(pw, ts.y);
+    float slot = uv.x >= 0.0 && uv.x <= 1.0 && uv.y >= 0.0 && uv.y <= 1.0 ? 1.0 : 0.0;
+    if (uFeather.x > 0.5) slot *= smoothstep(0.0, uFeather.x, qs.x - uSlot.x);
+    if (uFeather.y > 0.5) slot *= smoothstep(0.0, uFeather.y, uSlot.x + uSlot.z - qs.x);
+    if (uReach == vec4(0.0) && uArm.x <= 0.0) {
+      ink = tone(take(tq, ts, pw)) * slot;
+    } else {
+      vec2 qa = tq - uReach.xy, qb = tq - uReach.zw;
+      float ma = smoothstep(4.0, -4.0, dot(qa, SPLIT.xy) - SPLIT.z);
+      float a = tone(take(qa, ts, pw) * ma) * slot;
+      if (uArm.x > 0.0) {
+        float s = dot(qa, ARM), d = max(ARM_BAND - s, 0.0), t = dot(qa, PERP) - ARM_MID;
+        vec2 qe = qa + (d + ARM_REP - abs(mod(d, 2.0 * ARM_REP) - ARM_REP)) * ARM + (t / (1.0 + ARM_SPREAD * d) - t) * PERP;
+        float u = clamp((s - uArm.y + (fbm(qa / 34.0) - 0.5) * uArm.z * 0.8) / uArm.z, 0.0, 1.0);
+        vec2 k = take(qe, ts, pw);
+        float r = ARM_BLUR * (1.0 - u);
+        if (r > 1.0) {
+          for (int i = 0; i < 6; i++) k += take(qe + r * TAPS[i], ts, pw);
+          k /= 7.0;
+        }
+        a = mix(a, tone(k * ma) * u * u * (3.0 - 2.0 * u), uArm.x);
+      }
+      ink = min(1.0, a + tone(take(qb, ts, pw) * smoothstep(-4.0, 4.0, dot(qb, SPLIT.xy) - SPLIT.z)) * slot);
+    }
+  }
+
+  if (uStageFade > 0.5) {
+    ink *= smoothstep(0.0, uStageFade, qs.x) * smoothstep(0.0, uStageFade, S.x - qs.x) * smoothstep(0.0, uStageFade, H - qs.y);
+    ink *= smoothstep(0.0, mix(uStageFade * 0.5, TOP_BLEND, uArm.x), qs.y);
+  }
+  ink = max(ink * rev, spark);
+  vec2 c = floor(f / cell);
+  float bin = step(uPattern < 0.5 ? thr4(c) : uPattern < 1.5 ? thr8(c) : screen3(c), ink);
+  vec3 col = mix(mix(uBand, uPaper, smoothstep(0.0, TOP_BLEND, q.y)), acc, mix(ink, bin, uMix));
+  if (uDot.x <= 0.0 && !(entering && uAppear.w > 0.0)) {
+    o = vec4(col, 1.0);
+    return;
+  }
+
+  vec2 PITCH = vec2(uDot.z, uDot.z * 0.54);
+  float best = 1e9;
+  vec2 bc = vec2(0.0);
+  float j0 = floor(q.y / PITCH.y + 0.5);
+  for (int dj = -1; dj <= 1; dj++) {
+    float j = j0 + float(dj);
+    float off = mod(j, 2.0) > 0.5 ? PITCH.x * 0.5 : 0.0;
+    float i0 = floor((q.x - off) / PITCH.x + 0.5);
+    for (int di = -1; di <= 1; di++) {
+      vec2 cand = vec2((i0 + float(di)) * PITCH.x + off, j * PITCH.y);
+      float d = distance(q, cand);
+      if (d < best) { best = d; bc = cand; }
+    }
+  }
+
+  float core = smoothstep(uDot.y, 0.0, best);
+  float mask = 1.0 - smoothstep(0.0, 0.05, ink);
+  float noiseVal = fbm(bc / uField.x);
+  float a = uDot.x * core * mask * smoothstep(uDot.w, 1.0, noiseVal) * smoothstep(0.0, TOP_BLEND, bc.y);
+  float ring = 0.0;
+  if (entering && uAppear.w > 0.0) {
+    float dr = uSweep < 0.5 ? distance(bc, uOrigin.xy) : H - bc.y;
+    a *= smoothstep(uAppear.z + 4.0, uAppear.z - 4.0, dr);
+    float big = max(uDot.y, 0.5) * 2.4;
+    ring = uAppear.w * exp(-pow((dr - uAppear.z) / 18.0, 2.0)) * smoothstep(big + 0.4, big - 0.35, best) * smoothstep(0.0, TOP_BLEND, bc.y);
+  }
+  col *= mix(vec3(1.0), mix(acc, acc * 0.2, 0.5 + 0.45 * core), a);
+  col = mix(col, acc, ring);
+
+  o = vec4(col, 1.0);
+}
+`;
 
 export const AirtribeWaySection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const patternCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
   const [headerInView, setHeaderInView] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Target video time ref for seek loop
+  // WebGL State Refs
+  const glRef = useRef<WebGL2RenderingContext | null>(null);
+  const texRef = useRef<WebGLTexture | null>(null);
+  const locsRef = useRef<Record<string, WebGLUniformLocation>>({});
+  const videoUploadedRef = useRef(false);
+
+  // Scrubbing & seeking state
   const targetTimeRef = useRef(2.8);
   const isSeekingRef = useRef(false);
   const animationFrameRef = useRef<number | null>(null);
 
-  // Current color ref for canvas render loop
-  const currentColorRef = useRef({ r: 0, g: 118, b: 74, activeIdx: 0 });
+  // Initialize WebGL2 Pipeline
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-  // Generate offscreen pixelated dither texture pattern
-  const getPattern = useCallback((r: number, g: number, b: number) => {
-    if (!patternCanvasRef.current) {
-      const pCanvas = document.createElement('canvas');
-      pCanvas.width = 240;
-      pCanvas.height = 240;
-      patternCanvasRef.current = pCanvas;
+    const gl = canvas.getContext('webgl2', {
+      antialias: false,
+      alpha: false,
+      preserveDrawingBuffer: false,
+    });
+    if (!gl) {
+      console.warn('WebGL2 not available');
+      return;
     }
+    glRef.current = gl;
 
-    const pCanvas = patternCanvasRef.current;
-    const pCtx = pCanvas.getContext('2d');
-    if (!pCtx) return null;
-
-    pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-
-    // Stipple pixelated dots in the active color
-    const dotColor = `rgba(${r}, ${g}, ${b}, 0.22)`;
-    pCtx.fillStyle = dotColor;
-
-    // Deterministic pseudo-random dither clusters
-    const seed = 42;
-    for (let x = 0; x < pCanvas.width; x += 4) {
-      for (let y = 0; y < pCanvas.height; y += 4) {
-        // High frequency organic dither field
-        const hash = Math.sin(x * 12.9898 + y * 78.233 + seed) * 43758.5453;
-        const rand = hash - Math.floor(hash);
-        if (rand > 0.62) {
-          pCtx.fillRect(x, y, 2, 2);
-        }
+    // Compile Vertex & Fragment shaders
+    const createShader = (type: number, src: string) => {
+      const s = gl.createShader(type);
+      if (!s) throw new Error('Failed to create shader');
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        throw new Error(gl.getShaderInfoLog(s) || 'Shader error');
       }
+      return s;
+    };
+
+    let prog: WebGLProgram;
+    try {
+      const vs = createShader(gl.VERTEX_SHADER, VERTEX_SHADER);
+      const fs = createShader(gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
+      prog = gl.createProgram()!;
+      gl.attachShader(prog, vs);
+      gl.attachShader(prog, fs);
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+        throw new Error(gl.getProgramInfoLog(prog) || 'Link error');
+      }
+      gl.useProgram(prog);
+    } catch (err) {
+      console.error('[AirtribeWay WebGL]', err);
+      return;
     }
 
-    return pCanvas;
+    // Geometry quad
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const aLoc = gl.getAttribLocation(prog, 'a');
+    gl.enableVertexAttribArray(aLoc);
+    gl.vertexAttribPointer(aLoc, 2, gl.FLOAT, false, 0, 0);
+
+    // Ink texture
+    const tex = gl.createTexture();
+    texRef.current = tex;
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+    // Uniform locations
+    const uniformNames = [
+      'uInk', 'uRes', 'uDpr', 'uSlot', 'uFeather', 'uPaper', 'uBand', 'uAccA', 'uAccB', 'uWipe',
+      'uHasInk', 'uCell', 'uPattern', 'uMix', 'uGamma', 'uFill', 'uEdge', 'uDot', 'uField',
+      'uReach', 'uArm', 'uStageFade', 'uAppear', 'uOrigin', 'uSweep',
+    ];
+    locsRef.current = Object.fromEntries(
+      uniformNames.map((name) => [name, gl.getUniformLocation(prog, name)!])
+    );
+    gl.uniform1i(locsRef.current.uInk, 0);
+
+    return () => {
+      gl.deleteTexture(tex);
+      gl.deleteBuffer(buf);
+      gl.deleteProgram(prog);
+    };
   }, []);
 
-  // Main draw loop: draws the dither background + enlarged hand plane across the whole container
-  const drawFrame = useCallback(() => {
-    const video = videoRef.current;
+  // WebGL Render Call
+  const renderWebGL = useCallback(() => {
+    const gl = glRef.current;
     const canvas = canvasRef.current;
-    if (!video || !canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const locs = locsRef.current;
+    if (!gl || !canvas) return;
 
     const cw = canvas.width;
     const ch = canvas.height;
-    ctx.clearRect(0, 0, cw, ch);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const stageW = cw / dpr;
+    const stageH = ch / dpr;
 
-    const { r, g, b } = currentColorRef.current;
+    gl.viewport(0, 0, cw, ch);
+    gl.uniform2f(locs.uRes, cw, ch);
+    gl.uniform1f(locs.uDpr, dpr);
 
-    // 1. Draw pixelated dither background matching the active hand color
-    const pCanvas = getPattern(r, g, b);
-    if (pCanvas) {
-      const pattern = ctx.createPattern(pCanvas, 'repeat');
-      if (pattern) {
-        ctx.fillStyle = pattern;
-        ctx.fillRect(0, 0, cw, ch);
-      }
+    const p = scrollProgress;
+
+    // Slot computation:
+    // Sized so that hand spans across the whole container!
+    // Arm originates top-left (passing behind the card) and lower hand is at bottom-right
+    const A = 880 / 1604;
+    const fh = stageH * 1.36;
+    const fw = fh * A;
+    const slotX = (stageW - fw) * 0.35; // Positioned behind left card & extending right
+    const slotY = -stageH * 0.08;
+
+    gl.uniform4f(locs.uSlot, slotX, slotY, fw, fh);
+    gl.uniform2f(locs.uFeather, 150, 0);
+
+    // Paper & Band background colors
+    gl.uniform3f(locs.uPaper, 1.0, 1.0, 1.0);
+    gl.uniform3f(locs.uBand, 0.98, 0.98, 0.98);
+
+    // Stage Accent colors:
+    // Stage 1: Emerald Green (#00764a -> [0.0, 0.463, 0.290])
+    // Stage 2: Coral Orange (#ff725a -> [1.0, 0.447, 0.353])
+    // Stage 3: Electric Blue (#3580f9 -> [0.208, 0.502, 0.976])
+    const green = [0.0, 0.463, 0.290];
+    const orange = [1.0, 0.447, 0.353];
+    const blue = [0.208, 0.502, 0.976];
+
+    let accA = green;
+    let accB = orange;
+    let wipe = 0.0;
+
+    if (p < 0.26) {
+      accA = green;
+      accB = orange;
+      wipe = 0.0;
+    } else if (p < 0.44) {
+      accA = green;
+      accB = orange;
+      wipe = smoothstepEase(clamp((p - 0.26) / 0.18, 0, 1));
+    } else if (p < 0.62) {
+      accA = orange;
+      accB = blue;
+      wipe = 0.0;
+    } else if (p < 0.80) {
+      accA = orange;
+      accB = blue;
+      wipe = smoothstepEase(clamp((p - 0.62) / 0.18, 0, 1));
+    } else {
+      accA = blue;
+      accB = blue;
+      wipe = 1.0;
     }
 
-    // 2. Draw enlarged hand artwork
-    if (video.readyState >= 2) {
-      const planeW = 880;
-      const planeH = 1604;
+    gl.uniform3f(locs.uAccA, accA[0], accA[1], accA[2]);
+    gl.uniform3f(locs.uAccB, accB[0], accB[1], accB[2]);
+    gl.uniform1f(locs.uWipe, wipe);
+    gl.uniform1f(locs.uHasInk, videoUploadedRef.current ? 1.0 : 0.0);
 
-      // Scale generously so the hands span across the entire container,
-      // with the arm entering from the upper left (behind the card) and
-      // lower hand resting in the bottom right!
-      const isMobile = cw < 1024;
-      const scale = isMobile
-        ? Math.max(cw / 700, ch / 1100)
-        : Math.max(cw / 1050, ch / 1150);
+    // Dither & Outline Silhouette parameters:
+    // Cell size: 1.5 device pixels
+    // Pattern 0: Bayer 4x4 dither
+    // Mix 0.85: 85% dither quantization -> crisp pixelated outlined look!
+    // Fill 0.45: Silhouette outline
+    gl.uniform1f(locs.uCell, Math.max(1, Math.round(1.5 * dpr)));
+    gl.uniform1f(locs.uPattern, 0.0);
+    gl.uniform1f(locs.uMix, 0.85);
+    gl.uniform1f(locs.uGamma, 0.65);
+    gl.uniform1f(locs.uFill, 0.45);
+    gl.uniform1f(locs.uEdge, 0.5);
 
-      const drawW = planeW * scale;
-      const drawH = planeH * scale;
+    // Minimalistic 45° background pixel dot lattice
+    gl.uniform4f(locs.uDot, 0.42, 0.75, 7.0, 0.42);
+    gl.uniform2f(locs.uField, 55.0, 0.0);
+    gl.uniform1f(locs.uStageFade, 40.0);
 
-      // Offset so the upper arm extends from behind the card (left: 80px)
-      // and fingers meet in the center
-      const drawX = isMobile ? (cw - drawW) * 0.5 : (cw - drawW) * 0.28;
-      const drawY = (ch - drawH) * 0.45;
+    // CORNER-TO-CORNER REACHING MOVEMENT:
+    // Upper hand starts deep in top-left corner (-X, -Y)
+    // Lower hand starts deep in bottom-right corner (+X, +Y)
+    // As progress goes from 0 to 0.22, l drops from 340px to 0, gliding hands to center!
+    const reachProgress = clamp(p / 0.22, 0, 1);
+    const l = (1 - smoothstepEase(reachProgress)) * 340.0;
+    gl.uniform4f(locs.uReach, -0.629 * l, -0.777 * l, 0.992 * l, 0.124 * l);
 
-      ctx.drawImage(video, 0, 0, planeW, planeH, drawX, drawY, drawW, drawH);
-    }
-  }, [getPattern]);
+    // Upper arm dissolution along its length
+    const armProgress = clamp((p - 0.2) / 0.06, 0, 1);
+    const armWhole = 1 - smoothstepEase(armProgress);
+    gl.uniform3f(locs.uArm, armWhole, 760 - 580, 460);
 
-  // Handle canvas resolution on resize for crisp Retina display
+    gl.uniform4f(locs.uAppear, -1, 1, 0, 0);
+    gl.uniform3f(locs.uOrigin, 0, 0, 0);
+    gl.uniform1f(locs.uSweep, 0.0);
+
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }, [scrollProgress]);
+
+  // Upload video frame to WebGL texture
+  const uploadVideoTexture = useCallback(() => {
+    const gl = glRef.current;
+    const video = videoRef.current;
+    const tex = texRef.current;
+    if (!gl || !video || !tex || video.readyState < 2) return;
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video);
+    videoUploadedRef.current = true;
+    renderWebGL();
+  }, [renderWebGL]);
+
+  // Canvas size sync on resize
   const handleResize = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -208,8 +478,8 @@ export const AirtribeWaySection: React.FC = () => {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.max(1, Math.round(rect.width * dpr));
     canvas.height = Math.max(1, Math.round(rect.height * dpr));
-    drawFrame();
-  }, [drawFrame]);
+    renderWebGL();
+  }, [renderWebGL]);
 
   useEffect(() => {
     handleResize();
@@ -217,7 +487,7 @@ export const AirtribeWaySection: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [handleResize]);
 
-  // Intersection observer for heading entrance
+  // Header entrance intersection observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -237,14 +507,14 @@ export const AirtribeWaySection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Video seeking loop with seek-locking to prevent keyframe loops & stuttering
+  // Video scrub loop (with seek-locking to prevent decode thrashing / stutter loops)
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     const handleSeeked = () => {
       isSeekingRef.current = false;
-      drawFrame();
+      uploadVideoTexture();
     };
 
     video.addEventListener('seeked', handleSeeked);
@@ -270,9 +540,9 @@ export const AirtribeWaySection: React.FC = () => {
       }
       video.removeEventListener('seeked', handleSeeked);
     };
-  }, [drawFrame]);
+  }, [uploadVideoTexture]);
 
-  // Scroll tracking: updates progress, computes color transitions, and scrubs video smoothly
+  // Scroll handler: computes progress and maps to video timestamps
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -285,25 +555,29 @@ export const AirtribeWaySection: React.FC = () => {
       const progress = clamp(currentScroll / scrollableDist, 0, 1);
       setScrollProgress(progress);
 
-      // Compute active color
-      const stageColor = getStageColor(progress);
-      currentColorRef.current = stageColor;
-
-      // Compute target video time using the exact keyframes (starting at 2.8s)
-      const targetTime = getTargetVideoTime(progress);
-      targetTimeRef.current = targetTime;
-
-      drawFrame();
+      // Map to video time (starts at 2.8s)
+      targetTimeRef.current = getTargetVideoTime(progress);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [drawFrame]);
+  }, []);
 
-  const { r, g, b, activeIdx } = getStageColor(scrollProgress);
+  // Re-render WebGL when progress updates
+  useEffect(() => {
+    renderWebGL();
+  }, [scrollProgress, renderWebGL]);
 
-  // Compute card float-in translations from below completely out of frame:
+  // Active stage determination (for indicator dots)
+  let activeIdx = 0;
+  if (scrollProgress >= 0.70) {
+    activeIdx = 2;
+  } else if (scrollProgress >= 0.35) {
+    activeIdx = 1;
+  }
+
+  // Cards Float-In from Below Completely Out of Frame:
   // Card 1: Settled at start; tucks upward as Card 2 arrives
   let card1Y = 0;
   let card1Scale = 1;
@@ -329,22 +603,22 @@ export const AirtribeWaySection: React.FC = () => {
     card1Z = 10;
   }
 
-  // Card 2: Starts completely out of frame below (+100vh); floats up in parallel as color shifts to Orange
-  let card2Y = 600;
+  // Card 2: Starts completely out of frame below (+100vh / 650px); floats up in parallel as color shifts to Orange
+  let card2Y = 650;
   let card2Scale = 1;
   let card2Opacity = 0;
   let card2Z = 30;
 
   if (scrollProgress < 0.26) {
-    card2Y = 600; // completely below out of frame
+    card2Y = 650;
     card2Opacity = 0;
   } else if (scrollProgress >= 0.26 && scrollProgress < 0.44) {
     const t = clamp((scrollProgress - 0.26) / 0.18, 0, 1);
-    card2Y = (1 - easeOutCubic(t)) * 600; // floats up into settled position
-    card2Opacity = clamp(t * 2.5, 0, 1);
+    card2Y = (1 - easeOutCubic(t)) * 650;
+    card2Opacity = clamp(t * 2.2, 0, 1);
     card2Z = 30;
   } else if (scrollProgress >= 0.44 && scrollProgress < 0.62) {
-    card2Y = 0; // settled in place during core orange movement
+    card2Y = 0;
     card2Opacity = 1;
     card2Scale = 1;
     card2Z = 30;
@@ -356,22 +630,22 @@ export const AirtribeWaySection: React.FC = () => {
     card2Z = 25;
   }
 
-  // Card 3: Starts completely out of frame below (+100vh); floats up in parallel as color shifts to Blue
-  let card3Y = 600;
+  // Card 3: Starts completely out of frame below (+100vh / 650px); floats up in parallel as color shifts to Blue
+  let card3Y = 650;
   let card3Scale = 1;
   let card3Opacity = 0;
   let card3Z = 40;
 
   if (scrollProgress < 0.62) {
-    card3Y = 600; // completely below out of frame
+    card3Y = 650;
     card3Opacity = 0;
   } else if (scrollProgress >= 0.62 && scrollProgress < 0.80) {
     const t = clamp((scrollProgress - 0.62) / 0.18, 0, 1);
-    card3Y = (1 - easeOutCubic(t)) * 600; // floats up into settled position
-    card3Opacity = clamp(t * 2.5, 0, 1);
+    card3Y = (1 - easeOutCubic(t)) * 650;
+    card3Opacity = clamp(t * 2.2, 0, 1);
     card3Z = 40;
   } else {
-    card3Y = 0; // settled in place during core blue cat's cradle movement
+    card3Y = 0;
     card3Opacity = 1;
     card3Scale = 1;
     card3Z = 40;
@@ -384,26 +658,8 @@ export const AirtribeWaySection: React.FC = () => {
   ];
 
   return (
-    <section className="w-full bg-[#f4f4f6] text-black relative">
-      {/* Dynamic SVG Filter for Tinting the Hand Video Canvas
-          Black background becomes 100% transparent (alpha=0),
-          white ink is tinted to the exact dynamic (r, g, b) of the active stage!
-      */}
-      <svg className="absolute w-0 h-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <defs>
-          <filter id="hand-tint-dynamic" colorInterpolationFilters="sRGB">
-            <feColorMatrix
-              type="matrix"
-              values={`0 0 0 0 ${(r / 255).toFixed(3)}
-                      0 0 0 0 ${(g / 255).toFixed(3)}
-                      0 0 0 0 ${(b / 255).toFixed(3)}
-                      0.333 0.333 0.333 0 0`}
-            />
-          </filter>
-        </defs>
-      </svg>
-
-      {/* Hidden Video element decoding in the background without UI display */}
+    <section className="w-full bg-[#ffffff] text-black relative">
+      {/* Hidden Video element decoding in the background */}
       <video
         ref={videoRef}
         playsInline
@@ -413,45 +669,34 @@ export const AirtribeWaySection: React.FC = () => {
         className="hidden"
       />
 
-      {/* Pinned Scroll Track for Sticky Stage */}
+      {/* Pinned Scroll Track */}
       <div
         ref={containerRef}
         className="relative w-full"
         style={{ height: '380vh' }}
       >
         {/* Sticky Viewport Frame with continuous left & right vertical border: max-w-[1440px] mx-auto border-x border-[#232328] */}
-        <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#f4f4f6] border-b border-[#d8d8dc]">
+        <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#ffffff] border-b border-[#d8d8dc]">
           
           <div className="max-w-[1440px] mx-auto w-full h-full border-x border-[#232328] relative flex flex-col justify-between overflow-hidden">
             
-            {/* Subtle Paper Texture Background */}
-            <div
-              className="absolute inset-0 pointer-events-none opacity-40 mix-blend-multiply z-0"
-              style={{
-                backgroundImage: "url('/bg.5b4ca721.webp')",
-                backgroundRepeat: 'repeat',
-              }}
-            />
-
-            {/* FULL-BLEED CANVAS FOR HANDS & PIXELATED BACKGROUND:
-                Placed across the entire container (inset-0, z-10).
-                The hands fill the container generously and extend behind the card on the left!
+            {/* FULL-BLEED WEBGL2 DITHER CANVAS:
+                - Renders authentic pixelated outlined hands with dither stipple patterns
+                - Hands move corner-to-corner (Top-Left to Bottom-Right) without distortion
+                - Minimalistic 45° pixelated dot lattice background that changes color with each stage
+                - Abstract wavy lines background completely removed!
             */}
             <canvas
               ref={canvasRef}
               className="absolute inset-0 w-full h-full pointer-events-none z-10"
-              style={{
-                filter: 'url(#hand-tint-dynamic)',
-                mixBlendMode: 'multiply',
-              }}
             />
 
             {/* "The Airtribe way" Heading:
-                Placed lower down closer to the cards, in the white space
+                Placed lower down closer to the cards
             */}
             <div
               ref={headerRef}
-              className="w-full pt-14 sm:pt-16 pb-2 px-6 sm:px-12 text-center relative z-20"
+              className="w-full pt-14 sm:pt-18 pb-2 px-6 sm:px-12 text-center relative z-20 pointer-events-none"
             >
               <h2 className="text-[38px] sm:text-[52px] lg:text-[66px] font-normal leading-[1.0] tracking-[-0.04em] text-black flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
                 {/* 'The' */}
@@ -493,8 +738,8 @@ export const AirtribeWaySection: React.FC = () => {
 
             {/* Card Stack Container:
                 Cards sit on z-20 on top of the hands canvas.
-                As the hands change color, each card floats in from below completely out of frame
-                and settles in place once the core hand movement begins!
+                Upper arm passes behind the card cleanly into the top-left corner.
+                Each card floats up in parallel from out of frame below as colors transition!
             */}
             <div className="relative z-20 w-full flex-1 px-6 sm:px-10 lg:px-16 flex items-center justify-start pb-8">
               
