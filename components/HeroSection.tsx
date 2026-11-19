@@ -25,10 +25,10 @@ export const HeroSection: React.FC = () => {
   return (
     <section className="w-full bg-black border-b border-[#232328]">
       <div className="max-w-[1440px] mx-auto border-x border-[#232328]">
-        
+
         {/* Top Headline Block */}
         <div className="relative pt-12 sm:pt-16 lg:pt-20 pb-10 sm:pb-14 px-6 sm:px-12 lg:px-14">
-          
+
           {/* Era Tag (Top Right) */}
           <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-10">
             <div className="border border-[#232328] bg-[#121214] text-zinc-400 text-xs px-3.5 py-1.5 font-normal tracking-wide flex items-center gap-1.5">
@@ -51,7 +51,7 @@ export const HeroSection: React.FC = () => {
 
         {/* Split Grid Box: Left (Text & CTA) + Right (Retro ASCII Macintosh) */}
         <div className="border-t border-[#232328] grid grid-cols-1 md:grid-cols-12 min-h-[380px]">
-          
+
           {/* Left Cell */}
           <div className="md:col-span-5 border-b md:border-b-0 md:border-r border-[#232328] p-8 sm:p-12 lg:p-14 flex flex-col justify-between">
             <p className="text-zinc-300 text-[16px] sm:text-[18px] leading-[1.6] max-w-sm font-normal">
@@ -98,7 +98,7 @@ export const HeroSection: React.FC = () => {
 
         {/* Bottom Strip: Mentors From + Scrolling Logo Cells */}
         <div className="border-t border-[#232328] flex flex-col lg:flex-row items-stretch overflow-hidden">
-          
+
           {/* Mentors from label + Avatars */}
           <div className="flex items-center gap-4 px-6 sm:px-10 py-5 shrink-0 border-b lg:border-b-0 lg:border-r border-[#232328] bg-black z-20">
             <span className="text-zinc-400 text-[16px] sm:text-[18px] font-medium whitespace-nowrap">
@@ -160,3 +160,4 @@ export const HeroSection: React.FC = () => {
     </section>
   );
 };
+

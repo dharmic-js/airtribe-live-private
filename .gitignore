@@ -35,3 +35,8 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# Local raw media bundles
+media_copy/
+airtribe_extracted/
+*.py

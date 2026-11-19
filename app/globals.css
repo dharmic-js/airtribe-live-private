@@ -17,7 +17,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Editorial Serif for "Now is your turn" */
+/* Editorial Serif for "Now is your turn" and headings */
 .font-editorial {
   font-family: 'Instrument Serif', Georgia, serif;
 }
@@ -29,9 +29,18 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* Guide borders matching Airtribe's architectural layout */
-.border-guide {
-  border-color: #232328;
+/* Stats number animated gradient flow */
+.stats-number-flow {
+  background-image: linear-gradient(90deg, #9fa8ff, #38bdf8 50%, #9fa8ff);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: stats-number-flow 6s linear infinite;
+}
+
+@keyframes stats-number-flow {
+  to { background-position: -200% 0; }
 }
 
 /* Marquee for the square logo cells */
@@ -47,6 +56,48 @@ body {
 }
 
 .animate-logo-strip:hover {
+  animation-play-state: paused;
+}
+
+/* Events marquee */
+@keyframes events-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.events-marquee-track {
+  animation: events-marquee 40s linear infinite;
+}
+
+.events-marquee:hover .events-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Mentors marquee */
+@keyframes mentors-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.mentors-marquee-track {
+  animation: mentors-marquee 50s linear infinite;
+}
+
+.mentors-marquee:hover .mentors-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Reverse mentors marquee */
+@keyframes mentors-marquee-reverse {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.mentors-marquee-track-reverse {
+  animation: mentors-marquee-reverse 55s linear infinite;
+}
+
+.mentors-marquee:hover .mentors-marquee-track-reverse {
   animation-play-state: paused;
 }
 
