@@ -161,3 +161,111 @@ body {
   animation: belt-rtl 70s linear infinite;
 }
 
+/* AI PM Folder Floating Bob Animation */
+@keyframes folder-bob {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1.2deg);
+  }
+}
+
+.animate-folder-bob {
+  animation: folder-bob 4.5s ease-in-out infinite;
+}
+
+/* Success Factors Curving INTO the Folder (Left to Center-Mouth) */
+@keyframes curve-in-stream {
+  0% {
+    transform: translate(-300px, -90px) rotate(-26deg) scale(0.9);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.95;
+  }
+  80% {
+    transform: translate(-30px, 35px) rotate(-8deg) scale(0.6);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(15px, 75px) rotate(0deg) scale(0.2);
+    opacity: 0;
+  }
+}
+
+.animate-curve-in-1 {
+  top: 50%;
+  left: 50%;
+  animation: curve-in-stream 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation-delay: 0s;
+}
+
+.animate-curve-in-2 {
+  top: 50%;
+  left: 50%;
+  animation: curve-in-stream 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation-delay: 1.5s;
+}
+
+.animate-curve-in-3 {
+  top: 50%;
+  left: 50%;
+  animation: curve-in-stream 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation-delay: 3s;
+}
+
+.animate-curve-in-4 {
+  top: 50%;
+  left: 50%;
+  animation: curve-in-stream 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation-delay: 4.5s;
+}
+
+/* Transformed Tiles Curving OUT of the Folder (Center-Mouth to Top-Right and down) */
+@keyframes curve-out-stream {
+  0% {
+    transform: translate(-10px, 60px) rotate(0deg) scale(0.25);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  60% {
+    transform: translate(150px, -45px) rotate(12deg) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(300px, 65px) rotate(22deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+.animate-curve-out-1 {
+  top: 50%;
+  left: 50%;
+  animation: curve-out-stream 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation-delay: 0.7s;
+}
+
+.animate-curve-out-2 {
+  top: 50%;
+  left: 50%;
+  animation: curve-out-stream 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation-delay: 2.2s;
+}
+
+.animate-curve-out-3 {
+  top: 50%;
+  left: 50%;
+  animation: curve-out-stream 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation-delay: 3.7s;
+}
+
+.animate-curve-out-4 {
+  top: 50%;
+  left: 50%;
+  animation: curve-out-stream 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation-delay: 5.2s;
+}
+
