@@ -1,234 +1,317 @@
+'use client';
+
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
-import { Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react';
+import Link from 'next/link';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-dark-950 border-t border-white/10 text-gray-400 pt-16 pb-12 relative overflow-hidden">
-      {/* Decorative glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-brand-500/50 to-transparent" />
-      <div className="absolute -top-32 left-1/3 w-96 h-96 bg-brand-500/5 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-16">
+    <footer className="w-full bg-black border-t border-[#232328]">
+      <div className="mx-auto w-full max-w-[1440px] border-x border-[#232328]">
+        
+        {/* Main Content Area */}
+        <div className="flex flex-col lg:flex-row items-stretch justify-between">
           
-          {/* Brand Info */}
-          <div className="lg:col-span-2 space-y-5">
-            <Link href="/" className="inline-block">
-              <Image
-                src="/logo.svg"
-                alt="Airtribe"
-                width={140}
-                height={32}
-                className="h-8 w-auto object-contain"
-              />
-            </Link>
-            <p className="text-sm text-gray-400 max-w-sm leading-relaxed">
-              Airtribe is a 360° cohort-based learning community that empowers builders to master AI-first product management, engineering, and next-gen tech systems.
+          {/* Brand Left Column */}
+          <div className="flex flex-col justify-between gap-10 py-12 px-6 sm:px-10 lg:w-[420px] shrink-0 border-b lg:border-b-0 lg:border-r border-[#232328]">
+            <div className="flex flex-col gap-8">
+              
+              {/* Airtribe Logo */}
+              <Link href="/" className="inline-flex items-center gap-2">
+                <div className="relative w-7 h-7">
+                  <Image
+                    src="/airtribe-icon.svg"
+                    alt="Airtribe"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <div className="relative w-24 h-5">
+                  <Image
+                    src="/airtribe-wordmark.svg"
+                    alt="Airtribe"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </Link>
+
+              {/* Social Icons (SVGs from source) */}
+              <div className="flex items-center gap-6">
+                <a
+                  href="https://www.linkedin.com/company/airtribe/"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="LinkedIn"
+                  className="opacity-75 hover:opacity-100 transition-opacity"
+                >
+                  <div className="relative w-5 h-5">
+                    <Image src="/social-linkedin.svg" alt="LinkedIn" fill className="object-contain" />
+                  </div>
+                </a>
+                <a
+                  href="https://www.youtube.com/@airtribe"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="YouTube"
+                  className="opacity-75 hover:opacity-100 transition-opacity"
+                >
+                  <div className="relative w-7 h-5">
+                    <Image src="/social-youtube.svg" alt="YouTube" fill className="object-contain" />
+                  </div>
+                </a>
+                <a
+                  href="https://www.instagram.com/airtribe.live/"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="Instagram"
+                  className="opacity-75 hover:opacity-100 transition-opacity"
+                >
+                  <div className="relative w-5 h-5">
+                    <Image src="/social-instagram.svg" alt="Instagram" fill className="object-contain" />
+                  </div>
+                </a>
+                <a
+                  href="https://twitter.com/Airtribe_live"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="X"
+                  className="opacity-75 hover:opacity-100 transition-opacity"
+                >
+                  <div className="relative w-5 h-5">
+                    <Image src="/social-x.svg" alt="X" fill className="object-contain" />
+                  </div>
+                </a>
+              </div>
+
+            </div>
+
+            {/* Editorial Slogan */}
+            <p className="font-editorial italic text-white text-[32px] sm:text-[38px] leading-[1.25] tracking-tight">
+              Where builders are made.
             </p>
-            <div className="space-y-2 text-sm text-gray-300">
-              <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-brand-400 shrink-0" />
-                <a href="mailto:support@airtribe.live" className="hover:text-white transition-colors">
-                  support@airtribe.live
-                </a>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-brand-400 shrink-0" />
-                <a href="tel:+918031139097" className="hover:text-white transition-colors">
-                  +91-8031139097
-                </a>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <MapPin className="w-4 h-4 text-brand-400 shrink-0" />
-                <span>Indiranagar, Bengaluru, Karnataka, India</span>
+          </div>
+
+          {/* Nav Right Columns (Programs, Resources, Company) */}
+          <nav aria-label="Footer Navigation" className="flex-1 grid grid-cols-1 sm:grid-cols-3">
+            
+            {/* Column 1: Programs */}
+            <div className="py-12 px-6 sm:px-8 border-b sm:border-b-0 sm:border-r border-[#232328] flex flex-col gap-6">
+              <p className="text-zinc-400 text-[18px] sm:text-[20px] font-normal leading-none font-editorial">
+                Programs
+              </p>
+              <div className="flex flex-col gap-3.5">
+                <Link
+                  href="/courses/product-management-launchpad"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  AI-First product management
+                </Link>
+                <Link
+                  href="/courses/backend-engineering-launchpad"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  AI-First software engineering
+                </Link>
+                <Link
+                  href="/courses/generative-ai-launchpad"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  The GenAI launchpad
+                </Link>
               </div>
             </div>
 
-            {/* Social Icons (SVGs) */}
-            <div className="flex items-center gap-3 pt-2">
-              <a 
-                href="https://linkedin.com/company/airtribe" 
-                target="_blank" 
-                rel="noreferrer"
-                className="w-9 h-9 rounded-lg bg-dark-800 border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-brand-500/20 hover:border-brand-500/30 transition-all"
-                aria-label="LinkedIn"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                </svg>
-              </a>
-              <a 
-                href="https://youtube.com/@airtribe" 
-                target="_blank" 
-                rel="noreferrer"
-                className="w-9 h-9 rounded-lg bg-dark-800 border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-red-500/20 hover:border-red-500/30 transition-all"
-                aria-label="YouTube"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </a>
-              <a 
-                href="https://twitter.com/airtribelive" 
-                target="_blank" 
-                rel="noreferrer"
-                className="w-9 h-9 rounded-lg bg-dark-800 border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-sky-500/20 hover:border-sky-500/30 transition-all"
-                aria-label="Twitter"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-              <a 
-                href="https://instagram.com/airtribe.live" 
-                target="_blank" 
-                rel="noreferrer"
-                className="w-9 h-9 rounded-lg bg-dark-800 border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-pink-500/20 hover:border-pink-500/30 transition-all"
-                aria-label="Instagram"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-              </a>
+            {/* Column 2: Resources */}
+            <div className="py-12 px-6 sm:px-8 border-b sm:border-b-0 sm:border-r border-[#232328] flex flex-col gap-6">
+              <p className="text-zinc-400 text-[18px] sm:text-[20px] font-normal leading-none font-editorial">
+                Resources
+              </p>
+              <div className="flex flex-col gap-3.5">
+                <a
+                  href="https://www.airtribe.live/jobs"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Job board
+                </a>
+                <a
+                  href="https://www.airtribe.live/resume/builder"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Resume builder
+                </a>
+                <a
+                  href="https://www.airtribe.live/resume/review"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Free resume review
+                </a>
+                <a
+                  href="https://www.airtribe.live/linkedin-review"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  LinkedIn profile review
+                </a>
+                <Link
+                  href="/project-showcase"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Projects showcase
+                </Link>
+                <Link
+                  href="/events"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Events
+                </Link>
+                <Link
+                  href="/upskill-for-free"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Upskill for free
+                </Link>
+                <a
+                  href="https://airtribe.substack.com/"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Newsletter
+                </a>
+                <a
+                  href="https://www.airtribe.live/blog/"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Blog
+                </a>
+              </div>
             </div>
-          </div>
 
-          {/* Cohorts & Programs */}
-          <div className="space-y-4">
-            <h4 className="text-xs font-semibold text-white uppercase tracking-wider">
-              Flagship Cohorts
-            </h4>
-            <ul className="space-y-2.5 text-sm">
-              <li>
-                <Link href="/courses/generative-ai-launchpad" className="hover:text-brand-300 transition-colors flex items-center gap-1 group">
-                  <span>GenAI Launchpad</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+            {/* Column 3: Company */}
+            <div className="py-12 px-6 sm:px-8 flex flex-col gap-6">
+              <p className="text-zinc-400 text-[18px] sm:text-[20px] font-normal leading-none font-editorial">
+                Company
+              </p>
+              <div className="flex flex-col gap-3.5">
+                <Link
+                  href="/reviews"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Reviews
                 </Link>
-              </li>
-              <li>
-                <Link href="/courses/backend-engineering-launchpad" className="hover:text-brand-300 transition-colors flex items-center gap-1 group">
-                  <span>AI-First Software Engg</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Link>
-              </li>
-              <li>
-                <Link href="/courses/product-management-launchpad" className="hover:text-brand-300 transition-colors flex items-center gap-1 group">
-                  <span>AI-First Product Mgmt</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Link>
-              </li>
-              <li>
-                <Link href="/courses" className="hover:text-brand-300 transition-colors">
-                  System Design & Scale
-                </Link>
-              </li>
-              <li>
-                <Link href="/courses" className="hover:text-brand-300 transition-colors">
-                  Full Stack Engineering
-                </Link>
-              </li>
-              <li>
-                <Link href="/courses" className="hover:text-brand-300 transition-colors">
-                  UI/UX Product Design
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Free Upskilling Tools */}
-          <div className="space-y-4">
-            <h4 className="text-xs font-semibold text-white uppercase tracking-wider">
-              Free Resources
-            </h4>
-            <ul className="space-y-2.5 text-sm">
-              <li>
-                <Link href="/upskill-for-free" className="hover:text-brand-300 transition-colors">
-                  DSA 450 Sheet
-                </Link>
-              </li>
-              <li>
-                <Link href="/upskill-for-free" className="hover:text-brand-300 transition-colors">
-                  AI Practice Sandbox
-                </Link>
-              </li>
-              <li>
-                <Link href="/upskill-for-free" className="hover:text-brand-300 transition-colors">
-                  Resume Builder & Review
-                </Link>
-              </li>
-              <li>
-                <Link href="/project-showcase" className="hover:text-brand-300 transition-colors">
-                  Alumni Capstone Projects
-                </Link>
-              </li>
-              <li>
-                <Link href="/events" className="hover:text-brand-300 transition-colors">
-                  Live Masterclasses
-                </Link>
-              </li>
-              <li>
-                <a href="https://airtribe.substack.com" target="_blank" rel="noreferrer" className="hover:text-brand-300 transition-colors">
-                  Builder Newsletter
+                <a
+                  href="https://lp.airtribe.live/community"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Community
                 </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Company & Opportunities */}
-          <div className="space-y-4">
-            <h4 className="text-xs font-semibold text-white uppercase tracking-wider">
-              Company
-            </h4>
-            <ul className="space-y-2.5 text-sm">
-              <li>
-                <Link href="/about-us" className="hover:text-brand-300 transition-colors">
-                  About Us & Team
-                </Link>
-              </li>
-              <li>
-                <Link href="/reviews" className="hover:text-brand-300 transition-colors">
-                  Wall of Love (Reviews)
-                </Link>
-              </li>
-              <li>
-                <Link href="/business" className="hover:text-brand-300 transition-colors">
-                  For Business (Hire Talent)
-                </Link>
-              </li>
-              <li>
-                <a href="https://wellfound.com/company/airtribe" target="_blank" rel="noreferrer" className="hover:text-brand-300 transition-colors flex items-center gap-1">
-                  <span>Careers</span>
-                  <span className="text-[10px] bg-brand-500/20 text-brand-300 px-1.5 py-0.5 rounded">HIRING</span>
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSepnSomDp2GAccHeIxEuSpVDkAkY1qUCE-foiTfY-pPxEF5iA/viewform"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Hire from us
                 </a>
-              </li>
-              <li>
-                <Link href="/contact-us" className="hover:text-brand-300 transition-colors">
-                  Contact Us
+                <Link
+                  href="/business"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Business
                 </Link>
-              </li>
-            </ul>
-          </div>
+                <a
+                  href="https://wellfound.com/company/airtribe"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Careers at Airtribe
+                </a>
+                <Link
+                  href="/about-us"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  About us
+                </Link>
+                <Link
+                  href="/contact-us"
+                  className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
+                >
+                  Contact us
+                </Link>
+              </div>
+            </div>
+
+          </nav>
 
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+        {/* Bottom Legal / Contact Bar */}
+        <div className="border-t border-[#232328] px-6 sm:px-10 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[13px] sm:text-[14px]">
+          
+          {/* Note: NO copyright mark per user instruction */}
           <div>
-            &copy; {new Date().getFullYear()} Airtribe Edtech Inc. All rights reserved. Private sandbox preview.
+            <p className="text-zinc-500 font-medium">
+              2026 Airtribe Private Limited
+            </p>
           </div>
-          <div className="flex items-center gap-6">
-            <Link href="/contact-us" className="hover:text-gray-300 transition-colors">
-              Terms & Conditions
-            </Link>
-            <Link href="/contact-us" className="hover:text-gray-300 transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/contact-us" className="hover:text-gray-300 transition-colors">
-              Refund Policy
-            </Link>
+
+          {/* Legal Links & Contacts */}
+          <div className="flex flex-wrap items-center justify-center gap-x-3.5 gap-y-1 text-zinc-400">
+            <a
+              href="https://www.airtribe.live/terms-conditions"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="hover:text-white transition-colors"
+            >
+              Terms &amp; conditions
+            </a>
+            <span className="text-zinc-700">|</span>
+            <a
+              href="https://www.airtribe.live/privacy-policy"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="hover:text-white transition-colors"
+            >
+              Privacy policy
+            </a>
+            <span className="text-zinc-700">|</span>
+            <a
+              href="https://www.airtribe.live/refund-policy"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="hover:text-white transition-colors"
+            >
+              Refund policy
+            </a>
+            <span className="text-zinc-700">|</span>
+            <a
+              href="mailto:support@airtribe.live"
+              className="hover:text-white transition-colors"
+            >
+              support@airtribe.live
+            </a>
+            <span className="text-zinc-700">|</span>
+            <a
+              href="tel:+918031139097"
+              className="hover:text-white transition-colors"
+            >
+              +91-8031139097
+            </a>
           </div>
+
         </div>
 
       </div>
