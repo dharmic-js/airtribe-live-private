@@ -8,20 +8,11 @@ import { useApplyModal } from '@/components/ApplyModalContext';
 import { AirtribeButton } from '@/components/AirtribeButton';
 import {
   X,
-  Clock,
-  Users,
-  Calendar,
   Sparkles,
   CheckCircle2,
-  Download,
   ArrowRight,
   ChevronRight,
-  Shield,
-  Layers,
-  FileText,
-  BarChart2,
-  Rocket,
-  Award
+  Rocket
 } from 'lucide-react';
 
 const partnerLogos = [
@@ -37,11 +28,207 @@ const partnerLogos = [
   { name: 'Rapido', src: '/rapido.01bff05a.svg', width: 46, height: 22 },
 ];
 
+interface CurriculumModule {
+  tag: string;
+  title: string;
+  desc: string;
+}
+
+interface CurriculumPhase {
+  id: string;
+  tabLabel: string;
+  activeTitle: string;
+  activeDesc: string;
+  activeBadge: string;
+  modules: CurriculumModule[];
+  showCalloutBanner: boolean;
+  hasViewToggle?: boolean;
+}
+
+const curriculumPhases: CurriculumPhase[] = [
+  {
+    id: 'phase1',
+    tabLabel: 'Phase 1',
+    activeTitle: 'Phase 1: Craft',
+    activeDesc: 'Product thinking, research instincts and problem-solving fundamentals',
+    activeBadge: '[ 4 MODULES ]',
+    showCalloutBanner: true,
+    hasViewToggle: false,
+    modules: [
+      {
+        tag: 'MODULE 01',
+        title: 'Fundamentals of product management',
+        desc: 'What PMs actually do, product sense through teardowns, B2B vs B2C roles and your first real user conversation',
+      },
+      {
+        tag: 'MODULE 02',
+        title: 'Product strategy & strategic thinking',
+        desc: 'Vision, positioning, competitive moats, bet sizing, the new builder operating model and your own one-page product strategy',
+      },
+      {
+        tag: 'MODULE 03',
+        title: 'Problem discovery, market & user research',
+        desc: 'Personas, qualitative and quantitative research, and mapping B2B buying committees',
+      },
+      {
+        tag: 'MODULE 04',
+        title: 'Problem framing & prioritization',
+        desc: 'Problem statements, user stories, RICE, MoSCoW, first-principles thinking and back-of-envelope market sizing',
+      },
+    ],
+  },
+  {
+    id: 'phase2',
+    tabLabel: 'Phase 2',
+    activeTitle: 'Phase 2: Craft + AI',
+    activeDesc: 'Core PM work with AI as a working partner',
+    activeBadge: '[ 4 MODULES ]',
+    showCalloutBanner: true,
+    hasViewToggle: false,
+    modules: [
+      {
+        tag: 'MODULE 05',
+        title: 'UX & design collaboration',
+        desc: 'Design critique, wireframes and a clickable Figma prototype built with ChatGPT and Claude, tested with a real user',
+      },
+      {
+        tag: 'MODULE 06',
+        title: 'Effective communication as a PM',
+        desc: 'Pick your product case and write its PRD, plus stakeholder management, B2B communication and quality criteria for AI features',
+      },
+      {
+        tag: 'MODULE 07',
+        title: 'Analytics & metrics',
+        desc: 'North Star metrics, real SQL on a cloud data warehouse, funnels and cohorts in Amplitude, and A/B test analysis',
+      },
+      {
+        tag: 'MODULE 08',
+        title: 'Product launch & monetization',
+        desc: 'STP, MVPs and launch planning, monetization models, pricing AI products and B2B go-to-market',
+      },
+    ],
+  },
+  {
+    id: 'phase3',
+    tabLabel: 'Phase 3',
+    activeTitle: 'Phase 3: Deep AI',
+    activeDesc: 'Build, evaluate and ship AI-powered products',
+    activeBadge: '[ 6 MODULES ]',
+    showCalloutBanner: false,
+    hasViewToggle: true,
+    modules: [
+      {
+        tag: 'MODULE 09',
+        title: 'Tech 101 for PMs',
+        desc: 'How an app fits together, a real API call in Postman, Git, and running sprints with engineering',
+      },
+      {
+        tag: 'MODULE 10',
+        title: 'LLMs, RAG & AI foundations',
+        desc: 'LLM fundamentals, prompting, the fine-tuning vs RAG vs prompting decision, and eval design',
+      },
+      {
+        tag: 'MODULE 11',
+        title: 'Vibe coding for PMs',
+        desc: 'Run your PRD as a sprint with Claude Code, raise a pull request in a real codebase and set up OpenCode, a free coding agent you keep',
+      },
+      {
+        tag: 'MODULE 12',
+        title: 'Agents in production',
+        desc: 'When to use an agent, MCP, context engineering and guardrails, and your own personal agent with memory and skills',
+      },
+      {
+        tag: 'MODULE 13',
+        title: 'Evals for PMs',
+        desc: 'Eval sets, rubrics, LLM judges and red-teaming, ending in a ship or don\'t-ship call on your agent',
+      },
+      {
+        tag: 'MODULE 14',
+        title: 'Capstone project & interview prep',
+        desc: 'Design, build and present an AI-first product at Demo Day, then prepare for PM interviews',
+      },
+    ],
+  },
+  {
+    id: 'electives',
+    tabLabel: 'Electives',
+    activeTitle: 'Electives',
+    activeDesc: 'Two optional electives of 4 sessions each, run alongside your capstone. Take one or both',
+    activeBadge: '[ 2 ELECTIVES ]',
+    showCalloutBanner: true,
+    hasViewToggle: false,
+    modules: [
+      {
+        tag: 'ELECTIVE A',
+        title: 'System design for PMs',
+        desc: 'Caches, queues and a UPI payments flow, then AI feature and agent architecture, ending in an architecture doc for your capstone',
+      },
+      {
+        tag: 'ELECTIVE B',
+        title: 'Growth and business for PMs',
+        desc: 'Growth loops, retention, experiments and unit economics, with Canva, Meesho and CRED teardowns and a growth plan for your capstone',
+      },
+    ],
+  },
+  {
+    id: 'phase4',
+    tabLabel: 'Phase 4',
+    activeTitle: 'Phase 4: Interview prep',
+    activeDesc: 'Weekly expert-led sessions across 8 interview rounds, once the first 3 phases are done',
+    activeBadge: '[ 8 ROUND TYPES ]',
+    showCalloutBanner: false,
+    hasViewToggle: true,
+    modules: [
+      {
+        tag: 'ROUND 01',
+        title: 'AI interview',
+        desc: 'Show your AI-first skills and perform in AI-driven interview rounds',
+      },
+      {
+        tag: 'ROUND 02',
+        title: 'Execution',
+        desc: 'Handle ambiguity, and diagnose what went wrong and why',
+      },
+      {
+        tag: 'ROUND 03',
+        title: 'Product design',
+        desc: 'Find creative solutions to difficult or unusual problems',
+      },
+      {
+        tag: 'ROUND 04',
+        title: 'Product improvement',
+        desc: 'Improve existing products to meet customer needs and add value',
+      },
+      {
+        tag: 'ROUND 05',
+        title: 'Analytical',
+        desc: 'Frame problems in terms of concrete metrics and reason through them',
+      },
+      {
+        tag: 'ROUND 06',
+        title: 'Guesstimate',
+        desc: 'Work logically toward a close estimate when you don\'t have the data',
+      },
+      {
+        tag: 'ROUND 07',
+        title: 'Behavioural',
+        desc: 'Answer the experience-based and hypothetical scenario questions every PM interview includes',
+      },
+      {
+        tag: 'ROUND 08',
+        title: 'Strategy',
+        desc: 'Solve market, growth and business problems with structured thinking and clear decisions',
+      },
+    ],
+  },
+];
+
 export default function ProductManagementLaunchpadPage() {
   const router = useRouter();
   const { openModal } = useApplyModal();
   const [bannerVisible, setBannerVisible] = useState(true);
-  const [activeTab, setActiveTab] = useState<'curriculum' | 'capstone' | 'demoday' | 'careers'>('capstone');
+  const [selectedCurriculumPhase, setSelectedCurriculumPhase] = useState<string>('phase1');
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [curriculumModalOpen, setCurriculumModalOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [leadForm, setLeadForm] = useState({
@@ -90,7 +277,7 @@ export default function ProductManagementLaunchpadPage() {
     e.preventDefault();
     if (!leadForm.name || !leadForm.email || !leadForm.phone) return;
     setFormSubmitted(true);
-    // Smooth transition directly to the official Curriculum Document
+    // Direct transition to the full curriculum document
     setTimeout(() => {
       setCurriculumModalOpen(false);
       router.push('/courses/product-management-launchpad/curriculum');
@@ -99,8 +286,15 @@ export default function ProductManagementLaunchpadPage() {
 
   const format2 = (n: number) => String(n).padStart(2, '0');
 
+  const currentPhase = curriculumPhases.find((p) => p.id === selectedCurriculumPhase) || curriculumPhases[0];
+
+  // Determine which modules to display (if hasViewToggle and not isExpanded, show 4, otherwise all)
+  const displayModules = currentPhase.hasViewToggle && !isExpanded
+    ? currentPhase.modules.slice(0, 4)
+    : currentPhase.modules;
+
   return (
-    <div className="w-full bg-black text-white min-h-screen relative selection:bg-purple-500 selection:text-white">
+    <div className="w-full bg-black text-white min-h-screen relative selection:bg-purple-500 selection:text-white pb-24">
       
       {/* 1. TOP ANNOUNCEMENT BANNER */}
       {bannerVisible && (
@@ -266,22 +460,9 @@ export default function ProductManagementLaunchpadPage() {
           </div>
 
         </div>
-
-        {/* Floating WhatsApp Support Button */}
-        <a
-          href="https://wa.me/918031139097?text=Hi%20Airtribe,%20I%20have%20a%20question%20about%20the%20AI-First%20Product%20Management%20Launchpad"
-          target="_blank"
-          rel="noreferrer noopener"
-          aria-label="WhatsApp Support"
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-transform"
-        >
-          <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
-          </svg>
-        </a>
       </section>
 
-      {/* 3. PROGRAM HIGHLIGHTS SECTION (Image 2 exact replica) */}
+      {/* 3. PROGRAM HIGHLIGHTS SECTION */}
       <section className="w-full bg-black border-b border-[#232328]">
         <div className="max-w-[1440px] mx-auto border-x border-[#232328]">
           
@@ -397,185 +578,180 @@ export default function ProductManagementLaunchpadPage() {
         </div>
       </section>
 
-      {/* 4. PROGRAMS AT A GLANCE (Tabbed interactive section matching bottom of Image 2) */}
-      <section className="w-full bg-black py-20 sm:py-28 border-b border-[#232328]">
-        <div className="max-w-[1440px] mx-auto border-x border-[#232328] px-4 sm:px-8 lg:px-12">
+      {/* 4. PROGRAM CURRICULUM SECTION (Exact replica of user's screenshots) */}
+      <section className="w-full bg-white text-black py-16 sm:py-24 border-b border-[#e5e7eb] select-text">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
           
+          {/* Centered Heading & Subtitle */}
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-[38px] sm:text-[54px] font-editorial italic font-normal text-white">
-              Programs at a glance
+            <h2 className="text-[38px] sm:text-[48px] lg:text-[56px] font-editorial text-black tracking-tight leading-none">
+              Program curriculum
             </h2>
+            <p className="text-zinc-500 text-xs sm:text-[13px] font-normal mt-3">
+              14 modules · 3 phases · 2 electives · 13 portfolio projects
+            </p>
           </div>
 
-          {/* Tab Navigation */}
-          <div className="w-full max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 border-b border-[#232328] text-center mb-12">
-            {[
-              { id: 'curriculum', label: 'AI-first curriculum' },
-              { id: 'capstone', label: 'Capstone Project' },
-              { id: 'demoday', label: 'Demo Day' },
-              { id: 'careers', label: 'Careers & beyond' },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`py-4 text-xs sm:text-sm font-medium transition-all relative ${
-                  activeTab === tab.id
-                    ? 'text-white font-semibold'
-                    : 'text-zinc-500 hover:text-zinc-300'
-                }`}
-              >
-                {tab.label}
-                {activeTab === tab.id && (
-                  <div className="absolute bottom-0 inset-x-0 h-0.5 bg-white" />
-                )}
-              </button>
-            ))}
-          </div>
+          {/* Main Container Frame */}
+          <div className="w-full border border-[#e5e7eb] bg-white overflow-hidden shadow-sm">
+            
+            {/* Top Grid Area: Left Tabs + Right Modules */}
+            <div className="flex flex-col lg:flex-row items-stretch">
+              
+              {/* Left Column: Phase Tabs */}
+              <div className="w-full lg:w-[280px] shrink-0 border-b lg:border-b-0 lg:border-r border-[#e5e7eb] bg-[#f9fafb] flex flex-col">
+                {curriculumPhases.map((phase) => {
+                  const isActive = phase.id === selectedCurriculumPhase;
 
-          {/* Tab Content Display */}
-          <div className="w-full max-w-4xl mx-auto bg-[#0a0a0c] border border-[#232328] rounded-xl p-6 sm:p-10 shadow-2xl">
-            {activeTab === 'capstone' && (
-              <div className="flex flex-col lg:flex-row items-center gap-8">
-                <div className="flex-1 space-y-4">
-                  <span className="font-mono text-xs uppercase tracking-widest text-purple-400 bg-purple-500/10 px-3 py-1 rounded border border-purple-500/20 inline-block">
-                    02 CAPSTONE PROJECT
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-normal text-white">
-                    Solve real-world PM challenges vetted by hiring partners
-                  </h3>
-                  <p className="text-zinc-400 text-sm leading-relaxed">
-                    Build a complete 0-to-1 product strategy, from AI persona synthesis and PRD drafting to interactive prototyping in v0/Cursor and launch metrics tracking.
-                  </p>
-                  <ul className="space-y-2 text-xs sm:text-sm text-zinc-300 pt-2">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0" />
-                      Individual capstone with 1:1 Director of Product feedback
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0" />
-                      Presented live to hiring managers on Demo Day
-                    </li>
-                  </ul>
-                  <div className="pt-4">
+                  if (isActive) {
+                    return (
+                      <div
+                        key={phase.id}
+                        className="w-full p-6 bg-[#121214] border-b border-[#e5e7eb] text-white relative select-none"
+                        style={{
+                          backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px)',
+                          backgroundSize: '4px 4px'
+                        }}
+                      >
+                        <h4 className="text-white text-base sm:text-lg font-semibold tracking-tight">
+                          {phase.activeTitle}
+                        </h4>
+                        <p className="text-zinc-300 text-xs sm:text-[13px] leading-relaxed mt-2.5 font-normal">
+                          {phase.activeDesc}
+                        </p>
+                        <div className="mt-8 font-mono text-[11px] text-zinc-400 tracking-wider font-medium">
+                          {phase.activeBadge}
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  return (
                     <button
-                      onClick={() => setCurriculumModalOpen(true)}
-                      className="inline-flex items-center gap-2 text-sm text-purple-300 hover:text-purple-200 underline font-medium"
+                      key={phase.id}
+                      onClick={() => {
+                        setSelectedCurriculumPhase(phase.id);
+                        setIsExpanded(true);
+                      }}
+                      className="w-full text-left px-6 py-4 border-b border-[#e5e7eb] last:border-b-0 bg-[#f9fafb] hover:bg-[#f3f4f6] text-zinc-700 font-medium text-sm transition-colors cursor-pointer flex items-center justify-between"
                     >
-                      View capstone project rubrics in full curriculum &rarr;
+                      <span>{phase.tabLabel}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Right Column: 2-Column Module Grid */}
+              <div className="flex-1 flex flex-col bg-white">
+                <div className="grid grid-cols-1 md:grid-cols-2 flex-1">
+                  {displayModules.map((mod, idx) => {
+                    const isEvenCol = idx % 2 === 1;
+                    return (
+                      <div
+                        key={mod.tag}
+                        className={`p-6 sm:p-8 border-b border-[#e5e7eb] flex flex-col justify-start ${
+                          !isEvenCol ? 'md:border-r md:border-[#e5e7eb]' : ''
+                        }`}
+                      >
+                        <span className="font-mono text-xs uppercase tracking-wider text-zinc-800 font-semibold mb-2.5 block">
+                          {mod.tag}
+                        </span>
+                        <h3 className="font-editorial text-lg sm:text-[22px] font-normal text-black leading-snug mb-2">
+                          {mod.title}
+                        </h3>
+                        <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed font-normal">
+                          {mod.desc}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* View less / View more toggle for Phase 3 and Phase 4 */}
+                {currentPhase.hasViewToggle && (
+                  <div className="p-4 sm:p-5 flex justify-center sm:justify-end border-t border-[#e5e7eb] bg-white">
+                    <button
+                      onClick={() => setIsExpanded(!isExpanded)}
+                      className="px-4 py-2 border border-[#e5e7eb] bg-white hover:bg-zinc-50 text-xs font-medium text-zinc-700 rounded transition-colors flex items-center gap-1.5 shadow-sm cursor-pointer"
+                    >
+                      <span>{isExpanded ? 'View less ^' : 'View more v'}</span>
                     </button>
                   </div>
-                </div>
+                )}
+              </div>
 
-                <div className="w-full lg:w-[320px] aspect-[4/3] rounded-lg bg-gradient-to-tr from-purple-900/40 via-blue-900/30 to-black border border-purple-500/30 p-6 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-300 font-bold text-sm">
-                      PM
-                    </div>
-                    <p className="text-white font-medium text-sm">Capstone: 0-to-1 AI Copilot for Quick Commerce</p>
-                    <p className="text-zinc-400 text-xs">Spec, Prototype, Metric Funnel & GTM Playbook</p>
-                  </div>
-                  <div className="flex items-center justify-between text-[11px] text-zinc-500 font-mono pt-4 border-t border-white/10">
-                    <span>STATUS: VETTED</span>
-                    <span className="text-emerald-400">DEMO READY</span>
-                  </div>
-                </div>
+            </div>
+
+            {/* Bottom Purple Callout Banner for Phase 1, Phase 2, Electives */}
+            {currentPhase.showCalloutBanner && (
+              <div className="w-full bg-[#7c3aed] text-white px-6 sm:px-10 py-5 sm:py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-[#e5e7eb]">
+                <h3 className="font-editorial italic text-xl sm:text-2xl lg:text-[26px] text-white font-normal">
+                  Want to dive deeper into the details?
+                </h3>
+                <button
+                  onClick={() => setCurriculumModalOpen(true)}
+                  className="bg-white text-black hover:bg-zinc-100 text-xs sm:text-sm font-medium px-5 py-2.5 rounded flex items-center gap-2 transition-colors cursor-pointer self-start sm:self-auto shrink-0 shadow-sm"
+                >
+                  <span>Get the full curriculum</span>
+                  <ChevronRight className="w-4 h-4 text-black" />
+                </button>
               </div>
             )}
 
-            {activeTab === 'curriculum' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="font-mono text-xs text-purple-400 uppercase tracking-widest">16 WEEKS • 5 PHASES</span>
-                    <h3 className="text-2xl font-normal text-white mt-1">AI-First Product Management Syllabus</h3>
-                  </div>
-                  <button
-                    onClick={() => setCurriculumModalOpen(true)}
-                    className="px-4 py-2 rounded text-xs font-semibold bg-white text-black hover:bg-zinc-200 transition-colors"
-                  >
-                    Get Full PDF
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
-                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 1 (WEEKS 1-4)</span>
-                    <h4 className="text-sm font-semibold text-white">Problem Discovery & AI Market Sizing</h4>
-                    <p className="text-xs text-zinc-400 mt-1">Conducting user interviews, building AI personas, opportunity solution trees, and market modeling.</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
-                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 2 (WEEKS 5-7)</span>
-                    <h4 className="text-sm font-semibold text-white">Modern AI PRDs & System Scoping</h4>
-                    <p className="text-xs text-zinc-400 mt-1">Authoring AI PRDs, defining edge cases, APIs, vector DB architectures, and rapid prototyping in v0.</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
-                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 3 (WEEKS 8-10)</span>
-                    <h4 className="text-sm font-semibold text-white">Metrics, Funnels & Churn Modeling</h4>
-                    <p className="text-xs text-zinc-400 mt-1">Tracking taxonomies in Mixpanel/Amplitude, retention cohort curves, A/B testing, and North Star metrics.</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
-                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 4 & 5 (WEEKS 11-16)</span>
-                    <h4 className="text-sm font-semibold text-white">PLG, Capstone & PM Interview Mastery</h4>
-                    <p className="text-xs text-zinc-400 mt-1">Viral expansion flywheels, monetization experiments, Demo Day jury review, and 1:1 interview drills.</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'demoday' && (
-              <div className="space-y-4">
-                <span className="font-mono text-xs uppercase tracking-widest text-purple-400 bg-purple-500/10 px-3 py-1 rounded border border-purple-500/20 inline-block">
-                  03 LIVE DEMO DAY
-                </span>
-                <h3 className="text-2xl font-normal text-white">Pitch directly to VPs and Product Directors</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">
-                  Every builder presents their vetted Capstone project to an elite jury of hiring managers from companies like Swiggy, Razorpay, CRED, and Zepto. Top presenters receive direct fast-track interview invitations.
-                </p>
-                <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Award className="w-5 h-5 text-purple-400" />
-                    <span className="text-sm text-zinc-300">Over 350+ candidates placed through Airtribe Demo Days</span>
-                  </div>
-                  <button
-                    onClick={() => openModal('Demo Day Participation')}
-                    className="text-xs text-white underline hover:text-purple-300 font-medium"
-                  >
-                    Learn about jury &rarr;
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'careers' && (
-              <div className="space-y-4">
-                <span className="font-mono text-xs uppercase tracking-widest text-purple-400 bg-purple-500/10 px-3 py-1 rounded border border-purple-500/20 inline-block">
-                  04 CAREER SERVICES & BEYOND
-                </span>
-                <h3 className="text-2xl font-normal text-white">Comprehensive PM placement preparation</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">
-                  Personalized 1:1 resume teardown, portfolio optimization, mock interviews for Product Sense, Root Cause Analysis, and Behavioral Leadership rounds with senior practitioners.
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-center">
-                  <div className="p-3 bg-zinc-950 border border-[#232328] rounded">
-                    <span className="text-xl font-bold text-white block">1:1</span>
-                    <span className="text-xs text-zinc-400">Mentor Coaching</span>
-                  </div>
-                  <div className="p-3 bg-zinc-950 border border-[#232328] rounded">
-                    <span className="text-xl font-bold text-white block">400+</span>
-                    <span className="text-xs text-zinc-400">Hiring Partners</span>
-                  </div>
-                  <div className="p-3 bg-zinc-950 border border-[#232328] rounded">
-                    <span className="text-xl font-bold text-white block">48%</span>
-                    <span className="text-xs text-zinc-400">Avg. Salary Hike</span>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
         </div>
       </section>
 
-      {/* 5. LEAD CAPTURE SIGN-UP MODAL (Leads directly to Curriculum Document) */}
+      {/* 5. STICKY BOTTOM ENROLMENT BAR (Matches user's screenshots 3, 4, 5) */}
+      <div className="fixed bottom-0 inset-x-0 bg-black text-white border-t border-[#232328] z-40 py-3.5 px-4 sm:px-8 shadow-2xl backdrop-blur-md bg-black/95">
+        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6">
+          
+          {/* Left Enrolment Details */}
+          <div className="flex items-center gap-6 sm:gap-10 text-left w-full sm:w-auto justify-between sm:justify-start">
+            <div>
+              <div className="text-[11px] text-zinc-400 font-normal leading-tight">Enrolment ends on</div>
+              <div className="text-xs sm:text-sm font-semibold text-white tracking-tight mt-0.5">21 November</div>
+            </div>
+            <div>
+              <div className="text-[11px] text-zinc-400 font-normal leading-tight">Course starting on</div>
+              <div className="text-xs sm:text-sm font-semibold text-white tracking-tight mt-0.5">22 November</div>
+            </div>
+            <div>
+              <div className="text-[11px] text-zinc-400 font-normal leading-tight">Your commitment</div>
+              <div className="text-xs sm:text-sm font-semibold text-white tracking-tight mt-0.5">10-12 hrs/week</div>
+            </div>
+          </div>
+
+          {/* Right Action Button */}
+          <div className="flex items-center gap-4 shrink-0 w-full sm:w-auto justify-end">
+            <span className="text-xs text-zinc-400 hidden lg:inline-block">Limited seats available</span>
+            <button
+              onClick={() => openModal('AI-First Product Management')}
+              className="bg-white text-black hover:bg-zinc-200 text-xs sm:text-sm font-semibold px-5 py-2.5 rounded flex items-center gap-2 transition-colors cursor-pointer shrink-0 shadow"
+            >
+              <span>Apply now</span>
+              <ChevronRight className="w-4 h-4 text-black" />
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      {/* 6. FLOATING WHATSAPP BUTTON (Docked right above sticky bar) */}
+      <a
+        href="https://wa.me/918031139097?text=Hi%20Airtribe,%20I%20have%20a%20question%20about%20the%20AI-First%20Product%20Management%20Launchpad"
+        target="_blank"
+        rel="noreferrer noopener"
+        aria-label="WhatsApp Support"
+        className="fixed bottom-20 sm:bottom-22 right-5 z-50 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-transform"
+      >
+        <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+        </svg>
+      </a>
+
+      {/* 7. LEAD CAPTURE SIGN-UP MODAL (Leads directly to Curriculum Document) */}
       {curriculumModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-[#0e0e12] border border-[#232328] rounded-2xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl animate-in fade-in zoom-in-95 duration-200">
