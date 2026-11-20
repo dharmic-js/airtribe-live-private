@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useApplyModal } from './ApplyModalContext';
 import { AirtribeButton } from './AirtribeButton';
-import { ChevronDown, X, Sparkles, Code2, Briefcase } from 'lucide-react';
+import { ChevronDown, X } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { openModal } = useApplyModal();
@@ -51,6 +51,7 @@ export const Navbar: React.FC = () => {
             >
               <button 
                 type="button"
+                onClick={() => setProgramsOpen(!programsOpen)}
                 className="flex items-center gap-1.5 text-[15px] font-normal text-white hover:text-gray-300 transition-colors py-2"
               >
                 <span>Programs</span>
@@ -60,61 +61,30 @@ export const Navbar: React.FC = () => {
               </button>
 
               {programsOpen && (
-                <div className="absolute top-full -left-6 w-80 p-3 mt-1 bg-black border border-[#232328] shadow-2xl rounded-xl z-50">
-                  <div className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 px-3 py-1.5">
-                    Flagship Cohorts
-                  </div>
+                <div className="absolute top-full left-0 w-[240px] py-2 mt-1 bg-black border border-[#232328] shadow-2xl z-50">
                   <Link 
-                    href="/courses/generative-ai-launchpad"
-                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-zinc-900 transition-colors group"
+                    href="/courses/product-management-launchpad"
+                    onClick={() => setProgramsOpen(false)}
+                    className="block px-4 py-2 text-[14px] text-zinc-300 hover:text-white hover:bg-zinc-900/60 transition-colors text-left"
                   >
-                    <div className="p-2 rounded bg-purple-500/10 text-purple-400">
-                      <Sparkles className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-white group-hover:text-[#a5b4fc] flex items-center gap-2">
-                        GenAI Launchpad
-                        <span className="text-[9px] bg-red-500/20 text-red-300 px-1 py-0.5 rounded">NEW</span>
-                      </div>
-                      <p className="text-xs text-zinc-400 mt-0.5">Autonomous agents & RAG</p>
-                    </div>
+                    AI-First Product Management
                   </Link>
 
                   <Link 
                     href="/courses/backend-engineering-launchpad"
-                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-zinc-900 transition-colors group"
+                    onClick={() => setProgramsOpen(false)}
+                    className="block px-4 py-2 text-[14px] text-zinc-300 hover:text-white hover:bg-zinc-900/60 transition-colors text-left"
                   >
-                    <div className="p-2 rounded bg-blue-500/10 text-blue-400">
-                      <Code2 className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-white group-hover:text-[#a5b4fc]">
-                        AI-First Software Engg
-                      </div>
-                      <p className="text-xs text-zinc-400 mt-0.5">Distributed systems at scale</p>
-                    </div>
+                    AI-First Software Engineering
                   </Link>
 
                   <Link 
-                    href="/courses/product-management-launchpad"
-                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-zinc-900 transition-colors group"
+                    href="/courses/generative-ai-launchpad"
+                    onClick={() => setProgramsOpen(false)}
+                    className="block px-4 py-2 text-[14px] text-zinc-300 hover:text-white hover:bg-zinc-900/60 transition-colors text-left"
                   >
-                    <div className="p-2 rounded bg-emerald-500/10 text-emerald-400">
-                      <Briefcase className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-white group-hover:text-[#a5b4fc]">
-                        AI-First Product Mgmt
-                      </div>
-                      <p className="text-xs text-zinc-400 mt-0.5">Product strategy & AI PRDs</p>
-                    </div>
+                    The GenAI Launchpad
                   </Link>
-
-                  <div className="pt-2 border-t border-[#232328] mt-1">
-                    <Link href="/courses" className="block text-center text-xs text-zinc-400 hover:text-white py-1">
-                      View All Programs &rarr;
-                    </Link>
-                  </div>
                 </div>
               )}
             </div>
@@ -175,17 +145,14 @@ export const Navbar: React.FC = () => {
                     Programs
                   </div>
                   <div className="space-y-2.5 pl-2 text-sm">
-                    <Link href="/courses/generative-ai-launchpad" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
-                      The GenAI Launchpad
+                    <Link href="/courses/product-management-launchpad" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      AI-First Product Management
                     </Link>
                     <Link href="/courses/backend-engineering-launchpad" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
                       AI-First Software Engineering
                     </Link>
-                    <Link href="/courses/product-management-launchpad" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
-                      AI-First Product Management
-                    </Link>
-                    <Link href="/courses" onClick={() => setDrawerOpen(false)} className="block text-[#a5b4fc] font-medium pt-1">
-                      View all cohorts &rarr;
+                    <Link href="/courses/generative-ai-launchpad" onClick={() => setDrawerOpen(false)} className="block text-zinc-300 hover:text-white">
+                      The GenAI Launchpad
                     </Link>
                   </div>
                 </div>
