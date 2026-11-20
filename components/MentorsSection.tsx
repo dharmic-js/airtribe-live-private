@@ -12,14 +12,14 @@ interface Mentor {
   companyLogo: string;
 }
 
-// Mixed surnames from across the site to ensure no real individuals are referenced
+// Mixed surnames and distinct ethnicity-matched AI portraits
 const mentorsList: Mentor[] = [
   {
     firstName: 'Kumar',
     lastName: 'George',
     role: 'Product manager',
     company: 'Meta',
-    photo: '/ai-portraits/mentor-1.jpg',
+    photo: '/portraits/mentor-kumar-george.jpg',
     companyLogo: '/logos/meta.da990ff0.svg',
   },
   {
@@ -27,7 +27,7 @@ const mentorsList: Mentor[] = [
     lastName: 'Jain',
     role: 'Staff designer',
     company: 'Shopify',
-    photo: '/ai-portraits/mentor-2.jpg',
+    photo: '/portraits/mentor-ben-jain.jpg',
     companyLogo: '/logos/shopify.d0cf7ff1.svg',
   },
   {
@@ -35,7 +35,7 @@ const mentorsList: Mentor[] = [
     lastName: 'Tak',
     role: 'Sr. director of product',
     company: 'Razorpay',
-    photo: '/ai-portraits/mentor-3.jpg',
+    photo: '/portraits/mentor-prasun-tak.jpg',
     companyLogo: '/logos/cred.a4cd9d0e.svg',
   },
   {
@@ -43,7 +43,7 @@ const mentorsList: Mentor[] = [
     lastName: 'Utsav',
     role: 'SDE-III',
     company: 'Microsoft',
-    photo: '/ai-portraits/mentor-4.jpg',
+    photo: '/portraits/mentor-abhimanyu-utsav.jpg',
     companyLogo: '/logos/microsoft.e3fe3bf3.svg',
   },
   {
@@ -51,7 +51,7 @@ const mentorsList: Mentor[] = [
     lastName: 'Deshmukh',
     role: 'Staff software engineer',
     company: 'Uber',
-    photo: '/ai-portraits/alumni-male-2.jpg',
+    photo: '/portraits/mentor-pawan-deshmukh.jpg',
     companyLogo: '/logos/uber.48b48a45.svg',
   },
   {
@@ -59,7 +59,7 @@ const mentorsList: Mentor[] = [
     lastName: 'Rawat',
     role: 'Principal product manager',
     company: 'Apple',
-    photo: '/ai-portraits/alumni-male-1.jpg',
+    photo: '/portraits/mentor-abhishek-rawat.jpg',
     companyLogo: '/logos/apple.61f872c0.svg',
   },
   {
@@ -67,7 +67,7 @@ const mentorsList: Mentor[] = [
     lastName: 'Tiwari',
     role: 'AVP of product',
     company: 'Paytm',
-    photo: '/ai-portraits/mentor-1.jpg',
+    photo: '/portraits/mentor-nagappan-tiwari.jpg',
     companyLogo: '/logos/paytm.83ecf65f.svg',
   },
   {
@@ -75,7 +75,7 @@ const mentorsList: Mentor[] = [
     lastName: 'Tomar',
     role: 'Head of Engineering',
     company: 'Groww',
-    photo: '/ai-portraits/mentor-3.jpg',
+    photo: '/portraits/mentor-rishabh-tomar.jpg',
     companyLogo: '/logos/groww-a.1adebd1b.svg',
   },
 ];

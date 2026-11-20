@@ -14,12 +14,12 @@ interface Testimonial {
   quote: string;
 }
 
-// Column 1: Staggered reviews with mixed surnames & AI portraits
+// Column 1: Staggered reviews with mixed surnames & distinct ethnicity portraits
 const col1Reviews: Testimonial[] = [
   {
     name: 'Kunal Tiwari',
     role: 'Senior Technical Lead @HCL Technologies',
-    avatar: '/ai-portraits/avatar-2.jpg',
+    avatar: '/portraits/journey-kunal-tiwari.jpg',
     prevLogo: '/images/cgi_mono_944c0fb788.svg',
     prevAlt: 'CGI',
     nextLogo: '/images/hcltech_mono_2e3f8613ff.svg',
@@ -29,7 +29,7 @@ const col1Reviews: Testimonial[] = [
   {
     name: 'Yashwanth Tomar',
     role: 'Tech Lead @Kognitive Networks',
-    avatar: '/ai-portraits/avatar-1.jpg',
+    avatar: '/portraits/journey-yashwanth-tomar.jpg',
     prevLogo: '/images/ibm_mono_784a4c9801.svg',
     prevAlt: 'IBM',
     nextLogo: '/images/kognitive_networks_mono_73bad205d9.svg',
@@ -39,7 +39,7 @@ const col1Reviews: Testimonial[] = [
   {
     name: 'Ritik Deshmukh',
     role: 'Junior Software Developer @ Jhaveri Finserve',
-    avatar: '/ai-portraits/avatar-7.jpg',
+    avatar: '/portraits/journey-ritik-deshmukh.jpg',
     prevLogo: '/images/onclick_innovations_mono_91154c51c7.svg',
     prevAlt: 'Onclick Innovations',
     nextLogo: '/images/jhaveri_mono_90e05f4125.svg',
@@ -49,7 +49,7 @@ const col1Reviews: Testimonial[] = [
   {
     name: 'Divyasri Katiyar',
     role: 'SDE II (Frontend) @ LeViCh',
-    avatar: '/ai-portraits/avatar-9.jpg',
+    avatar: '/portraits/journey-divyasri-katiyar.jpg',
     prevLogo: '/images/publicis_sapient_mono_b4f22fe8a7.svg',
     prevAlt: 'Publicis Sapient',
     nextLogo: '/images/levich_mono_47733f462a.svg',
@@ -58,12 +58,12 @@ const col1Reviews: Testimonial[] = [
   },
 ];
 
-// Column 2: Staggered reviews with mixed surnames & AI portraits
+// Column 2: Staggered reviews with mixed surnames & distinct ethnicity portraits
 const col2Reviews: Testimonial[] = [
   {
     name: 'Ranadheer Sahoo',
     role: 'Backend Engineer @ JPMorgan Chase',
-    avatar: '/ai-portraits/avatar-3.jpg',
+    avatar: '/portraits/journey-ranadheer-sahoo.jpg',
     prevLogo: '/images/microsoft_mono_a95566b9f5.svg',
     prevAlt: 'Microsoft',
     nextLogo: '/images/jpmorganchase_mono_93bf95023d.svg',
@@ -73,7 +73,7 @@ const col2Reviews: Testimonial[] = [
   {
     name: 'Anshuman Rawat',
     role: 'SDE II @Hero Vired',
-    avatar: '/ai-portraits/avatar-4.jpg',
+    avatar: '/portraits/journey-anshuman-rawat.jpg',
     prevLogo: '/images/dozee_mono_d6f93d0ceb.svg',
     prevAlt: 'Dozee',
     nextLogo: '/images/hero_vired_mono_b4a1edc2d3.svg',
@@ -83,7 +83,7 @@ const col2Reviews: Testimonial[] = [
   {
     name: 'Shubham Ranjan',
     role: 'SDE 1 @Swageazy',
-    avatar: '/ai-portraits/avatar-5.jpg',
+    avatar: '/portraits/journey-shubham-ranjan.jpg',
     prevLogo: '/images/blackbox_mono_9d22bb7bc1.svg',
     prevAlt: 'Black Box',
     nextLogo: '/images/swageazy_mono_c06c08488b.svg',
@@ -93,7 +93,7 @@ const col2Reviews: Testimonial[] = [
   {
     name: 'Aditya Manda',
     role: 'SDE @ Leadrat',
-    avatar: '/ai-portraits/avatar-10.jpg',
+    avatar: '/portraits/journey-aditya-manda.jpg',
     prevLogo: '/images/cognizant_mono_e1ff23e298.svg',
     prevAlt: 'Cognizant',
     nextLogo: '/images/leadrat_mono_0591f7a857.svg',
@@ -102,12 +102,12 @@ const col2Reviews: Testimonial[] = [
   },
 ];
 
-// Column 3: Staggered reviews with mixed surnames & AI portraits
+// Column 3: Staggered reviews with mixed surnames & distinct ethnicity portraits
 const col3Reviews: Testimonial[] = [
   {
     name: 'Aditya Deshmukh',
     role: 'SDE @ Leadrat',
-    avatar: '/ai-portraits/avatar-10.jpg',
+    avatar: '/portraits/journey-aditya-deshmukh.jpg',
     prevLogo: '/images/cognizant_mono_e1ff23e298.svg',
     prevAlt: 'Cognizant',
     nextLogo: '/images/leadrat_mono_0591f7a857.svg',
@@ -117,7 +117,7 @@ const col3Reviews: Testimonial[] = [
   {
     name: 'Yash Kumar',
     role: 'SDE 2 @ Gritworks',
-    avatar: '/ai-portraits/avatar-6.jpg',
+    avatar: '/portraits/journey-yash-kumar.jpg',
     prevLogo: '/images/qolaba_mono_f91f62a310.svg',
     prevAlt: 'Qolaba',
     nextLogo: '/images/gritworks_mono_db805b4f04.svg',
@@ -127,7 +127,7 @@ const col3Reviews: Testimonial[] = [
   {
     name: 'Kartik Sai',
     role: 'SDE-1 @ Dentira',
-    avatar: '/ai-portraits/avatar-8.jpg',
+    avatar: '/portraits/journey-kartik-sai.jpg',
     prevLogo: '/images/newton_school_mono_58548afb18.svg',
     prevAlt: 'Newton School',
     nextLogo: '/images/dentira_mono_7478618fca.svg',
@@ -135,9 +135,9 @@ const col3Reviews: Testimonial[] = [
     quote: 'Airtribe accelerated my journey exponentially. The continuous feedback loops on code and real mock interviews simulate top tech companies like nothing else.',
   },
   {
-    name: 'Kanupriya Rawat',
+    name: 'Ananya Rawat',
     role: 'Growth Product Manager @ Matiks',
-    avatar: '/ai-portraits/avatar-12.jpg',
+    avatar: '/portraits/journey-ananya-rawat.jpg',
     prevLogo: '/images/endevis_mono_120bfeb334.svg',
     prevAlt: 'Endevis',
     nextLogo: '/images/matiks_mono_aae347cb1c.svg',

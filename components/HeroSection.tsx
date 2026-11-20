@@ -108,22 +108,22 @@ export const HeroSection: React.FC = () => {
             </span>
             <div className="flex items-center">
               <img
-                src="/ai-portraits/avatar-1.jpg"
+                src="/portraits/hero-avatar-1.jpg"
                 alt="Mentor"
                 className="w-8 h-8 rounded-full border-2 border-black object-cover shrink-0"
               />
               <img
-                src="/ai-portraits/avatar-2.jpg"
+                src="/portraits/hero-avatar-2.jpg"
                 alt="Mentor"
                 className="w-8 h-8 rounded-full border-2 border-black object-cover -ml-2 shrink-0"
               />
               <img
-                src="/ai-portraits/avatar-3.jpg"
+                src="/portraits/hero-avatar-3.jpg"
                 alt="Mentor"
                 className="w-8 h-8 rounded-full border-2 border-black object-cover -ml-2 shrink-0"
               />
               <img
-                src="/ai-portraits/avatar-4.jpg"
+                src="/portraits/hero-avatar-4.jpg"
                 alt="Mentor"
                 className="w-8 h-8 rounded-full border-2 border-black object-cover -ml-2 shrink-0"
               />

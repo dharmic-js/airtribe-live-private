@@ -95,7 +95,7 @@ export const StoriesSection: React.FC = () => {
               </p>
               <div className="flex items-center gap-4 pt-4 border-t border-[#232328]/60">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-zinc-700 bg-zinc-800">
-                  <Image src="/ai-portraits/avatar-2.jpg" alt="" fill className="object-cover" unoptimized />
+                  <Image src="/portraits/story-yash-tiwari.jpg" alt="" fill className="object-cover" unoptimized />
                 </div>
                 <div>
                   <h4 className="text-white text-base font-bold leading-tight">Yash Tiwari</h4>
@@ -152,7 +152,7 @@ export const StoriesSection: React.FC = () => {
               </div>
               <div className="flex items-center gap-3 pt-3 border-t border-[#232328]/60">
                 <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 border border-zinc-700 bg-zinc-800">
-                  <Image src="/ai-portraits/avatar-5.jpg" alt="" fill className="object-cover" unoptimized />
+                  <Image src="/portraits/story-kanupriya-rawat.jpg" alt="" fill className="object-cover" unoptimized />
                 </div>
                 <div>
                   <h4 className="text-white text-sm font-bold leading-tight">Kanupriya Rawat</h4>
@@ -168,7 +168,7 @@ export const StoriesSection: React.FC = () => {
               </p>
               <div className="flex items-center gap-4 pt-4 border-t border-[#232328]/60">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-zinc-700 bg-zinc-800">
-                  <Image src="/ai-portraits/avatar-6.jpg" alt="" fill className="object-cover" unoptimized />
+                  <Image src="/portraits/story-unnam-deshmukh.jpg" alt="" fill className="object-cover" unoptimized />
                 </div>
                 <div>
                   <h4 className="text-white text-base font-bold leading-tight">Unnam Deshmukh</h4>
@@ -194,7 +194,7 @@ export const StoriesSection: React.FC = () => {
               </div>
               <div className="flex items-center gap-4 pt-4 border-t border-[#232328]/60">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-zinc-700 bg-zinc-800">
-                  <Image src="/ai-portraits/avatar-4.jpg" alt="" fill className="object-cover" unoptimized />
+                  <Image src="/portraits/story-deeksha-george.jpg" alt="" fill className="object-cover" unoptimized />
                 </div>
                 <div>
                   <h4 className="text-white text-base font-bold leading-tight">Deeksha George</h4>
@@ -211,7 +211,7 @@ export const StoriesSection: React.FC = () => {
               </p>
               <div className="flex items-center gap-4 pt-4 border-t border-[#232328]/60">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-zinc-700 bg-zinc-800">
-                  <Image src="/ai-portraits/avatar-2.jpg" alt="" fill className="object-cover" unoptimized />
+                  <Image src="/portraits/story-yash-tiwari.jpg" alt="" fill className="object-cover" unoptimized />
                 </div>
                 <div>
                   <h4 className="text-white text-base font-bold leading-tight">Yash Tiwari</h4>
@@ -268,7 +268,7 @@ export const StoriesSection: React.FC = () => {
               </div>
               <div className="flex items-center gap-3 pt-3 border-t border-[#232328]/60">
                 <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 border border-zinc-700 bg-zinc-800">
-                  <Image src="/ai-portraits/avatar-5.jpg" alt="" fill className="object-cover" unoptimized />
+                  <Image src="/portraits/story-kanupriya-rawat.jpg" alt="" fill className="object-cover" unoptimized />
                 </div>
                 <div>
                   <h4 className="text-white text-sm font-bold leading-tight">Kanupriya Rawat</h4>
@@ -284,7 +284,7 @@ export const StoriesSection: React.FC = () => {
               </p>
               <div className="flex items-center gap-4 pt-4 border-t border-[#232328]/60">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-zinc-700 bg-zinc-800">
-                  <Image src="/ai-portraits/avatar-6.jpg" alt="" fill className="object-cover" unoptimized />
+                  <Image src="/portraits/story-unnam-deshmukh.jpg" alt="" fill className="object-cover" unoptimized />
                 </div>
                 <div>
                   <h4 className="text-white text-base font-bold leading-tight">Unnam Deshmukh</h4>
