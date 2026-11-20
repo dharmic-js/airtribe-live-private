@@ -33,6 +33,7 @@ export const FoundersLetterSection: React.FC = () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
     handleScroll();
 
     const loop = () => {
@@ -50,13 +51,14 @@ export const FoundersLetterSection: React.FC = () => {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     };
   }, []);
 
   // Subtle interactive parallax tilt when letter is fully unfolded
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (progress < 0.85) return;
+    if (progress < 0.88) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const nx = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
     const ny = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
@@ -73,48 +75,60 @@ export const FoundersLetterSection: React.FC = () => {
   // =========================================================================
   // ANIMATION STAGES TIMELINE (0.0 -> 1.0)
   // =========================================================================
-  // 1. Initial State: Envelope shows Address Face (Stamp, "To every builder reading this")
-  // 2. Stage 1 (0.05 -> 0.25): Envelope rotates 180° around Y to reveal opening side with flap
-  // 3. Stage 2 (0.25 -> 0.45): Flap unfolds & rotates 180° upwards around top hinge
-  // 4. Stage 3 (0.45 -> 0.65): Folded letter paper emerges and slides upwards out of pocket
-  // 5. Stage 4 (0.65 -> 0.85): Envelope sinks & fades, letter unfolds top & bottom flat
-  // 6. Stage 5 (0.85 -> 1.00): Full letter displayed with complete manifesto text & interactive tilt
+  // 1. Initial State (0.00 -> 0.06): Envelope shows Address Face (Stamp & Title)
+  // 2. Stage 1 (0.06 -> 0.22): Envelope rotates 180° around Y to reveal opening side
+  // 3. Stage 2 (0.22 -> 0.38): Triangular flap flips open 180° upwards
+  // 4. Stage 3 (0.36 -> 0.52): Compact folded letter slides up out of envelope pocket
+  // 5. Stage 4 (0.50 -> 0.66): Envelope sinks & dissolves; folded letter moves to center
+  // 6. Stage 5 (0.66 -> 0.88): Folded letter opens up flat into the full manifesto
+  // 7. Stage 6 (0.88 -> 1.00): Pristine fully unfolded letter with interactive 3D tilt
   // =========================================================================
 
-  // Rotation of Envelope (Address side -> Flap side)
-  const rotProgress = smoothstep(0.04, 0.24, progress);
-  // Initial slight natural 3D tilt: rotateX: 6deg, rotateY: -8deg, rotateZ: 1.5deg
-  const envelopeRotY = -8 + rotProgress * 188; // from -8deg to 180deg
-  const envelopeRotX = (1 - rotProgress) * 6;
-  const envelopeRotZ = (1 - rotProgress) * 1.5;
+  // 1. Rotation of Envelope (Address Face -> Flap Face)
+  const rotProgress = smoothstep(0.04, 0.22, progress);
+  const envelopeRotY = rotProgress * 180; // 0deg to 180deg
+  const envelopeRotX = (1 - rotProgress) * 4;
 
-  // Flap opening (0deg closed down -> -180deg open up)
-  const flapProgress = smoothstep(0.24, 0.44, progress);
-  const flapAngle = flapProgress * 180; // 0 to 180 deg (flips up)
+  // 2. Flap opening (0deg closed -> 180deg flipped open)
+  const flapProgress = smoothstep(0.22, 0.38, progress);
+  const flapAngle = flapProgress * 180;
 
-  // Folded letter sliding up out of the envelope
-  const slideProgress = smoothstep(0.42, 0.62, progress);
-  const letterSlideY = slideProgress * -260; // slides up out of pocket
+  // 3. Folded letter sliding up out of the pocket
+  const slideProgress = smoothstep(0.36, 0.52, progress);
+  const slideY = 45 - slideProgress * 185; // from +45px (inside pocket) to -140px (clearing mouth)
 
-  // Envelope sinking and fading as letter takes over
-  const envFadeProgress = smoothstep(0.55, 0.72, progress);
+  // 4. Envelope sinking and dissolving
+  const envFadeProgress = smoothstep(0.50, 0.66, progress);
   const envOpacity = 1 - envFadeProgress;
-  const envSinkY = envFadeProgress * 120;
+  const envSinkY = envFadeProgress * 140;
 
-  // Letter unfolding (Top flap hinges up, bottom flap hinges down)
-  const unfoldProgress = smoothstep(0.66, 0.86, progress);
-  const isFullyUnfolded = progress >= 0.86;
+  // Letter smoothly glides to exact viewport center (Y = 0)
+  const centerProgress = smoothstep(0.52, 0.68, progress);
+  const letterY = slideY * (1 - centerProgress);
 
-  // Scale of the letter
-  const letterScale = 0.88 + unfoldProgress * 0.12;
+  // 5. Letter unfolding from compact folded strip to full document
+  const unfoldProgress = smoothstep(0.66, 0.88, progress);
+  const isFullyUnfolded = progress >= 0.88;
+
+  // Sizing: Folded height is 175px, full height is 540px
+  const foldedHeight = 175;
+  const fullHeight = 540;
+  const currentHeight = Math.round(foldedHeight + unfoldProgress * (fullHeight - foldedHeight));
+
+  // Width expands slightly as it unfolds for expansive editorial presence
+  const currentMaxWidth = Math.round(620 + unfoldProgress * 120); // 620px -> 740px
+
+  // Subtle 3D tilt for top and bottom flaps while unfolding
+  const topFoldRotateX = (1 - unfoldProgress) * -18;
+  const bottomFoldRotateX = (1 - unfoldProgress) * 18;
 
   return (
     <section
       ref={containerRef}
       className="relative w-full bg-black border-t border-[#232328]"
-      style={{ height: '400vh' }}
+      style={{ height: '380vh' }}
     >
-      {/* Sticky Viewport Stage */}
+      {/* Sticky Viewport Stage - Perfectly Centered in Viewport */}
       <div
         className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden [perspective:1400px] select-none"
         onPointerMove={handlePointerMove}
@@ -124,41 +138,40 @@ export const FoundersLetterSection: React.FC = () => {
         <div
           className="absolute inset-0 pointer-events-none transition-opacity duration-700"
           style={{
-            backgroundImage: `radial-gradient(circle at 50% 50%, rgba(125, 85, 255, ${0.18 * (1 - envFadeProgress * 0.7)}), transparent 70%)`,
+            backgroundImage: `radial-gradient(circle at 50% 50%, rgba(125, 85, 255, ${0.16 * (1 - envFadeProgress * 0.6)}), transparent 70%)`,
           }}
         />
 
-        {/* Global 3D Transformation Anchor */}
+        {/* Global 3D Anchor */}
         <div
           className="relative w-full flex items-center justify-center [transform-style:preserve-3d]"
           style={{
             transform: isFullyUnfolded
-              ? `perspective(1200px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg) scale(0.995)`
+              ? `perspective(1200px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`
               : 'none',
             transition: isFullyUnfolded ? 'transform 0.15s ease-out' : 'none',
           }}
         >
           {/* ============================================================ */}
-          {/* 1. THE 3D ROTATING ENVELOPE (Face A: Stamp / Face B: Flap)   */}
+          {/* 1. THE 3D ROTATING ENVELOPE CONTAINER                        */}
           {/* ============================================================ */}
           <div
-            className="absolute w-[92vw] max-w-[660px] h-[400px] sm:h-[430px] [transform-style:preserve-3d] pointer-events-none"
+            className="relative w-[92vw] max-w-[640px] h-[390px] [transform-style:preserve-3d] pointer-events-none"
             style={{
-              transform: `translate3d(0, ${envSinkY}px, 0) rotateX(${envelopeRotX}deg) rotateY(${envelopeRotY}deg) rotateZ(${envelopeRotZ}deg)`,
-              opacity: envOpacity,
-              zIndex: 10,
-              visibility: envOpacity <= 0.005 ? 'hidden' : 'visible',
+              transform: `rotateX(${envelopeRotX}deg) rotateY(${envelopeRotY}deg)`,
             }}
           >
             {/* ---------------------------------------------------------- */}
-            {/* FACE A: ADDRESS / STAMP SIDE (Matching Uploaded Image)     */}
+            {/* FACE A: ADDRESS / STAMP SIDE (0deg, visible initially)     */}
             {/* ---------------------------------------------------------- */}
             <div
-              className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl [backface-visibility:hidden] z-20"
+              className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl [backface-visibility:hidden] z-10"
               style={{
                 transform: 'rotateY(0deg)',
                 background: 'linear-gradient(135deg, #7d55ff 8%, #4615cc 52%, #9a77ec 100%)',
                 boxShadow: '0 25px 60px rgba(0,0,0,0.85), inset 0 1px 2px rgba(255,255,255,0.3)',
+                opacity: envOpacity,
+                visibility: envOpacity <= 0.005 ? 'hidden' : 'visible',
               }}
             >
               {/* Halftone / Dot Stipple Texture Overlay */}
@@ -186,25 +199,20 @@ export const FoundersLetterSection: React.FC = () => {
                 </span>
               </div>
 
-              {/* Top-Right: Perforated Postage Stamp & Bengaluru Postmark */}
+              {/* Top-Right: Perforated Postage Stamp & Postmark */}
               <div className="absolute top-7 sm:top-9 right-7 sm:right-9 flex items-center gap-3 z-10">
                 
-                {/* Circular Postmark Stamp with Sinusoidal Wavy Lines */}
+                {/* Circular Postmark Stamp with Sinusoidal Waves */}
                 <div className="relative pointer-events-none opacity-85">
                   <svg className="w-28 sm:w-36 h-16 sm:h-20 text-white/90" viewBox="0 0 160 80" fill="none" stroke="currentColor">
-                    {/* Concentric Cancellation Rings */}
                     <circle cx="115" cy="40" r="34" strokeWidth="1.8" />
                     <circle cx="115" cy="40" r="23" strokeWidth="1.2" strokeDasharray="3 2" />
-                    
-                    {/* Curved Text Path */}
                     <path id="postmarkCircle" d="M 87,40 A 28,28 0 1,1 143,40 A 28,28 0 1,1 87,40" fill="none" stroke="none" />
                     <text fontSize="7.5" fontWeight="bold" fill="currentColor" letterSpacing="1.8" fontFamily="monospace">
                       <textPath href="#postmarkCircle" startOffset="50%" textAnchor="middle">
                         AIRTRIBE &bull; BENGALURU &bull;
                       </textPath>
                     </text>
-
-                    {/* 5 Sinusoidal Postmark Waves stretching to the left */}
                     <path d="M 78 18 Q 62 10, 46 18 T 14 18" strokeWidth="1.6" />
                     <path d="M 78 29 Q 62 21, 46 29 T 14 29" strokeWidth="1.6" />
                     <path d="M 78 40 Q 62 32, 46 40 T 14 40" strokeWidth="1.6" />
@@ -215,19 +223,14 @@ export const FoundersLetterSection: React.FC = () => {
 
                 {/* Perforated Postage Stamp Card */}
                 <div className="relative w-18 sm:w-22 h-24 sm:h-28 bg-white rounded-[2px] p-2 flex flex-col items-center justify-between shadow-xl text-black select-none">
-                  {/* Scalloped / Perforated Outer Border Effect */}
                   <div className="absolute -inset-[3px] pointer-events-none border-[3px] border-dotted border-white/60 rounded-[2px]" />
-                  
-                  {/* Inner Thin Purple Border */}
                   <div className="w-full h-full border border-[#4615cc]/40 rounded-[2px] p-1.5 flex flex-col items-center justify-between">
-                    {/* Official Airtribe Chevron Wings Vector Logo */}
                     <div className="w-8 sm:w-10 h-6 sm:h-7 text-[#4615cc] mt-1">
                       <svg viewBox="-1 -1 41 26.4" className="w-full h-full fill-current">
                         <path d="M31.2726 23.7354C31.2726 23.7354 31.2346 23.7606 31.2135 23.769C31.1712 23.79 31.1247 23.811 31.0825 23.8236C30.8416 23.9245 30.5838 23.975 30.3218 23.975H23.6995L11.7988 0.288086H19.4945L31.2726 23.7312V23.7354Z" />
                         <path d="M0 23.975L7.6957 23.9792L19.7865 0.288086L12.0908 0.296493L0 23.975Z" />
                       </svg>
                     </div>
-
                     <div className="text-center font-sans tracking-tight">
                       <span className="block text-[9px] sm:text-[10px] font-extrabold text-[#1a0868] leading-none">
                         AIRTRIBE
@@ -255,21 +258,23 @@ export const FoundersLetterSection: React.FC = () => {
             </div>
 
             {/* ---------------------------------------------------------- */}
-            {/* FACE B: OPENING / FLAP SIDE (Faces user after 180° rot)   */}
+            {/* FACE B: FLAP / OPENING SIDE (180deg, faces user on rotate) */}
             {/* ---------------------------------------------------------- */}
             <div
-              className="absolute inset-0 rounded-2xl overflow-visible shadow-2xl [backface-visibility:hidden] z-10"
+              className="absolute inset-0 rounded-2xl overflow-visible shadow-2xl [backface-visibility:hidden] z-20"
               style={{
                 transform: 'rotateY(180deg)',
-                background: 'linear-gradient(135deg, #4615cc 0%, #5820db 55%, #350da6 100%)',
-                boxShadow: '0 25px 60px rgba(0,0,0,0.85)',
               }}
             >
-              {/* Dark Interior Pocket Lining (Visible when flap opens) */}
+              {/* Back Wall & Pocket Lining (Sinks and fades with envelope) */}
               <div
-                className="absolute inset-0 rounded-2xl overflow-hidden"
+                className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none transition-transform duration-75"
                 style={{
                   background: 'linear-gradient(180deg, #18095c 0%, #100445 100%)',
+                  transform: `translateY(${envSinkY}px)`,
+                  opacity: envOpacity,
+                  visibility: envOpacity <= 0.005 ? 'hidden' : 'visible',
+                  zIndex: 5,
                 }}
               >
                 {/* Diagonal Pinstripe Lining */}
@@ -281,14 +286,167 @@ export const FoundersLetterSection: React.FC = () => {
                 />
               </div>
 
-              {/* Triangular Flap (Hinged at top: 0, flips up by flapAngle) */}
+              {/* ======================================================== */}
+              {/* THE LETTER (Tucked inside pocket -> Slides out -> Unfolds) */}
+              {/* ======================================================== */}
               <div
-                className="absolute top-0 left-0 right-0 h-[210px] [transform-origin:top_center] [transform-style:preserve-3d] z-30 transition-none"
+                className="absolute left-1/2 -translate-x-1/2 pointer-events-auto bg-[#fbfbfa] text-[#121214] rounded-lg border border-[#e4e4dc] transition-all duration-75"
                 style={{
-                  transform: `rotateX(${-flapAngle}deg)`,
+                  width: '92vw',
+                  maxWidth: `${currentMaxWidth}px`,
+                  height: `${currentHeight}px`,
+                  maxHeight: 'calc(100vh - 140px)',
+                  top: '50%',
+                  transform: `translate(-50%, calc(-50% + ${letterY}px))`,
+                  zIndex: 20,
+                  overflow: isFullyUnfolded ? 'visible' : 'hidden',
+                  boxShadow: isFullyUnfolded
+                    ? '0 30px 90px rgba(0,0,0,0.85), 0 10px 30px rgba(0,0,0,0.45)'
+                    : '0 15px 40px rgba(0,0,0,0.6)',
                 }}
               >
-                {/* Flap Outer Purple Face */}
+                {/* Vintage Stationery Paper Texture */}
+                <div
+                  className="absolute inset-0 opacity-[0.035] pointer-events-none"
+                  style={{
+                    backgroundImage:
+                      'radial-gradient(#000000 1px, transparent 1px), radial-gradient(#000000 1px, transparent 1px)',
+                    backgroundSize: '20px 20px',
+                    backgroundPosition: '0 0, 10px 10px',
+                  }}
+                />
+
+                {/* Horizontal Paper Crease Lines (Fade away as letter unfolds) */}
+                <div
+                  className="absolute inset-x-0 top-[33.3%] h-px bg-gradient-to-r from-transparent via-black/25 to-transparent pointer-events-none transition-opacity duration-300"
+                  style={{
+                    opacity: (1 - unfoldProgress) * 0.85,
+                    boxShadow: unfoldProgress < 0.9 ? '0 1px 3px rgba(0,0,0,0.15)' : 'none',
+                  }}
+                />
+                <div
+                  className="absolute inset-x-0 top-[66.7%] h-px bg-gradient-to-r from-transparent via-black/25 to-transparent pointer-events-none transition-opacity duration-300"
+                  style={{
+                    opacity: (1 - unfoldProgress) * 0.85,
+                    boxShadow: unfoldProgress < 0.9 ? '0 1px 3px rgba(0,0,0,0.15)' : 'none',
+                  }}
+                />
+
+                {/* Letter Content */}
+                <div className="relative w-full h-full flex flex-col justify-between p-6 sm:p-10 lg:p-12 overflow-hidden">
+                  
+                  {/* Top Section: Header */}
+                  <div
+                    className="relative z-10 pb-4 sm:pb-6 border-b border-[#e8e8df] flex items-center justify-between"
+                    style={{
+                      transform: unfoldProgress < 1 ? `rotateX(${topFoldRotateX}deg)` : 'none',
+                      transformOrigin: 'top center',
+                    }}
+                  >
+                    <div>
+                      <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-zinc-500 block mb-1">
+                        Founders&apos; Note
+                      </span>
+                      <h2 className="text-[26px] sm:text-[38px] lg:text-[46px] font-editorial italic text-[#111113] leading-[1.05] tracking-tight">
+                        To every builder reading this
+                      </h2>
+                    </div>
+                    <div className="hidden sm:block opacity-65 shrink-0 ml-4">
+                      <Image
+                        src="/airtribe-icon.svg"
+                        alt="Airtribe"
+                        width={28}
+                        height={28}
+                        className="filter grayscale opacity-60"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Middle Section: 4 Canonical Paragraphs */}
+                  <div
+                    className="relative z-10 my-auto py-3 sm:py-4 space-y-3 sm:space-y-4 text-[#232326] text-[13.5px] sm:text-[15.5px] lg:text-[17px] leading-[1.58] font-normal transition-opacity duration-200"
+                    style={{
+                      opacity: unfoldProgress < 0.25 ? 0.2 : clamp((unfoldProgress - 0.25) / 0.55, 0.2, 1),
+                    }}
+                  >
+                    <p>
+                      We&apos;ve both been the person wondering if it was already too late to start over.
+                    </p>
+                    <p>
+                      The ambition was never the problem. What we didn&apos;t have was a clear path, someone a few
+                      steps ahead to ask, and a room full of people building the same thing at the same time.
+                      We got there eventually, slower and lonelier than we needed to.
+                    </p>
+                    <p>
+                      Airtribe is the thing we wish we&apos;d had. Mentors who&apos;ve actually built what they teach.
+                      Work that ends in something you shipped. And a tribe that stays long after the cohort does.
+                    </p>
+                    <p className="font-semibold text-[#111113]">
+                      Careers are built, not handed out. Start with one project. We&apos;ll be right here.
+                    </p>
+                  </div>
+
+                  {/* Bottom Section: Signatures & Seal */}
+                  <div
+                    className="relative z-10 pt-4 sm:pt-6 border-t border-[#e8e8df] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-opacity duration-200"
+                    style={{
+                      transform: unfoldProgress < 1 ? `rotateX(${bottomFoldRotateX}deg)` : 'none',
+                      transformOrigin: 'bottom center',
+                      opacity: unfoldProgress < 0.4 ? 0 : clamp((unfoldProgress - 0.4) / 0.5, 0, 1),
+                    }}
+                  >
+                    <div>
+                      <p className="font-editorial italic text-xl sm:text-2xl lg:text-[26px] text-[#111113] leading-tight">
+                        Navneet Sharma &amp; Dhaval Trivedi
+                      </p>
+                      <p className="text-zinc-500 text-[11px] sm:text-xs font-mono mt-0.5">
+                        Co-founders, Airtribe
+                      </p>
+                    </div>
+
+                    {/* Monogram Seal */}
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full border border-[#d6d6cb] bg-[#f0f0eb] flex items-center justify-center text-xs font-mono font-bold text-zinc-600 shadow-inner">
+                        AT
+                      </div>
+                      <div className="text-[10px] sm:text-[11px] font-mono text-zinc-500 leading-tight">
+                        <span>Bengaluru, India</span>
+                        <span className="block text-zinc-400">Official Manifesto</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+              {/* Front Pocket Cover (Covers the bottom 64% of envelope) */}
+              <div
+                className="absolute inset-0 rounded-2xl pointer-events-none transition-transform duration-75"
+                style={{
+                  clipPath: 'polygon(0% 36%, 50% 68%, 100% 36%, 100% 100%, 0% 100%)',
+                  background: 'linear-gradient(180deg, #531ecc 0%, #3e12b3 100%)',
+                  boxShadow: '0 -6px 20px rgba(0,0,0,0.4)',
+                  transform: `translateY(${envSinkY}px)`,
+                  opacity: envOpacity,
+                  visibility: envOpacity <= 0.005 ? 'hidden' : 'visible',
+                  zIndex: 30,
+                }}
+              >
+                <div className="absolute inset-0 border-t border-white/20" />
+              </div>
+
+              {/* Triangular Top Flap (Hinged at top: 0, flips open -180deg) */}
+              <div
+                className="absolute top-0 left-0 right-0 h-[195px] [transform-origin:top_center] [transform-style:preserve-3d] transition-transform duration-75"
+                style={{
+                  transform: `translateY(${envSinkY}px) rotateX(${-flapAngle}deg)`,
+                  opacity: envOpacity,
+                  visibility: envOpacity <= 0.005 ? 'hidden' : 'visible',
+                  zIndex: 40,
+                }}
+              >
+                {/* Flap Outer Face */}
                 <div
                   className="absolute inset-0"
                   style={{
@@ -307,9 +465,9 @@ export const FoundersLetterSection: React.FC = () => {
                   />
                 </div>
 
-                {/* Airtribe Wax Seal at the apex tip of the flap */}
+                {/* Airtribe Wax Seal at Apex of Flap */}
                 <div
-                  className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 w-15 h-15 rounded-full flex items-center justify-center shadow-2xl z-40"
+                  className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl z-50"
                   style={{
                     background: 'radial-gradient(circle at 35% 35%, #2a0870 0%, #150242 75%, #0c0128 100%)',
                     border: '2px solid rgba(255,255,255,0.3)',
@@ -323,158 +481,13 @@ export const FoundersLetterSection: React.FC = () => {
                     </svg>
                   </div>
                 </div>
-              </div>
 
-              {/* Lower Pocket Cover (Folded seams forming the envelope back) */}
-              <div
-                className="absolute inset-0 rounded-2xl pointer-events-none z-20 overflow-hidden"
-                style={{
-                  clipPath: 'polygon(0% 32%, 50% 64%, 100% 32%, 100% 100%, 0% 100%)',
-                  background: 'linear-gradient(180deg, #531ecc 0%, #3e12b3 100%)',
-                  boxShadow: '0 -6px 20px rgba(0,0,0,0.4)',
-                }}
-              >
-                {/* Diagonal fold crease highlights */}
-                <div className="absolute inset-0 border-t border-white/20" />
               </div>
 
             </div>
 
           </div>
 
-          {/* ============================================================ */}
-          {/* 2. THE LETTER (Slides Out Folded, Then Unfolds Flat)         */}
-          {/* ============================================================ */}
-          <div
-            className="w-[92vw] max-w-[760px] bg-[#fbfbfa] text-[#121214] rounded-lg shadow-[0_30px_100px_rgba(0,0,0,0.9)] border border-[#e4e4dc] relative overflow-hidden transition-all duration-75"
-            style={{
-              transform: `translate3d(0, ${isFullyUnfolded ? 0 : letterSlideY}px, ${isFullyUnfolded ? 40 : 15}px) scale(${letterScale})`,
-              zIndex: 25,
-              opacity: progress < 0.38 ? 0 : clamp((progress - 0.38) / 0.12, 0, 1),
-              boxShadow: isFullyUnfolded
-                ? '0 30px 100px rgba(0,0,0,0.9), 0 10px 30px rgba(0,0,0,0.5)'
-                : '0 15px 40px rgba(0,0,0,0.6)',
-              minHeight: isFullyUnfolded ? '580px' : '220px',
-            }}
-          >
-            {/* Vintage Paper Texture Overlay */}
-            <div
-              className="absolute inset-0 opacity-[0.035] pointer-events-none"
-              style={{
-                backgroundImage:
-                  'radial-gradient(#000000 1px, transparent 1px), radial-gradient(#000000 1px, transparent 1px)',
-                backgroundSize: '20px 20px',
-                backgroundPosition: '0 0, 10px 10px',
-              }}
-            />
-
-            {/* Trifold Paper Fold Crease Lines (Fade out as paper flattens) */}
-            <div
-              className="absolute inset-x-0 top-1/3 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent pointer-events-none transition-opacity duration-300"
-              style={{
-                opacity: 1 - unfoldProgress,
-                transform: `scaleY(${1 + (1 - unfoldProgress) * 4})`,
-              }}
-            />
-            <div
-              className="absolute inset-x-0 top-2/3 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent pointer-events-none transition-opacity duration-300"
-              style={{
-                opacity: 1 - unfoldProgress,
-                transform: `scaleY(${1 + (1 - unfoldProgress) * 4})`,
-              }}
-            />
-
-            {/* Letter Content (Becomes fully visible as it unfolds) */}
-            <div className={`p-8 sm:p-14 sm:py-16 transition-opacity duration-300 ${unfoldProgress > 0.4 ? 'opacity-100' : 'opacity-80'}`}>
-              
-              {/* Letter Header */}
-              <div className="relative z-10 mb-8 sm:mb-10 pb-6 border-b border-[#e8e8df] flex items-center justify-between">
-                <div>
-                  <span className="font-mono text-xs uppercase tracking-widest text-zinc-500 block mb-2">
-                    Founders&apos; Note
-                  </span>
-                  <h2 className="text-[34px] sm:text-[46px] lg:text-[52px] font-editorial italic text-[#111113] leading-[1.0] tracking-tight">
-                    To every builder reading this
-                  </h2>
-                </div>
-                <div className="hidden sm:block opacity-70">
-                  <Image
-                    src="/airtribe-icon.svg"
-                    alt="Airtribe"
-                    width={28}
-                    height={28}
-                    className="filter grayscale opacity-60"
-                  />
-                </div>
-              </div>
-
-              {/* Letter Body: 4 Canonical Paragraphs */}
-              <div className="relative z-10 space-y-5 sm:space-y-6 text-[#232326] text-[16px] sm:text-[18px] lg:text-[19px] leading-[1.65] font-normal">
-                <p>
-                  We&apos;ve both been the person wondering if it was already too late to start over.
-                </p>
-                <p>
-                  The ambition was never the problem. What we didn&apos;t have was a clear path, someone a few
-                  steps ahead to ask, and a room full of people building the same thing at the same time.
-                  We got there eventually, slower and lonelier than we needed to.
-                </p>
-                <p>
-                  Airtribe is the thing we wish we&apos;d had. Mentors who&apos;ve actually built what they teach.
-                  Work that ends in something you shipped. And a tribe that stays long after the cohort does.
-                </p>
-                <p className="font-semibold text-[#111113] pt-1">
-                  Careers are built, not handed out. Start with one project. We&apos;ll be right here.
-                </p>
-              </div>
-
-              {/* Signatures & Seal */}
-              <div className="relative z-10 mt-10 sm:mt-12 pt-8 border-t border-[#e8e8df] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                <div>
-                  <p className="font-editorial italic text-2xl sm:text-3xl text-[#111113]">
-                    Navneet Sharma &amp; Dhaval Trivedi
-                  </p>
-                  <p className="text-zinc-500 text-xs sm:text-sm font-mono mt-0.5">
-                    Co-founders, Airtribe
-                  </p>
-                </div>
-
-                {/* Handcrafted Seal / Monogram */}
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full border border-[#d6d6cb] bg-[#f0f0eb] flex items-center justify-center text-xs font-mono font-bold text-zinc-600 shadow-inner">
-                    AT
-                  </div>
-                  <div className="text-[11px] font-mono text-zinc-500 leading-tight">
-                    <span>Bengaluru, India</span>
-                    <span className="block text-zinc-400">Official Manifesto</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* Scroll Progress Bar at Bottom */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/70 backdrop-blur-md px-4 py-1.5 rounded-full border border-[#232328] z-50">
-          <span className="text-[11px] font-mono text-zinc-400">
-            {progress < 0.22
-              ? 'Scroll to rotate envelope'
-              : progress < 0.44
-              ? 'Opening flap...'
-              : progress < 0.65
-              ? 'Sliding letter...'
-              : progress < 0.86
-              ? 'Unfolding...'
-              : 'Founders\' Note'}
-          </span>
-          <div className="w-20 h-1 bg-zinc-800 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-[#a78bfa] transition-all duration-75"
-              style={{ width: `${Math.round(progress * 100)}%` }}
-            />
-          </div>
         </div>
 
       </div>
