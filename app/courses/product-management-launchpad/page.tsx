@@ -329,6 +329,7 @@ export default function ProductManagementLaunchpadPage() {
   const router = useRouter();
   const { openModal } = useApplyModal();
   const [bannerVisible, setBannerVisible] = useState(true);
+  const [activeGlanceTab, setActiveGlanceTab] = useState<'curriculum' | 'capstone' | 'demoday' | 'careers'>('capstone');
   const [selectedCurriculumPhase, setSelectedCurriculumPhase] = useState<string>('phase1');
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [currentExpertIndex, setCurrentExpertIndex] = useState<number>(0);
@@ -461,7 +462,7 @@ export default function ProductManagementLaunchpadPage() {
       )}
 
       {/* 2. HERO SECTION */}
-      <section className="relative w-full bg-black border-b border-[#232328] overflow-hidden pt-12 sm:pt-16 pb-16 sm:pb-24">
+      <section className="relative w-full bg-black border-b border-[#232328] overflow-hidden pt-12 sm:pt-16 pb-0">
         
         {/* Subtle Ambient Radial Glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/3 w-[680px] h-[480px] bg-gradient-to-tr from-purple-600/15 via-blue-600/15 to-transparent rounded-full blur-3xl pointer-events-none" />
@@ -505,21 +506,21 @@ export default function ProductManagementLaunchpadPage() {
           </div>
 
           {/* HERO VISUAL: ANIMATED PIPELINE OF SUCCESS FACTORS FLOWING INTO & OUT OF THE GLOWING FOLDER */}
-          <div className="relative w-full max-w-[880px] h-[320px] sm:h-[380px] flex items-center justify-center overflow-visible select-none">
+          <div className="relative w-full max-w-[880px] h-[340px] sm:h-[400px] flex items-end justify-center overflow-visible select-none pb-0">
             
             {/* The Central Glowing Floating Folder held by hand */}
-            <div className="relative z-20 flex flex-col items-center animate-folder-bob">
+            <div className="relative z-20 flex flex-col items-center animate-folder-bob -mb-2 sm:-mb-3">
               
               {/* Backlight Cyan/Purple Aura */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-r from-blue-500/40 via-purple-500/40 to-cyan-400/40 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-blue-500/40 via-purple-500/40 to-cyan-400/40 rounded-full blur-3xl pointer-events-none" />
 
               {/* Glowing Folder Asset */}
-              <div className="relative w-[190px] sm:w-[220px] h-[220px] sm:h-[250px] drop-shadow-[0_0_35px_rgba(99,102,241,0.65)]">
+              <div className="relative w-[200px] sm:w-[240px] h-[230px] sm:h-[270px] drop-shadow-[0_0_35px_rgba(99,102,241,0.65)]">
                 <Image
                   src="/images/pm-folder-glowing.png"
                   alt="AI PM Launchpad Core"
                   fill
-                  className="object-contain"
+                  className="object-contain object-bottom"
                   priority
                 />
               </div>
@@ -530,7 +531,7 @@ export default function ProductManagementLaunchpadPage() {
               
               {/* Chip 1: AI ASSISTANTS */}
               <div className="absolute animate-curve-in-1">
-                <div className="bg-[#0e0e12]/95 border border-white/20 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2 -rotate-12">
+                <div className="bg-[#0e0e12]/95 border border-white/20 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                   AI ASSISTANTS
                 </div>
@@ -538,7 +539,7 @@ export default function ProductManagementLaunchpadPage() {
 
               {/* Chip 2: TRUST MARKET */}
               <div className="absolute animate-curve-in-2">
-                <div className="bg-[#0e0e12]/95 border border-white/20 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2 -rotate-6">
+                <div className="bg-[#0e0e12]/95 border border-white/20 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
                   TRUST MARKET
                 </div>
@@ -546,7 +547,7 @@ export default function ProductManagementLaunchpadPage() {
 
               {/* Chip 3: PROMPT ENGINEERING */}
               <div className="absolute animate-curve-in-3">
-                <div className="bg-[#0e0e12]/95 border border-white/20 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2 -rotate-15">
+                <div className="bg-[#0e0e12]/95 border border-white/20 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
                   PROMPT ENGIN.
                 </div>
@@ -554,7 +555,7 @@ export default function ProductManagementLaunchpadPage() {
 
               {/* Chip 4: USER DISCOVERY */}
               <div className="absolute animate-curve-in-4">
-                <div className="bg-[#0e0e12]/95 border border-white/20 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2 -rotate-3">
+                <div className="bg-[#0e0e12]/95 border border-white/20 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-blue-400" />
                   USER DISCOVERY
                 </div>
@@ -567,7 +568,7 @@ export default function ProductManagementLaunchpadPage() {
               
               {/* Tile 1: JioHotstar Star Icon */}
               <div className="absolute animate-curve-out-1">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#07132b] border border-cyan-400/40 shadow-[0_0_30px_rgba(6,182,212,0.5)] flex items-center justify-center rotate-12 backdrop-blur-md">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#07132b] border border-cyan-400/40 shadow-[0_0_30px_rgba(6,182,212,0.5)] flex items-center justify-center backdrop-blur-md">
                   <svg viewBox="0 0 24 24" className="w-8 h-8 fill-white text-cyan-300 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">
                     <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
                   </svg>
@@ -576,14 +577,14 @@ export default function ProductManagementLaunchpadPage() {
 
               {/* Tile 2: Myntra Red 'my' Tile */}
               <div className="absolute animate-curve-out-2">
-                <div className="w-13 h-13 sm:w-15 sm:h-15 rounded-2xl bg-[#991b1b] border border-red-400/40 shadow-[0_0_30px_rgba(239,68,68,0.5)] flex items-center justify-center -rotate-6 backdrop-blur-md">
+                <div className="w-13 h-13 sm:w-15 sm:h-15 rounded-2xl bg-[#991b1b] border border-red-400/40 shadow-[0_0_30px_rgba(239,68,68,0.5)] flex items-center justify-center backdrop-blur-md">
                   <span className="font-bold text-white text-xl tracking-tighter">my</span>
                 </div>
               </div>
 
               {/* Tile 3: 10x Retention Flywheel */}
               <div className="absolute animate-curve-out-3">
-                <div className="bg-[#18181b]/95 border border-purple-500/40 text-purple-200 font-mono text-xs sm:text-[13px] font-bold px-3.5 py-2 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-2 rotate-12">
+                <div className="bg-[#18181b]/95 border border-purple-500/40 text-purple-200 font-mono text-xs sm:text-[13px] font-bold px-3.5 py-2 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-2">
                   <Sparkles className="w-3.5 h-3.5 text-purple-400" />
                   10x RETENTION
                 </div>
@@ -591,7 +592,7 @@ export default function ProductManagementLaunchpadPage() {
 
               {/* Tile 4: AI Copilot Launch */}
               <div className="absolute animate-curve-out-4">
-                <div className="bg-[#09090b]/95 border border-cyan-500/40 text-cyan-200 font-mono text-xs sm:text-[13px] font-bold px-3.5 py-2 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-2 rotate-6">
+                <div className="bg-[#09090b]/95 border border-cyan-500/40 text-cyan-200 font-mono text-xs sm:text-[13px] font-bold px-3.5 py-2 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-2">
                   <Rocket className="w-3.5 h-3.5 text-cyan-400" />
                   AI COPILOT
                 </div>
@@ -720,7 +721,187 @@ export default function ProductManagementLaunchpadPage() {
         </div>
       </section>
 
-      {/* 4. PROGRAM CURRICULUM SECTION */}
+      {/* 4. PROGRAMS AT A GLANCE (Image 1 replica) */}
+      <section className="w-full bg-black py-20 sm:py-28 border-b border-[#232328]">
+        <div className="max-w-[1440px] mx-auto border-x border-[#232328] px-4 sm:px-8 lg:px-12">
+          
+          <div className="text-center mb-10 sm:mb-14">
+            <h2 className="text-[38px] sm:text-[54px] font-editorial italic font-normal text-white">
+              Programs at a glance
+            </h2>
+          </div>
+
+          {/* Tab Navigation Matching Image 1 */}
+          <div className="w-full max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 border-b border-[#232328] text-center mb-12">
+            {[
+              { id: 'curriculum', label: 'AI-first curriculum' },
+              { id: 'capstone', label: 'Capstone Project' },
+              { id: 'demoday', label: 'Demo Day' },
+              { id: 'careers', label: 'Careers & beyond' },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveGlanceTab(tab.id as any)}
+                className={`py-4 text-xs sm:text-sm font-medium transition-all relative cursor-pointer ${
+                  activeGlanceTab === tab.id
+                    ? 'text-white font-semibold'
+                    : 'text-zinc-500 hover:text-zinc-300'
+                }`}
+              >
+                {tab.label}
+                {activeGlanceTab === tab.id && (
+                  <div className="absolute bottom-0 inset-x-0 h-0.5 bg-white" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Tab Content Display */}
+          <div className="w-full max-w-4xl mx-auto bg-[#0a0a0c] border border-[#232328] rounded-xl p-6 sm:p-10 shadow-2xl">
+            {activeGlanceTab === 'capstone' && (
+              <div className="flex flex-col lg:flex-row items-center gap-8">
+                <div className="flex-1 space-y-4">
+                  <span className="font-mono text-xs uppercase tracking-widest text-zinc-400 block">
+                    02 CAPSTONE PROJECT
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-normal text-white leading-snug">
+                    Solve real-world PM challenges vetted by hiring partners
+                  </h3>
+                  <p className="text-zinc-400 text-sm leading-relaxed font-light">
+                    Build a complete 0-to-1 product strategy, from AI persona synthesis and PRD drafting to interactive prototyping in v0/Cursor and launch metrics tracking.
+                  </p>
+                  <ul className="space-y-2 text-xs sm:text-sm text-zinc-300 pt-2 font-light">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0" />
+                      Individual capstone with 1:1 Director of Product feedback
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0" />
+                      Presented live to hiring managers on Demo Day
+                    </li>
+                  </ul>
+                  <div className="pt-4">
+                    <button
+                      onClick={() => setCurriculumModalOpen(true)}
+                      className="inline-flex items-center gap-2 text-sm text-purple-300 hover:text-purple-200 underline font-medium cursor-pointer"
+                    >
+                      View capstone project rubrics in full curriculum &rarr;
+                    </button>
+                  </div>
+                </div>
+
+                {/* Image 1 Digital Art Graphic */}
+                <div className="w-full lg:w-[320px] aspect-[4/3] rounded-lg bg-gradient-to-tr from-purple-900/50 via-blue-900/40 to-black border border-purple-500/40 p-6 flex flex-col justify-between relative overflow-hidden shadow-2xl">
+                  <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(88,93,255,0.15)_0px,rgba(88,93,255,0.15)_1px,transparent_1px,transparent_6px)] pointer-events-none" />
+                  <div className="space-y-2 relative z-10">
+                    <div className="w-9 h-9 rounded-lg bg-purple-500/25 border border-purple-400/40 flex items-center justify-center text-purple-200 font-bold text-sm">
+                      AI
+                    </div>
+                    <p className="text-white font-medium text-sm">Capstone: 0-to-1 AI Copilot for Quick Commerce</p>
+                    <p className="text-zinc-400 text-xs">Spec, Prototype, Metric Funnel & GTM Playbook</p>
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] text-zinc-400 font-mono pt-4 border-t border-white/10 relative z-10">
+                    <span>STATUS: VETTED</span>
+                    <span className="text-emerald-400 font-semibold">DEMO READY</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeGlanceTab === 'curriculum' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-mono text-xs text-purple-400 uppercase tracking-widest">16 WEEKS • 3 PHASES + ELECTIVES</span>
+                    <h3 className="text-2xl font-normal text-white mt-1">AI-First Product Management Syllabus</h3>
+                  </div>
+                  <button
+                    onClick={() => setCurriculumModalOpen(true)}
+                    className="px-4 py-2 rounded text-xs font-semibold bg-white text-black hover:bg-zinc-200 transition-colors cursor-pointer"
+                  >
+                    Get Full PDF
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
+                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 1 (WEEKS 1-4)</span>
+                    <h4 className="text-sm font-semibold text-white">Craft: Problem Discovery & Strategy</h4>
+                    <p className="text-xs text-zinc-400 mt-1">Conducting user interviews, building AI personas, opportunity solution trees, and market modeling.</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
+                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 2 (WEEKS 5-8)</span>
+                    <h4 className="text-sm font-semibold text-white">Craft + AI: UX, Analytics & GTM</h4>
+                    <p className="text-xs text-zinc-400 mt-1">Authoring AI PRDs, defining edge cases, APIs, funnels in Amplitude, and monetization models.</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
+                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 3 (WEEKS 9-14)</span>
+                    <h4 className="text-sm font-semibold text-white">Deep AI: LLMs, Agents & Evals</h4>
+                    <p className="text-xs text-zinc-400 mt-1">Vibe coding with Claude Code, production agents with memory, LLM evals, and capstone presentation.</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
+                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 4 (WEEKS 15-16)</span>
+                    <h4 className="text-sm font-semibold text-white">Interview Prep & Hiring Drills</h4>
+                    <p className="text-xs text-zinc-400 mt-1">Weekly expert-led drills across 8 interview rounds from Product Sense to Behavioral and Strategy.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeGlanceTab === 'demoday' && (
+              <div className="space-y-4">
+                <span className="font-mono text-xs uppercase tracking-widest text-zinc-400 block">
+                  03 LIVE DEMO DAY
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-normal text-white">Pitch directly to VPs and Product Directors</h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  Every builder presents their vetted Capstone project to an elite jury of hiring managers from companies like Swiggy, Razorpay, CRED, and Zepto. Top presenters receive direct fast-track interview invitations.
+                </p>
+                <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328] flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="w-5 h-5 text-purple-400" />
+                    <span className="text-sm text-zinc-300">Over 350+ candidates placed through Airtribe Demo Days</span>
+                  </div>
+                  <button
+                    onClick={() => openModal('Demo Day Participation')}
+                    className="text-xs text-white underline hover:text-purple-300 font-medium cursor-pointer"
+                  >
+                    Learn about jury &rarr;
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {activeGlanceTab === 'careers' && (
+              <div className="space-y-4">
+                <span className="font-mono text-xs uppercase tracking-widest text-zinc-400 block">
+                  04 CAREER SERVICES & BEYOND
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-normal text-white">Comprehensive PM placement preparation</h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  Personalized 1:1 resume teardown, portfolio optimization, mock interviews for Product Sense, Root Cause Analysis, and Behavioral Leadership rounds with senior practitioners.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-center">
+                  <div className="p-3 bg-zinc-950 border border-[#232328] rounded">
+                    <span className="text-xl font-bold text-white block">1:1</span>
+                    <span className="text-xs text-zinc-400">Mentor Coaching</span>
+                  </div>
+                  <div className="p-3 bg-zinc-950 border border-[#232328] rounded">
+                    <span className="text-xl font-bold text-white block">400+</span>
+                    <span className="text-xs text-zinc-400">Hiring Partners</span>
+                  </div>
+                  <div className="p-3 bg-zinc-950 border border-[#232328] rounded">
+                    <span className="text-xl font-bold text-white block">48%</span>
+                    <span className="text-xs text-zinc-400">Avg. Salary Hike</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 5. PROGRAM CURRICULUM SECTION */}
       <section className="w-full bg-white text-black py-16 sm:py-24 border-b border-[#e5e7eb] select-text">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
           
