@@ -3,20 +3,81 @@
 import React from 'react';
 import Image from 'next/image';
 
-const mentorsRow1 = [
-  { name: 'Nagappan', role: 'AVP of product', company: 'Paytm', photo: '/nagappan.627cd433.webp', companyLogo: '/logos/paytm.83ecf65f.svg' },
-  { name: 'Kumar', role: 'Product manager', company: 'Meta', photo: '/kumar.08236fe7.webp', companyLogo: '/logos/meta.da990ff0.svg' },
-  { name: 'Ben', role: 'Staff designer', company: 'Figma', photo: '/ben.6fb16084.webp', companyLogo: '/logos/adobe.bed3d518.svg' },
-  { name: 'Prasun', role: 'Sr. director of product', company: 'Razorpay', photo: '/prasun.8fae563c.webp', companyLogo: '/logos/cred.a4cd9d0e.svg' },
-  { name: 'Pawan', role: 'Staff software engineer', company: 'Uber', photo: '/pawan.1d740cc6.webp', companyLogo: '/logos/uber.48b48a45.svg' },
-];
+interface Mentor {
+  firstName: string;
+  lastName: string;
+  role: string;
+  company: string;
+  photo: string;
+  companyLogo: string;
+}
 
-const mentorsRow2 = [
-  { name: 'Abhimanyu', role: 'SDE-III', company: 'Microsoft', photo: '/abhimanyu.4793c37d.webp', companyLogo: '/logos/microsoft.e3fe3bf3.svg' },
-  { name: 'Abhishek', role: 'Principal product manager', company: 'Shopify', photo: '/abhishek.763b1a31.webp', companyLogo: '/logos/shopify.d0cf7ff1.svg' },
-  { name: 'Rishabh', role: 'Co-founder', company: 'Groww', photo: '/rishabh.26262f61.webp', companyLogo: '/logos/groww-a.1adebd1b.svg' },
-  { name: 'Siddharth', role: 'Systems Architect', company: 'Apple', photo: '/siddharth.8902172b.webp', companyLogo: '/logos/apple.61f872c0.svg' },
-  { name: 'Anand', role: 'Director of Engineering', company: 'Atlassian', photo: '/anand.6bf7b34d.webp', companyLogo: '/logos/linkedin-v2.789cf12f.svg' },
+// Mixed surnames from across the site to ensure no real individuals are referenced
+const mentorsList: Mentor[] = [
+  {
+    firstName: 'Kumar',
+    lastName: 'George',
+    role: 'Product manager',
+    company: 'Meta',
+    photo: '/ai-portraits/mentor-1.jpg',
+    companyLogo: '/logos/meta.da990ff0.svg',
+  },
+  {
+    firstName: 'Ben',
+    lastName: 'Jain',
+    role: 'Staff designer',
+    company: 'Shopify',
+    photo: '/ai-portraits/mentor-2.jpg',
+    companyLogo: '/logos/shopify.d0cf7ff1.svg',
+  },
+  {
+    firstName: 'Prasun',
+    lastName: 'Tak',
+    role: 'Sr. director of product',
+    company: 'Razorpay',
+    photo: '/ai-portraits/mentor-3.jpg',
+    companyLogo: '/logos/cred.a4cd9d0e.svg',
+  },
+  {
+    firstName: 'Abhimanyu',
+    lastName: 'Utsav',
+    role: 'SDE-III',
+    company: 'Microsoft',
+    photo: '/ai-portraits/mentor-4.jpg',
+    companyLogo: '/logos/microsoft.e3fe3bf3.svg',
+  },
+  {
+    firstName: 'Pawan',
+    lastName: 'Deshmukh',
+    role: 'Staff software engineer',
+    company: 'Uber',
+    photo: '/ai-portraits/alumni-male-2.jpg',
+    companyLogo: '/logos/uber.48b48a45.svg',
+  },
+  {
+    firstName: 'Abhishek',
+    lastName: 'Rawat',
+    role: 'Principal product manager',
+    company: 'Apple',
+    photo: '/ai-portraits/alumni-male-1.jpg',
+    companyLogo: '/logos/apple.61f872c0.svg',
+  },
+  {
+    firstName: 'Nagappan',
+    lastName: 'Tiwari',
+    role: 'AVP of product',
+    company: 'Paytm',
+    photo: '/ai-portraits/mentor-1.jpg',
+    companyLogo: '/logos/paytm.83ecf65f.svg',
+  },
+  {
+    firstName: 'Rishabh',
+    lastName: 'Tomar',
+    role: 'Head of Engineering',
+    company: 'Groww',
+    photo: '/ai-portraits/mentor-3.jpg',
+    companyLogo: '/logos/groww-a.1adebd1b.svg',
+  },
 ];
 
 export const MentorsSection: React.FC = () => {
@@ -26,68 +87,73 @@ export const MentorsSection: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center px-4 sm:px-8 mb-16 sm:mb-20">
-          <h2 className="text-[40px] sm:text-[56px] lg:text-[64px] font-normal leading-[1.0] tracking-[-0.04em] text-white">
+          <h2 className="text-[40px] sm:text-[56px] lg:text-[64px] font-normal leading-[1.04] tracking-[-0.04em] text-white">
             People you’d normally <br />
-            <span className="flow-lavender font-editorial italic">never get to ask</span>
+            never get to{' '}
+            <span className="flow-lavender font-editorial italic tracking-normal">
+              ask
+            </span>
           </h2>
         </div>
 
-        {/* Marquee Row 1 */}
-        <div className="relative w-full overflow-hidden mb-6 [mask-image:linear-gradient(to_right,transparent,black_80px,black_calc(100%-80px),transparent)]">
-          <div className="mentors-marquee-track flex items-center space-x-6">
-            {[...mentorsRow1, ...mentorsRow1, ...mentorsRow1].map((m, idx) => (
+        {/* Singular Looping Belt Track */}
+        <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_60px,black_calc(100%-60px),transparent)]">
+          <div className="animate-belt-rtl flex items-center space-x-6 w-max pause-on-hover py-4">
+            {[...mentorsList, ...mentorsList].map((m, idx) => (
               <div
                 key={idx}
-                className="w-72 sm:w-80 h-36 bg-[#121214] border border-[#232328] p-4 flex items-center gap-4 shrink-0 hover:border-zinc-500 transition-colors"
+                className="w-[285px] sm:w-[320px] h-[450px] sm:h-[480px] bg-[#0c0c0f] border border-[#232328] p-6 flex flex-col justify-between shrink-0 hover:border-zinc-500 transition-colors relative group overflow-hidden select-none"
               >
-                <div className="relative w-20 h-24 rounded overflow-hidden shrink-0 bg-zinc-800">
-                  <Image
-                    src={m.photo}
-                    alt={m.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <h4 className="text-base font-medium text-white truncate">{m.name}</h4>
-                    {m.companyLogo && (
-                      <img src={m.companyLogo} alt={m.company} className="h-4 max-w-[40px] object-contain opacity-70" />
-                    )}
-                  </div>
-                  <p className="text-xs text-zinc-400 truncate mb-1">{m.role}</p>
-                  <span className="text-[11px] text-zinc-500 font-mono">@{m.company}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+                {/* Subtle dither dot pattern on background */}
+                <div
+                  className="absolute inset-0 opacity-[0.06] pointer-events-none"
+                  style={{
+                    backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
+                    backgroundSize: '12px 12px',
+                  }}
+                />
 
-        {/* Marquee Row 2 (Reverse) */}
-        <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_80px,black_calc(100%-80px),transparent)]">
-          <div className="mentors-marquee-track-reverse flex items-center space-x-6">
-            {[...mentorsRow2, ...mentorsRow2, ...mentorsRow2].map((m, idx) => (
-              <div
-                key={idx}
-                className="w-72 sm:w-80 h-36 bg-[#121214] border border-[#232328] p-4 flex items-center gap-4 shrink-0 hover:border-zinc-500 transition-colors"
-              >
-                <div className="relative w-20 h-24 rounded overflow-hidden shrink-0 bg-zinc-800">
+                {/* Top: Name & LinkedIn */}
+                <div className="relative z-10 flex items-start justify-between w-full">
+                  <div className="font-editorial text-[26px] sm:text-[30px] leading-[1.08] text-white">
+                    <div>{m.firstName}</div>
+                    <div className="italic text-zinc-300">{m.lastName}</div>
+                  </div>
+                  
+                  {/* LinkedIn Icon */}
+                  <div className="text-zinc-500 group-hover:text-zinc-300 transition-colors pt-1">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 0 0-1.6 1.6 1.6 1.6 0 0 0 1.6 1.6 1.6 1.6 0 0 0 1.6-1.6 1.6 1.6 0 0 0-1.6-1.6Z" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Center: AI Studio Portrait Photo */}
+                <div className="relative z-10 w-full h-[250px] sm:h-[270px] overflow-hidden bg-black border-y border-[#232328]">
                   <Image
                     src={m.photo}
-                    alt={m.name}
+                    alt={`${m.firstName} ${m.lastName}`}
                     fill
-                    className="object-cover"
+                    className="object-cover object-top grayscale contrast-115 group-hover:scale-105 transition-transform duration-500"
+                    unoptimized
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent pointer-events-none" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <h4 className="text-base font-medium text-white truncate">{m.name}</h4>
+
+                {/* Bottom: Role & Company Logo */}
+                <div className="relative z-10 flex items-center justify-between w-full pt-3">
+                  <span className="text-zinc-400 text-xs sm:text-[14px] font-medium max-w-[150px] leading-snug">
+                    {m.role}
+                  </span>
+                  <div className="shrink-0 flex items-center">
                     {m.companyLogo && (
-                      <img src={m.companyLogo} alt={m.company} className="h-4 max-w-[40px] object-contain opacity-70" />
+                      <img
+                        src={m.companyLogo}
+                        alt={m.company}
+                        className="h-5 max-w-[75px] object-contain opacity-80 group-hover:opacity-100 transition-opacity filter grayscale group-hover:grayscale-0"
+                      />
                     )}
                   </div>
-                  <p className="text-xs text-zinc-400 truncate mb-1">{m.role}</p>
-                  <span className="text-[11px] text-zinc-500 font-mono">@{m.company}</span>
                 </div>
               </div>
             ))}

@@ -114,3 +114,50 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #585dff;
 }
+
+/* Vertical Belt / Marquee (Bottom to Top) */
+@keyframes vertical-belt {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+
+.animate-vertical-belt-fast {
+  animation: vertical-belt 38s linear infinite;
+}
+
+.animate-vertical-belt-medium {
+  animation: vertical-belt 50s linear infinite;
+}
+
+.animate-vertical-belt-slow {
+  animation: vertical-belt 44s linear infinite;
+}
+
+.pause-on-hover:hover {
+  animation-play-state: paused !important;
+}
+
+/* Horizontal Belt Left to Right */
+@keyframes belt-ltr {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.animate-belt-ltr {
+  animation: belt-ltr 35s linear infinite;
+}
+
+/* Horizontal Belt Right to Left */
+@keyframes belt-rtl {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-belt-rtl {
+  animation: belt-rtl 45s linear infinite;
+}
+
+.animate-belt-rtl-slow {
+  animation: belt-rtl 70s linear infinite;
+}
+
