@@ -14,7 +14,7 @@ interface Testimonial {
   quote: string;
 }
 
-// Column 1: Staggered reviews with mixed surnames & distinct ethnicity portraits
+// Column 1: Staggered reviews with regionally consistent, authentic Indian names
 const col1Reviews: Testimonial[] = [
   {
     name: 'Kunal Tiwari',
@@ -27,9 +27,9 @@ const col1Reviews: Testimonial[] = [
     quote: 'Joining Airtribe’s Backend Development course was a turning point for me. The structured curriculum combined theory with real-world projects, while the mentors provided clear guidance and feedback. What made the journey even more meaningful was the community learning alongside peers who were equally driven kept me inspired every step of the way. Today, I feel confident in building scalable backend systems and applying industry best practices.',
   },
   {
-    name: 'Yashwanth Tomar',
+    name: 'Yashwanth Reddy',
     role: 'Tech Lead @Kognitive Networks',
-    avatar: '/portraits/journey-yashwanth-tomar.jpg',
+    avatar: '/portraits/journey-yashwanth-reddy.jpg',
     prevLogo: '/images/ibm_mono_784a4c9801.svg',
     prevAlt: 'IBM',
     nextLogo: '/images/kognitive_networks_mono_73bad205d9.svg',
@@ -58,7 +58,7 @@ const col1Reviews: Testimonial[] = [
   },
 ];
 
-// Column 2: Staggered reviews with mixed surnames & distinct ethnicity portraits
+// Column 2: Staggered reviews with regionally consistent, authentic Indian names
 const col2Reviews: Testimonial[] = [
   {
     name: 'Ranadheer Sahoo',
@@ -91,9 +91,9 @@ const col2Reviews: Testimonial[] = [
     quote: 'This program played a major role in my career growth. It strengthened my fundamentals in backend development and system design, and helped me better understand real-world production systems.',
   },
   {
-    name: 'Aditya Manda',
-    role: 'SDE @ Leadrat',
-    avatar: '/portraits/journey-aditya-manda.jpg',
+    name: 'Arvind Venkataraman',
+    role: 'Senior Backend Architect @ Leadrat',
+    avatar: '/portraits/journey-arvind-venkataraman.jpg',
     prevLogo: '/images/cognizant_mono_e1ff23e298.svg',
     prevAlt: 'Cognizant',
     nextLogo: '/images/leadrat_mono_0591f7a857.svg',
@@ -102,12 +102,12 @@ const col2Reviews: Testimonial[] = [
   },
 ];
 
-// Column 3: Staggered reviews with mixed surnames & distinct ethnicity portraits
+// Column 3: Staggered reviews with regionally consistent, authentic Indian names
 const col3Reviews: Testimonial[] = [
   {
-    name: 'Aditya Deshmukh',
+    name: 'Pranav Kulkarni',
     role: 'SDE @ Leadrat',
-    avatar: '/portraits/journey-aditya-deshmukh.jpg',
+    avatar: '/portraits/journey-pranav-kulkarni.jpg',
     prevLogo: '/images/cognizant_mono_e1ff23e298.svg',
     prevAlt: 'Cognizant',
     nextLogo: '/images/leadrat_mono_0591f7a857.svg',
@@ -115,9 +115,9 @@ const col3Reviews: Testimonial[] = [
     quote: 'Hi Airtribe team I would like to heartily thank the mentors, instructors and program managers for helping me out in my fundamentals and core concepts at first I was under-confident whether I will be able to cope-up with the curriculum specially DSA and System Design but the trainers were extremely knowledgeable and very helpful. Whenever you need support, someone is always there.',
   },
   {
-    name: 'Yash Kumar',
-    role: 'SDE 2 @ Gritworks',
-    avatar: '/portraits/journey-yash-kumar.jpg',
+    name: 'Ananya Sen',
+    role: 'AI Systems Engineer @ Gritworks',
+    avatar: '/portraits/journey-ananya-sen.jpg',
     prevLogo: '/images/qolaba_mono_f91f62a310.svg',
     prevAlt: 'Qolaba',
     nextLogo: '/images/gritworks_mono_db805b4f04.svg',
@@ -125,9 +125,9 @@ const col3Reviews: Testimonial[] = [
     quote: 'I recently joined Airtribe’s Software Engineer AI First course, and I’m truly grateful for the experience so far. Within just two weeks, I received an offer from an AI startup, something I honestly didn’t expect this soon. One thing I deeply appreciate is that Airtribe keeps the curriculum fresh and aligned with what hiring teams look for.',
   },
   {
-    name: 'Kartik Sai',
+    name: 'Karthik Sundaram',
     role: 'SDE-1 @ Dentira',
-    avatar: '/portraits/journey-kartik-sai.jpg',
+    avatar: '/portraits/journey-karthik-sundaram.jpg',
     prevLogo: '/images/newton_school_mono_58548afb18.svg',
     prevAlt: 'Newton School',
     nextLogo: '/images/dentira_mono_7478618fca.svg',
@@ -135,9 +135,9 @@ const col3Reviews: Testimonial[] = [
     quote: 'Airtribe accelerated my journey exponentially. The continuous feedback loops on code and real mock interviews simulate top tech companies like nothing else.',
   },
   {
-    name: 'Ananya Rawat',
+    name: 'Tanvi Agarwal',
     role: 'Growth Product Manager @ Matiks',
-    avatar: '/portraits/journey-ananya-rawat.jpg',
+    avatar: '/portraits/journey-tanvi-agarwal.jpg',
     prevLogo: '/images/endevis_mono_120bfeb334.svg',
     prevAlt: 'Endevis',
     nextLogo: '/images/matiks_mono_aae347cb1c.svg',

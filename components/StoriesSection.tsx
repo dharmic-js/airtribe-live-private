@@ -120,7 +120,7 @@ export const StoriesSection: React.FC = () => {
               </div>
               <div className="relative z-10 pt-4">
                 <p className="text-white/90 text-sm leading-snug mb-4">
-                  Senior consultant, customer experience · Jesseh Bhatt
+                  Senior consultant, customer experience · Jayesh Bhatt
                 </p>
                 <div className="flex items-center justify-between border-t border-white/20 pt-3">
                   <span className="font-bold text-base tracking-wide">RelevantZ</span>
@@ -168,10 +168,10 @@ export const StoriesSection: React.FC = () => {
               </p>
               <div className="flex items-center gap-4 pt-4 border-t border-[#232328]/60">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-zinc-700 bg-zinc-800">
-                  <Image src="/portraits/story-unnam-deshmukh.jpg" alt="" fill className="object-cover" unoptimized />
+                  <Image src="/portraits/story-tanmay-deshmukh.jpg" alt="" fill className="object-cover" unoptimized />
                 </div>
                 <div>
-                  <h4 className="text-white text-base font-bold leading-tight">Unnam Deshmukh</h4>
+                  <h4 className="text-white text-base font-bold leading-tight">Tanmay Deshmukh</h4>
                   <p className="text-zinc-400 text-xs mt-0.5">Senior software engineer II @ GeekyAnts</p>
                 </div>
               </div>
@@ -194,10 +194,10 @@ export const StoriesSection: React.FC = () => {
               </div>
               <div className="flex items-center gap-4 pt-4 border-t border-[#232328]/60">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-zinc-700 bg-zinc-800">
-                  <Image src="/portraits/story-deeksha-george.jpg" alt="" fill className="object-cover" unoptimized />
+                  <Image src="/portraits/story-deeksha-sharma.jpg" alt="" fill className="object-cover" unoptimized />
                 </div>
                 <div>
-                  <h4 className="text-white text-base font-bold leading-tight">Deeksha George</h4>
+                  <h4 className="text-white text-base font-bold leading-tight">Deeksha Sharma</h4>
                   <p className="text-zinc-400 text-xs mt-0.5">Product manager @ Marmin Tech</p>
                 </div>
               </div>
@@ -236,7 +236,7 @@ export const StoriesSection: React.FC = () => {
               </div>
               <div className="relative z-10 pt-4">
                 <p className="text-white/90 text-sm leading-snug mb-4">
-                  Senior consultant, customer experience · Jesseh Bhatt
+                  Senior consultant, customer experience · Jayesh Bhatt
                 </p>
                 <div className="flex items-center justify-between border-t border-white/20 pt-3">
                   <span className="font-bold text-base tracking-wide">RelevantZ</span>
@@ -284,10 +284,10 @@ export const StoriesSection: React.FC = () => {
               </p>
               <div className="flex items-center gap-4 pt-4 border-t border-[#232328]/60">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-zinc-700 bg-zinc-800">
-                  <Image src="/portraits/story-unnam-deshmukh.jpg" alt="" fill className="object-cover" unoptimized />
+                  <Image src="/portraits/story-tanmay-deshmukh.jpg" alt="" fill className="object-cover" unoptimized />
                 </div>
                 <div>
-                  <h4 className="text-white text-base font-bold leading-tight">Unnam Deshmukh</h4>
+                  <h4 className="text-white text-base font-bold leading-tight">Tanmay Deshmukh</h4>
                   <p className="text-zinc-400 text-xs mt-0.5">Senior software engineer II @ GeekyAnts</p>
                 </div>
               </div>
