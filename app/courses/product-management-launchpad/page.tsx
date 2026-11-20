@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useApplyModal } from '@/components/ApplyModalContext';
 import { AirtribeButton } from '@/components/AirtribeButton';
+import { ToolsSection } from '@/components/ToolsSection';
 import {
   X,
   Sparkles,
@@ -1162,6 +1163,9 @@ export default function ProductManagementLaunchpadPage() {
 
         </div>
       </section>
+
+      {/* 5. TOOLS YOU'LL BUILD WITH (SCROLL-DRIVEN CONSTELLATION ANIMATION) */}
+      <ToolsSection />
 
       {/* 6. STICKY BOTTOM ENROLMENT BAR */}
       <div className="fixed bottom-0 inset-x-0 bg-black text-white border-t border-[#232328] z-40 py-3.5 px-4 sm:px-8 shadow-2xl backdrop-blur-md bg-black/95">
