@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useApplyModal } from '@/components/ApplyModalContext';
 import { AirtribeButton } from '@/components/AirtribeButton';
 import { ToolsSection } from '@/components/ToolsSection';
+import { ProgramsAtAGlanceSection } from '@/components/ProgramsAtAGlanceSection';
 import {
   X,
   Sparkles,
@@ -330,7 +331,6 @@ export default function ProductManagementLaunchpadPage() {
   const router = useRouter();
   const { openModal } = useApplyModal();
   const [bannerVisible, setBannerVisible] = useState(true);
-  const [activeGlanceTab, setActiveGlanceTab] = useState<'curriculum' | 'capstone' | 'demoday' | 'careers'>('capstone');
   const [selectedCurriculumPhase, setSelectedCurriculumPhase] = useState<string>('phase1');
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [currentExpertIndex, setCurrentExpertIndex] = useState<number>(0);
@@ -722,185 +722,8 @@ export default function ProductManagementLaunchpadPage() {
         </div>
       </section>
 
-      {/* 4. PROGRAMS AT A GLANCE (Image 1 replica) */}
-      <section className="w-full bg-black py-20 sm:py-28 border-b border-[#232328]">
-        <div className="max-w-[1440px] mx-auto border-x border-[#232328] px-4 sm:px-8 lg:px-12">
-          
-          <div className="text-center mb-10 sm:mb-14">
-            <h2 className="text-[38px] sm:text-[54px] font-editorial italic font-normal text-white">
-              Programs at a glance
-            </h2>
-          </div>
-
-          {/* Tab Navigation Matching Image 1 */}
-          <div className="w-full max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 border-b border-[#232328] text-center mb-12">
-            {[
-              { id: 'curriculum', label: 'AI-first curriculum' },
-              { id: 'capstone', label: 'Capstone Project' },
-              { id: 'demoday', label: 'Demo Day' },
-              { id: 'careers', label: 'Careers & beyond' },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveGlanceTab(tab.id as any)}
-                className={`py-4 text-xs sm:text-sm font-medium transition-all relative cursor-pointer ${
-                  activeGlanceTab === tab.id
-                    ? 'text-white font-semibold'
-                    : 'text-zinc-500 hover:text-zinc-300'
-                }`}
-              >
-                {tab.label}
-                {activeGlanceTab === tab.id && (
-                  <div className="absolute bottom-0 inset-x-0 h-0.5 bg-white" />
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* Tab Content Display */}
-          <div className="w-full max-w-4xl mx-auto bg-[#0a0a0c] border border-[#232328] rounded-xl p-6 sm:p-10 shadow-2xl">
-            {activeGlanceTab === 'capstone' && (
-              <div className="flex flex-col lg:flex-row items-center gap-8">
-                <div className="flex-1 space-y-4">
-                  <span className="font-mono text-xs uppercase tracking-widest text-zinc-400 block">
-                    02 CAPSTONE PROJECT
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-normal text-white leading-snug">
-                    Solve real-world PM challenges vetted by hiring partners
-                  </h3>
-                  <p className="text-zinc-400 text-sm leading-relaxed font-light">
-                    Build a complete 0-to-1 product strategy, from AI persona synthesis and PRD drafting to interactive prototyping in v0/Cursor and launch metrics tracking.
-                  </p>
-                  <ul className="space-y-2 text-xs sm:text-sm text-zinc-300 pt-2 font-light">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0" />
-                      Individual capstone with 1:1 Director of Product feedback
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0" />
-                      Presented live to hiring managers on Demo Day
-                    </li>
-                  </ul>
-                  <div className="pt-4">
-                    <button
-                      onClick={() => setCurriculumModalOpen(true)}
-                      className="inline-flex items-center gap-2 text-sm text-purple-300 hover:text-purple-200 underline font-medium cursor-pointer"
-                    >
-                      View capstone project rubrics in full curriculum &rarr;
-                    </button>
-                  </div>
-                </div>
-
-                {/* Image 1 Digital Art Graphic */}
-                <div className="w-full lg:w-[320px] aspect-[4/3] rounded-lg bg-gradient-to-tr from-purple-900/50 via-blue-900/40 to-black border border-purple-500/40 p-6 flex flex-col justify-between relative overflow-hidden shadow-2xl">
-                  <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(88,93,255,0.15)_0px,rgba(88,93,255,0.15)_1px,transparent_1px,transparent_6px)] pointer-events-none" />
-                  <div className="space-y-2 relative z-10">
-                    <div className="w-9 h-9 rounded-lg bg-purple-500/25 border border-purple-400/40 flex items-center justify-center text-purple-200 font-bold text-sm">
-                      AI
-                    </div>
-                    <p className="text-white font-medium text-sm">Capstone: 0-to-1 AI Copilot for Quick Commerce</p>
-                    <p className="text-zinc-400 text-xs">Spec, Prototype, Metric Funnel & GTM Playbook</p>
-                  </div>
-                  <div className="flex items-center justify-between text-[11px] text-zinc-400 font-mono pt-4 border-t border-white/10 relative z-10">
-                    <span>STATUS: VETTED</span>
-                    <span className="text-emerald-400 font-semibold">DEMO READY</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeGlanceTab === 'curriculum' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="font-mono text-xs text-purple-400 uppercase tracking-widest">16 WEEKS • 3 PHASES + ELECTIVES</span>
-                    <h3 className="text-2xl font-normal text-white mt-1">AI-First Product Management Syllabus</h3>
-                  </div>
-                  <button
-                    onClick={() => setCurriculumModalOpen(true)}
-                    className="px-4 py-2 rounded text-xs font-semibold bg-white text-black hover:bg-zinc-200 transition-colors cursor-pointer"
-                  >
-                    Get Full PDF
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
-                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 1 (WEEKS 1-4)</span>
-                    <h4 className="text-sm font-semibold text-white">Craft: Problem Discovery & Strategy</h4>
-                    <p className="text-xs text-zinc-400 mt-1">Conducting user interviews, building AI personas, opportunity solution trees, and market modeling.</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
-                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 2 (WEEKS 5-8)</span>
-                    <h4 className="text-sm font-semibold text-white">Craft + AI: UX, Analytics & GTM</h4>
-                    <p className="text-xs text-zinc-400 mt-1">Authoring AI PRDs, defining edge cases, APIs, funnels in Amplitude, and monetization models.</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
-                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 3 (WEEKS 9-14)</span>
-                    <h4 className="text-sm font-semibold text-white">Deep AI: LLMs, Agents & Evals</h4>
-                    <p className="text-xs text-zinc-400 mt-1">Vibe coding with Claude Code, production agents with memory, LLM evals, and capstone presentation.</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328]">
-                    <span className="text-xs font-mono text-purple-400 block mb-1">PHASE 4 (WEEKS 15-16)</span>
-                    <h4 className="text-sm font-semibold text-white">Interview Prep & Hiring Drills</h4>
-                    <p className="text-xs text-zinc-400 mt-1">Weekly expert-led drills across 8 interview rounds from Product Sense to Behavioral and Strategy.</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeGlanceTab === 'demoday' && (
-              <div className="space-y-4">
-                <span className="font-mono text-xs uppercase tracking-widest text-zinc-400 block">
-                  03 LIVE DEMO DAY
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-normal text-white">Pitch directly to VPs and Product Directors</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">
-                  Every builder presents their vetted Capstone project to an elite jury of hiring managers from companies like Swiggy, Razorpay, CRED, and Zepto. Top presenters receive direct fast-track interview invitations.
-                </p>
-                <div className="p-4 rounded-lg bg-zinc-950 border border-[#232328] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Sparkles className="w-5 h-5 text-purple-400" />
-                    <span className="text-sm text-zinc-300">Over 350+ candidates placed through Airtribe Demo Days</span>
-                  </div>
-                  <button
-                    onClick={() => openModal('Demo Day Participation')}
-                    className="text-xs text-white underline hover:text-purple-300 font-medium cursor-pointer"
-                  >
-                    Learn about jury &rarr;
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {activeGlanceTab === 'careers' && (
-              <div className="space-y-4">
-                <span className="font-mono text-xs uppercase tracking-widest text-zinc-400 block">
-                  04 CAREER SERVICES & BEYOND
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-normal text-white">Comprehensive PM placement preparation</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">
-                  Personalized 1:1 resume teardown, portfolio optimization, mock interviews for Product Sense, Root Cause Analysis, and Behavioral Leadership rounds with senior practitioners.
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-center">
-                  <div className="p-3 bg-zinc-950 border border-[#232328] rounded">
-                    <span className="text-xl font-bold text-white block">1:1</span>
-                    <span className="text-xs text-zinc-400">Mentor Coaching</span>
-                  </div>
-                  <div className="p-3 bg-zinc-950 border border-[#232328] rounded">
-                    <span className="text-xl font-bold text-white block">400+</span>
-                    <span className="text-xs text-zinc-400">Hiring Partners</span>
-                  </div>
-                  <div className="p-3 bg-zinc-950 border border-[#232328] rounded">
-                    <span className="text-xl font-bold text-white block">48%</span>
-                    <span className="text-xs text-zinc-400">Avg. Salary Hike</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-        </div>
-      </section>
+      {/* 4. PROGRAMS AT A GLANCE (Animated Left-to-Right Timer Line & High-Fidelity Infographics) */}
+      <ProgramsAtAGlanceSection />
 
       {/* 5. PROGRAM CURRICULUM SECTION */}
       <section className="w-full bg-white text-black py-16 sm:py-24 border-b border-[#e5e7eb] select-text">
