@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   ArrowRight,
   ChevronRight,
+  ChevronLeft,
   Rocket
 } from 'lucide-react';
 
@@ -223,12 +224,119 @@ const curriculumPhases: CurriculumPhase[] = [
   },
 ];
 
+interface ExpertInstructor {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  companyLogo?: string;
+  companyRender?: React.ReactNode;
+  bio1: string;
+  bio2: string;
+  experience: string;
+  pastLogos: string[];
+  image: string;
+}
+
+const expertInstructors: ExpertInstructor[] = [
+  {
+    id: 'expert-1',
+    name: 'Aniket Mathur',
+    role: 'Director, AI Product Management',
+    company: 'Paytm',
+    companyLogo: '/logos/paytm.83ecf65f.svg',
+    bio1: 'I lead the AI product charter for Recharges and Utilities at Paytm, building AI agents for the next 500M users.',
+    bio2: "I'm replacing manual, operations-heavy workflows with agentic loops built from raw APIs, and I'll show you what works when you build with AI, and what breaks.",
+    experience: '9+ years of experience',
+    pastLogos: ['First Advantage', 'HomeLane', 'annalect'],
+    image: '/portraits/expert-aniket-mathur.jpg',
+  },
+  {
+    id: 'expert-2',
+    name: 'Sravanti Sundaram',
+    role: 'Senior Product Manager, International Checkout',
+    company: 'PayPal',
+    companyRender: (
+      <span className="inline-flex items-center gap-0.5 font-bold italic text-white text-sm tracking-tighter">
+        <span className="text-[#0079C1]">Pay</span>
+        <span className="text-[#00457C]">Pal</span>
+      </span>
+    ),
+    bio1: 'I build international checkout, cross-border payments and subscriptions at PayPal, and recently shipped a managed-subscriptions capability for small businesses across EMEA and MENA.',
+    bio2: "Just before PayPal I built an SRE AI agent at Rakuten that cut incident resolution time by 32%, and I'll show you how to tie every AI feature to an outcome you can measure.",
+    experience: '8+ years of experience',
+    pastLogos: ['Rakuten', 'SCISPACE', 'Mercedes-Benz'],
+    image: '/portraits/expert-sravanti-sundaram.jpg',
+  },
+  {
+    id: 'expert-3',
+    name: 'Natarajan Thangavel',
+    role: 'Senior Product Manager',
+    company: 'Google',
+    companyRender: (
+      <span className="inline-flex items-center font-medium text-sm tracking-normal">
+        <span className="text-[#4285F4]">G</span>
+        <span className="text-[#EA4335]">o</span>
+        <span className="text-[#FBBC05]">o</span>
+        <span className="text-[#4285F4]">g</span>
+        <span className="text-[#34A853]">l</span>
+        <span className="text-[#EA4335]">e</span>
+      </span>
+    ),
+    bio1: "I lead Google Cloud's identity security portfolio, which protects millions of users and AI agents, along with a customer identity platform used by billions of people every month.",
+    bio2: "I launched Google's identity threat detection offering, cutting security response time from days to seconds, and I'll show you how to take a complex product from idea to launch.",
+    experience: '15+ years of experience',
+    pastLogos: ['INTUIT', 'SAP'],
+    image: '/portraits/expert-natarajan-thangavel.jpg',
+  },
+  {
+    id: 'expert-4',
+    name: 'Gaurav Sethi',
+    role: 'Product Leader, B2B gift card distribution',
+    company: 'pine labs',
+    companyRender: (
+      <span className="inline-flex items-center gap-1.5 font-bold text-white text-xs tracking-tight">
+        <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
+        <span>pine labs</span>
+      </span>
+    ),
+    bio1: "I lead Pine Labs' B2B gift card distribution platform, owning the product from strategy through go-to-market and revenue.",
+    bio2: "Just before this I led growth at Optiva, launching a new B2B2X product line with GenAI built in, and I'll teach you to turn AI from an experiment into revenue.",
+    experience: '15+ years of experience',
+    pastLogos: ['Optiva', 'Adobe', 'BOEING', 'GE'],
+    image: '/portraits/expert-gaurav-sethi.jpg',
+  },
+  {
+    id: 'expert-5',
+    name: 'Siddharth Malhotra',
+    role: 'Head of Product and Growth',
+    company: 'PCA PRODUCT CAREER ACADEMY',
+    companyRender: (
+      <span className="inline-flex items-center gap-1.5 font-bold text-white text-xs tracking-tight">
+        <span className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-200 text-[10px] font-mono border border-zinc-700">PCA</span>
+        <span className="text-[11px] uppercase tracking-wider text-zinc-300 font-semibold">PRODUCT CAREER ACADEMY</span>
+      </span>
+    ),
+    bio1: 'I run product and growth as fractional CPO at Product Career Academy, and I coach PMs who want to move into AI product roles.',
+    bio2: "I've coached 1200+ PMs through the AI PM interview, from RAG and evals to model trade-offs, and I'll help you tell your story the way hiring managers want to hear it.",
+    experience: '10+ years of experience',
+    pastLogos: ['AmbitionBox', 'media.net', 'Khoros'],
+    image: '/portraits/expert-siddharth-malhotra.jpg',
+  },
+];
+
 export default function ProductManagementLaunchpadPage() {
   const router = useRouter();
   const { openModal } = useApplyModal();
   const [bannerVisible, setBannerVisible] = useState(true);
   const [selectedCurriculumPhase, setSelectedCurriculumPhase] = useState<string>('phase1');
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const [currentExpertIndex, setCurrentExpertIndex] = useState<number>(0);
+  const [isCarouselPaused, setIsCarouselPaused] = useState<boolean>(false);
+  const [trackOffset, setTrackOffset] = useState<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const [curriculumModalOpen, setCurriculumModalOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [leadForm, setLeadForm] = useState({
@@ -273,6 +381,32 @@ export default function ProductManagementLaunchpadPage() {
     return () => clearInterval(timer);
   }, []);
 
+  // Experts Carousel Auto-slide loop
+  useEffect(() => {
+    if (isCarouselPaused) return;
+    const interval = setInterval(() => {
+      setCurrentExpertIndex((prev) => (prev + 1) % expertInstructors.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isCarouselPaused]);
+
+  // Dynamically calculate center offset for active expert card
+  const updateOffset = useCallback(() => {
+    if (!containerRef.current || !cardRefs.current[currentExpertIndex]) return;
+    const container = containerRef.current;
+    const card = cardRefs.current[currentExpertIndex];
+    if (!card) return;
+    const containerCenter = container.offsetWidth / 2;
+    const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+    setTrackOffset(containerCenter - cardCenter);
+  }, [currentExpertIndex]);
+
+  useEffect(() => {
+    updateOffset();
+    window.addEventListener('resize', updateOffset);
+    return () => window.removeEventListener('resize', updateOffset);
+  }, [updateOffset]);
+
   const handleCurriculumSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!leadForm.name || !leadForm.email || !leadForm.phone) return;
@@ -284,11 +418,19 @@ export default function ProductManagementLaunchpadPage() {
     }, 600);
   };
 
+  const handlePrevExpert = () => {
+    setCurrentExpertIndex((prev) => (prev - 1 + expertInstructors.length) % expertInstructors.length);
+  };
+
+  const handleNextExpert = () => {
+    setCurrentExpertIndex((prev) => (prev + 1) % expertInstructors.length);
+  };
+
   const format2 = (n: number) => String(n).padStart(2, '0');
 
   const currentPhase = curriculumPhases.find((p) => p.id === selectedCurriculumPhase) || curriculumPhases[0];
 
-  // Determine which modules to display (if hasViewToggle and not isExpanded, show 4, otherwise all)
+  // Determine which modules to display
   const displayModules = currentPhase.hasViewToggle && !isExpanded
     ? currentPhase.modules.slice(0, 4)
     : currentPhase.modules;
@@ -578,7 +720,7 @@ export default function ProductManagementLaunchpadPage() {
         </div>
       </section>
 
-      {/* 4. PROGRAM CURRICULUM SECTION (Exact replica of user's screenshots) */}
+      {/* 4. PROGRAM CURRICULUM SECTION */}
       <section className="w-full bg-white text-black py-16 sm:py-24 border-b border-[#e5e7eb] select-text">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
           
@@ -703,7 +845,144 @@ export default function ProductManagementLaunchpadPage() {
         </div>
       </section>
 
-      {/* 5. STICKY BOTTOM ENROLMENT BAR (Matches user's screenshots 3, 4, 5) */}
+      {/* 5. EXPERTS SECTION: "Learn from experts who build with AI" (Moving belt of cards) */}
+      <section className="w-full bg-black text-white py-20 sm:py-28 border-b border-[#232328] relative overflow-hidden">
+        
+        {/* Subtle Ambient Radial Lighting */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-r from-purple-900/10 via-blue-900/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 relative z-10">
+          
+          {/* Centered Heading */}
+          <div className="text-center mb-14 sm:mb-20">
+            <h2 className="text-[34px] sm:text-[48px] md:text-[54px] font-editorial text-white leading-[1.12] tracking-tight">
+              Learn from experts who<br />build with AI
+            </h2>
+          </div>
+
+          {/* Carousel Track Container */}
+          <div
+            ref={containerRef}
+            onMouseEnter={() => setIsCarouselPaused(true)}
+            onMouseLeave={() => setIsCarouselPaused(false)}
+            className="relative w-full overflow-hidden select-none py-4"
+          >
+            {/* The Moving Belt of Cards */}
+            <div
+              className="flex items-center transition-transform duration-700 ease-out"
+              style={{
+                transform: `translateX(${trackOffset}px)`,
+              }}
+            >
+              {expertInstructors.map((expert, idx) => {
+                const isActive = idx === currentExpertIndex;
+
+                return (
+                  <div
+                    key={expert.id}
+                    ref={(el) => {
+                      cardRefs.current[idx] = el;
+                    }}
+                    onClick={() => setCurrentExpertIndex(idx)}
+                    className={`w-[88vw] sm:w-[80vw] lg:w-[860px] shrink-0 mx-3 sm:mx-6 bg-[#0a0a0c] border rounded-2xl transition-all duration-500 overflow-hidden ${
+                      isActive
+                        ? 'border-[#2e2e38] shadow-[0_0_50px_rgba(0,0,0,0.9)] opacity-100 scale-100 cursor-default'
+                        : 'border-[#1b1b22] opacity-35 scale-95 cursor-pointer hover:opacity-60'
+                    }`}
+                  >
+                    <div className="flex flex-col md:flex-row items-center p-6 sm:p-10 gap-6 sm:gap-10">
+                      
+                      {/* Left: Grayscale Studio Portrait with bottom vignette */}
+                      <div className="w-[200px] sm:w-[240px] md:w-[280px] h-[260px] sm:h-[320px] md:h-[360px] relative shrink-0 overflow-hidden rounded-xl bg-black">
+                        <img
+                          src={expert.image}
+                          alt={expert.name}
+                          className="w-full h-full object-cover object-top filter grayscale contrast-125"
+                        />
+                        {/* Smooth bottom gradient vignette to black */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-transparent to-transparent pointer-events-none" />
+                      </div>
+
+                      {/* Right: Expert Bio & Credentials */}
+                      <div className="flex-1 flex flex-col justify-center text-left">
+                        <h3 className="text-2xl sm:text-[30px] font-editorial text-white font-normal tracking-tight mb-1">
+                          {expert.name}
+                        </h3>
+
+                        {/* Current Role & Company */}
+                        <div className="text-xs sm:text-[13px] text-zinc-300 font-medium mb-5 flex items-center gap-1.5 flex-wrap">
+                          <span>{expert.role}</span>
+                          <span className="text-zinc-500 font-normal">@</span>
+                          {expert.companyLogo ? (
+                            <img
+                              src={expert.companyLogo}
+                              alt={expert.company}
+                              className="h-4 sm:h-5 object-contain inline-block"
+                            />
+                          ) : expert.companyRender ? (
+                            expert.companyRender
+                          ) : (
+                            <span className="text-white font-bold">{expert.company}</span>
+                          )}
+                        </div>
+
+                        {/* Two Bio Paragraphs */}
+                        <p className="text-zinc-400 text-xs sm:text-[13px] leading-relaxed mb-3 font-light">
+                          {expert.bio1}
+                        </p>
+                        <p className="text-zinc-400 text-xs sm:text-[13px] leading-relaxed mb-6 font-light">
+                          {expert.bio2}
+                        </p>
+
+                        {/* Years of Experience */}
+                        <div className="text-zinc-500 text-[11px] font-mono tracking-wider mb-2">
+                          {expert.experience}
+                        </div>
+
+                        {/* Past Company Logos */}
+                        <div className="flex items-center gap-4 sm:gap-6 flex-wrap opacity-75 grayscale hover:grayscale-0 transition-all pt-1">
+                          {expert.pastLogos.map((brand, bIdx) => (
+                            <span
+                              key={bIdx}
+                              className="text-xs sm:text-[13px] font-semibold tracking-tight text-zinc-300"
+                            >
+                              {brand}
+                            </span>
+                          ))}
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Left Peeking Navigation Arrow */}
+            <button
+              onClick={handlePrevExpert}
+              aria-label="Previous Expert"
+              className="absolute left-2 sm:left-6 md:left-12 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded bg-[#121214]/90 border border-white/20 text-white flex items-center justify-center hover:bg-white hover:text-black transition-colors cursor-pointer shadow-2xl"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            {/* Right Peeking Navigation Arrow */}
+            <button
+              onClick={handleNextExpert}
+              aria-label="Next Expert"
+              className="absolute right-2 sm:right-6 md:right-12 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded bg-[#121214]/90 border border-white/20 text-white flex items-center justify-center hover:bg-white hover:text-black transition-colors cursor-pointer shadow-2xl"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* 6. STICKY BOTTOM ENROLMENT BAR */}
       <div className="fixed bottom-0 inset-x-0 bg-black text-white border-t border-[#232328] z-40 py-3.5 px-4 sm:px-8 shadow-2xl backdrop-blur-md bg-black/95">
         <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6">
           
@@ -738,7 +1017,7 @@ export default function ProductManagementLaunchpadPage() {
         </div>
       </div>
 
-      {/* 6. FLOATING WHATSAPP BUTTON (Docked right above sticky bar) */}
+      {/* 7. FLOATING WHATSAPP BUTTON (Docked neatly above sticky bar) */}
       <a
         href="https://wa.me/918031139097?text=Hi%20Airtribe,%20I%20have%20a%20question%20about%20the%20AI-First%20Product%20Management%20Launchpad"
         target="_blank"
@@ -751,7 +1030,7 @@ export default function ProductManagementLaunchpadPage() {
         </svg>
       </a>
 
-      {/* 7. LEAD CAPTURE SIGN-UP MODAL (Leads directly to Curriculum Document) */}
+      {/* 8. LEAD CAPTURE SIGN-UP MODAL */}
       {curriculumModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-[#0e0e12] border border-[#232328] rounded-2xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl animate-in fade-in zoom-in-95 duration-200">
