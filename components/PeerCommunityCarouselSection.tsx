@@ -68,18 +68,22 @@ export function PeerCommunityCarouselSection() {
   const animRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [radiusX, setRadiusX] = useState<number>(420);
+  const [radiusX, setRadiusX] = useState<number>(440);
+  const [radiusZ, setRadiusZ] = useState<number>(180);
 
   // Responsive radius calculation based on container width
   const updateRadius = useCallback(() => {
     if (typeof window !== 'undefined') {
       const width = window.innerWidth;
       if (width < 640) {
-        setRadiusX(180);
+        setRadiusX(170);
+        setRadiusZ(90);
       } else if (width < 1024) {
         setRadiusX(300);
+        setRadiusZ(140);
       } else {
-        setRadiusX(420);
+        setRadiusX(440);
+        setRadiusZ(180);
       }
     }
   }, []);
@@ -90,8 +94,9 @@ export function PeerCommunityCarouselSection() {
     return () => window.removeEventListener('resize', updateRadius);
   }, [updateRadius]);
 
-  // Smooth continuous rotational step around the central axis
+  // Slower, smooth continuous rotational step around the central axis
   // Revolving left to right across the front (Z > 0)
+  // ~5.5 degrees per second -> full revolution in ~65 seconds (gentle, luxurious pacing)
   useEffect(() => {
     const loop = (currentTime: number) => {
       if (lastTimeRef.current === null) {
@@ -101,8 +106,7 @@ export function PeerCommunityCarouselSection() {
       lastTimeRef.current = currentTime;
 
       if (!isHovered && !isDragging) {
-        // ~15 degrees per second -> full revolution in 24 seconds
-        setRotation((prev) => (prev + delta * 15) % 360);
+        setRotation((prev) => (prev + delta * 5.5) % 360);
       }
 
       animRef.current = requestAnimationFrame(loop);
@@ -128,7 +132,7 @@ export function PeerCommunityCarouselSection() {
     if (!isDragging) return;
     const deltaX = e.clientX - dragStartXRef.current;
     // Drag right rotates right (positive angle), drag left rotates left
-    const newRot = (dragStartRotRef.current + deltaX * 0.35) % 360;
+    const newRot = (dragStartRotRef.current + deltaX * 0.25) % 360;
     setRotation(newRot < 0 ? newRot + 360 : newRot);
   };
 
@@ -146,12 +150,12 @@ export function PeerCommunityCarouselSection() {
   const numCards = carouselCards.length;
 
   return (
-    <section className="bg-black text-white py-24 sm:py-32 relative overflow-hidden border-t border-[#232328]">
+    <section className="bg-black text-white min-h-[580px] sm:min-h-[660px] lg:min-h-[720px] flex flex-col justify-center items-center py-14 sm:py-20 lg:py-24 relative overflow-hidden border-t border-[#232328]">
       {/* Container constrained strictly between the two guide lines */}
-      <div className="max-w-[1440px] mx-auto border-x border-[#232328] relative px-4 sm:px-8">
+      <div className="max-w-[1440px] w-full mx-auto border-x border-[#232328] relative px-4 sm:px-8 flex flex-col items-center justify-center">
         
-        {/* Section Header */}
-        <div className="text-center mb-16 sm:mb-20">
+        {/* Section Header with balanced, centered spacing */}
+        <div className="text-center mb-8 sm:mb-12">
           <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-zinc-400 font-semibold mb-3">
             A COMMUNITY FOR YOU TO THRIVE
           </p>
@@ -160,57 +164,62 @@ export function PeerCommunityCarouselSection() {
           </h2>
         </div>
 
-        {/* 3D Cylindrical Orbit Carousel Stage */}
+        {/* 3D Cylindrical Orbit Carousel Stage - centered vertically and horizontally */}
         <div
           ref={containerRef}
-          className="relative w-full h-[380px] sm:h-[440px] flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing select-none"
+          className="relative w-full h-[320px] sm:h-[370px] lg:h-[400px] flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing select-none"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
-          style={{ perspective: '1100px', transformStyle: 'preserve-3d' }}
+          style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
         >
           {carouselCards.map((card, i) => {
             // Angle around the central vertical axis
             const cardAngle = (rotation + (i * 360) / numCards) % 360;
             const rad = (cardAngle * Math.PI) / 180;
 
-            // Coordinates on horizontal ellipse / cylinder:
+            // Coordinates on horizontal ellipse:
             // X: -radiusX (left) to +radiusX (right)
-            // Z: -1.0 (furthest back) to +1.0 (closest front)
+            // Z: -radiusZ (back) to +radiusZ (front)
             const x = Math.sin(rad) * radiusX;
-            const z = Math.cos(rad);
+            const zNorm = Math.cos(rad); // -1 (back) to +1 (front)
+            const z = zNorm * radiusZ;
 
-            // Scale: Front is full size (1.0), Back is noticeably smaller (~0.52)
-            const normalizedZ = (z + 1) / 2; // 0 to 1
-            const scale = 0.52 + 0.48 * normalizedZ;
+            // Scale: Front is full size (1.0), Back is smaller (~0.52)
+            const normalizedZ = (zNorm + 1) / 2; // 0 to 1
+            const scale = 0.55 + 0.45 * normalizedZ;
 
-            // Z-Index: Front cards naturally sit in front of back cards
+            // Z-Index: Front cards render in front of back cards
             const zIndex = Math.round(normalizedZ * 50);
 
             // Opacity: Front cards 1.0, Back cards recede with depth (~0.60)
             const opacity = 0.60 + 0.40 * normalizedZ;
 
-            // Rotate Y: Natural cylindrical tangent tilt
-            const rotateY = -Math.sin(rad) * 22;
+            // OUTWARD CURVATURE (Convex Cylinder):
+            // When card is on the right (x > 0, rad > 0), rotateY is POSITIVE so its right edge recedes away into the background
+            // When card is on the left (x < 0, rad < 0), rotateY is NEGATIVE so its left edge recedes away
+            // In the center (x = 0), rotateY is 0, bulging outward closest to the viewer!
+            const rotateY = Math.sin(rad) * 34;
 
             return (
               <div
                 key={card.id}
                 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden shadow-2xl transition-transform duration-75 select-none pointer-events-none"
                 style={{
-                  transform: `translate3d(${x}px, 0, 0) scale(${scale}) rotateY(${rotateY}deg)`,
+                  transform: `translate3d(${x}px, 0, ${z}px) scale(${scale}) rotateY(${rotateY}deg)`,
                   zIndex,
                   opacity,
                   width: '320px',
                   height: '220px',
+                  transformOrigin: 'center center',
                 }}
               >
                 {/* Yellow Quote Card */}
                 {card.type === 'yellow-quote' && (
-                  <div className="relative w-full h-full bg-[#fde047] text-black p-7 flex flex-col justify-end border border-yellow-200 overflow-hidden">
+                  <div className="relative w-full h-full bg-[#fde047] text-black p-7 flex flex-col justify-end border border-yellow-200 overflow-hidden shadow-lg">
                     <div
                       className="absolute inset-0 opacity-20 pointer-events-none bg-repeat"
                       style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '8px 8px' }}
@@ -223,7 +232,7 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Light Cyan/Blue Quote Card */}
                 {card.type === 'blue-quote' && (
-                  <div className="relative w-full h-full bg-[#7dd3fc] text-white p-7 flex flex-col justify-end border border-sky-300 overflow-hidden">
+                  <div className="relative w-full h-full bg-[#7dd3fc] text-white p-7 flex flex-col justify-end border border-sky-300 overflow-hidden shadow-lg">
                     <div
                       className="absolute inset-0 opacity-15 pointer-events-none bg-repeat"
                       style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '8px 8px' }}
@@ -236,7 +245,7 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Coral / Red Quote Card */}
                 {card.type === 'red-quote' && (
-                  <div className="relative w-full h-full bg-[#e11d48] text-white p-7 flex flex-col justify-end border border-rose-400 overflow-hidden">
+                  <div className="relative w-full h-full bg-[#e11d48] text-white p-7 flex flex-col justify-end border border-rose-400 overflow-hidden shadow-lg">
                     <div
                       className="absolute inset-0 opacity-20 pointer-events-none bg-repeat"
                       style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '8px 8px' }}
@@ -249,7 +258,7 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Purple / Violet Quote Card */}
                 {card.type === 'purple-quote' && (
-                  <div className="relative w-full h-full bg-[#7c3aed] text-white p-7 flex flex-col justify-end border border-purple-400 overflow-hidden">
+                  <div className="relative w-full h-full bg-[#7c3aed] text-white p-7 flex flex-col justify-end border border-purple-400 overflow-hidden shadow-lg">
                     <div
                       className="absolute inset-0 opacity-15 pointer-events-none bg-repeat"
                       style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '8px 8px' }}
@@ -262,7 +271,7 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Immersion Photo Card */}
                 {card.type === 'photo' && card.image && (
-                  <div className="relative w-full h-full bg-zinc-900 border border-white/20 overflow-hidden">
+                  <div className="relative w-full h-full bg-zinc-900 border border-white/20 overflow-hidden shadow-lg">
                     <Image
                       src={card.image}
                       alt={card.alt || 'Airtribe cohort community'}
