@@ -17,6 +17,7 @@ import { WeeklyInterviewSection } from '@/components/WeeklyInterviewSection';
 import { ComeAsYouAreSection } from '@/components/ComeAsYouAreSection';
 import { YourCommitmentSection } from '@/components/YourCommitmentSection';
 import { CertificateSection } from '@/components/CertificateSection';
+import { PeerCommunityCarouselSection } from '@/components/PeerCommunityCarouselSection';
 import {
   X,
   CheckCircle2,
@@ -1039,6 +1040,9 @@ export default function ProductManagementLaunchpadPage() {
 
       {/* 14. CERTIFICATE OF COMPLETION */}
       <CertificateSection />
+
+      {/* 15. A COMMUNITY FOR YOU TO THRIVE: BUILDING IS BETTER WITH PEERS */}
+      <PeerCommunityCarouselSection />
 
       {/* 6. STICKY BOTTOM ENROLMENT BAR */}
       <div
