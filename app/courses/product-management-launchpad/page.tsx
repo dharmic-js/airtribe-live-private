@@ -536,7 +536,10 @@ export default function ProductManagementLaunchpadPage() {
           </div>
 
           {/* HERO VISUAL: VIDEO BACKGROUND ANIMATION */}
-          <div className="relative w-full max-w-[960px] h-[340px] sm:h-[420px] lg:h-[480px] flex items-end justify-center overflow-hidden select-none pb-0">
+          <div className="relative w-full max-w-[1100px] h-[360px] sm:h-[460px] lg:h-[520px] flex items-end justify-center overflow-hidden select-none pb-0">
+            {/* Ambient Backlight Aura */}
+            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-gradient-to-t from-purple-600/35 via-blue-600/20 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
+
             <video
               autoPlay
               loop
@@ -544,7 +547,12 @@ export default function ProductManagementLaunchpadPage() {
               playsInline
               preload="auto"
               poster="/videos/hero-poster.webp"
-              className="w-full h-full object-contain object-bottom pointer-events-none select-none"
+              className="w-full h-full object-cover object-bottom pointer-events-none select-none"
+              style={{
+                mixBlendMode: 'screen',
+                WebkitMaskImage: 'radial-gradient(ellipse 90% 80% at 50% 100%, black 50%, transparent 100%)',
+                maskImage: 'radial-gradient(ellipse 90% 80% at 50% 100%, black 50%, transparent 100%)',
+              }}
             >
               <source src="/videos/hero-av1.612ca5dc.mp4" type='video/mp4; codecs="av01.0.08M.08"' />
               <source src="/videos/hero-av1.612ca5dc.mp4" type="video/mp4" />
