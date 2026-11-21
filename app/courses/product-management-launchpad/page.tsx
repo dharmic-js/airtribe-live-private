@@ -535,101 +535,21 @@ export default function ProductManagementLaunchpadPage() {
             />
           </div>
 
-          {/* HERO VISUAL: ANIMATED PIPELINE OF SUCCESS FACTORS FLOWING INTO & OUT OF THE GLOWING FOLDER */}
-          <div className="relative w-full max-w-[880px] h-[340px] sm:h-[400px] flex items-end justify-center overflow-visible select-none pb-0">
-
-            {/* The Central Glowing Floating Folder held by hand */}
-            <div className="relative z-20 flex flex-col items-center animate-folder-bob -mb-2 sm:-mb-3">
-
-              {/* Backlight Cyan/Purple Aura */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-blue-500/40 via-purple-500/40 to-cyan-400/40 rounded-full blur-3xl pointer-events-none" />
-
-              {/* Glowing Folder Asset */}
-              <div className="relative w-[200px] sm:w-[240px] h-[230px] sm:h-[270px] drop-shadow-[0_0_35px_rgba(99,102,241,0.65)]">
-                <Image
-                  src="/images/pm-folder-glowing.png"
-                  alt="AI PM Launchpad Core"
-                  fill
-                  className="object-contain object-bottom"
-                  priority
-                />
-              </div>
-            </div>
-
-            {/* INCOMING STREAM: SUCCESS FACTOR CHIPS ARCHING INTO THE FOLDER FROM THE LEFT */}
-            <div className="absolute inset-0 pointer-events-none z-10">
-
-              {/* Chip 1: UPI PAYMENTS */}
-              <div className="absolute animate-curve-in-1">
-                <div className="-translate-x-1/2 -translate-y-1/2 bg-[#0e0e12]/95 border border-purple-500/30 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-[0_0_20px_rgba(168,85,247,0.3)] backdrop-blur-md flex items-center gap-2 whitespace-nowrap">
-                  <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
-                  UPI PAYMENTS
-                </div>
-              </div>
-
-              {/* Chip 2: STREAK */}
-              <div className="absolute animate-curve-in-2">
-                <div className="-translate-x-1/2 -translate-y-1/2 bg-[#0e0e12]/95 border border-emerald-500/30 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.3)] backdrop-blur-md flex items-center gap-2 whitespace-nowrap">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  STREAK
-                </div>
-              </div>
-
-              {/* Chip 3: AI ASSISTANTS */}
-              <div className="absolute animate-curve-in-3">
-                <div className="-translate-x-1/2 -translate-y-1/2 bg-[#0e0e12]/95 border border-cyan-500/30 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.3)] backdrop-blur-md flex items-center gap-2 whitespace-nowrap">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                  AI ASSISTANTS
-                </div>
-              </div>
-
-              {/* Chip 4: USER DISCOVERY */}
-              <div className="absolute animate-curve-in-4">
-                <div className="-translate-x-1/2 -translate-y-1/2 bg-[#0e0e12]/95 border border-blue-500/30 text-white font-mono text-xs sm:text-[13px] font-semibold px-4 py-2 rounded-full shadow-[0_0_20px_rgba(59,130,246,0.3)] backdrop-blur-md flex items-center gap-2 whitespace-nowrap">
-                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-                  USER DISCOVERY
-                </div>
-              </div>
-
-            </div>
-
-            {/* OUTGOING STREAM: TRANSFORMED PRODUCT APP TILES ARCHING OUT OF THE FOLDER TO THE RIGHT */}
-            <div className="absolute inset-0 pointer-events-none z-30">
-
-              {/* Tile 1: Uber */}
-              <div className="absolute animate-curve-out-1">
-                <div className="-translate-x-1/2 -translate-y-1/2 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-black border border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center justify-center backdrop-blur-md">
-                  <span className="font-bold text-white text-base sm:text-lg tracking-tight">Uber</span>
-                </div>
-              </div>
-
-              {/* Tile 2: WhatsApp */}
-              <div className="absolute animate-curve-out-2">
-                <div className="-translate-x-1/2 -translate-y-1/2 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#25D366] border border-emerald-300/40 shadow-[0_0_30px_rgba(37,211,102,0.4)] flex items-center justify-center backdrop-blur-md">
-                  <svg viewBox="0 0 24 24" className="w-8 h-8 fill-white">
-                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Tile 3: JioHotstar Star Icon */}
-              <div className="absolute animate-curve-out-3">
-                <div className="-translate-x-1/2 -translate-y-1/2 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#07132b] border border-cyan-400/40 shadow-[0_0_30px_rgba(6,182,212,0.5)] flex items-center justify-center backdrop-blur-md">
-                  <svg viewBox="0 0 24 24" className="w-8 h-8 fill-white text-cyan-300 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">
-                    <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Tile 4: Myntra Red 'my' Tile */}
-              <div className="absolute animate-curve-out-4">
-                <div className="-translate-x-1/2 -translate-y-1/2 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#e11d48] border border-rose-300/40 shadow-[0_0_30px_rgba(225,29,72,0.5)] flex items-center justify-center backdrop-blur-md">
-                  <span className="font-black text-white text-xl sm:text-2xl tracking-tighter">my</span>
-                </div>
-              </div>
-
-            </div>
-
+          {/* HERO VISUAL: VIDEO BACKGROUND ANIMATION */}
+          <div className="relative w-full max-w-[960px] h-[340px] sm:h-[420px] lg:h-[480px] flex items-end justify-center overflow-hidden select-none pb-0">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              poster="/videos/hero-poster.webp"
+              className="w-full h-full object-contain object-bottom pointer-events-none select-none"
+            >
+              <source src="/videos/hero-av1.612ca5dc.mp4" type='video/mp4; codecs="av01.0.08M.08"' />
+              <source src="/videos/hero-av1.612ca5dc.mp4" type="video/mp4" />
+              <source src="/videos/hero.mp4" type="video/mp4" />
+            </video>
           </div>
 
         </div>
