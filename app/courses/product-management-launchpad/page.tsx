@@ -9,6 +9,8 @@ import { AirtribeButton } from '@/components/AirtribeButton';
 import { ToolsSection } from '@/components/ToolsSection';
 import { ProgramsAtAGlanceSection } from '@/components/ProgramsAtAGlanceSection';
 import { PMStoriesSection } from '@/components/PMStoriesSection';
+import { BonusPerksSection } from '@/components/BonusPerksSection';
+import { TrustedCompaniesSection } from '@/components/TrustedCompaniesSection';
 import {
   X,
   CheckCircle2,
@@ -1007,6 +1009,12 @@ export default function ProductManagementLaunchpadPage() {
 
       {/* 6. REAL STORIES FROM THE TRIBE (UPPER BELT LTR + LOWER OUTCOMES & COMMUNITY RTL) */}
       <PMStoriesSection />
+
+      {/* 7. BONUS PERKS */}
+      <BonusPerksSection />
+
+      {/* 8. TRUSTED BY LEADING COMPANIES */}
+      <TrustedCompaniesSection />
 
       {/* 6. STICKY BOTTOM ENROLMENT BAR */}
       <div
