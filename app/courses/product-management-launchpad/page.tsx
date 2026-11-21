@@ -8,6 +8,7 @@ import { useApplyModal } from '@/components/ApplyModalContext';
 import { AirtribeButton } from '@/components/AirtribeButton';
 import { ToolsSection } from '@/components/ToolsSection';
 import { ProgramsAtAGlanceSection } from '@/components/ProgramsAtAGlanceSection';
+import { PMStoriesSection } from '@/components/PMStoriesSection';
 import {
   X,
   CheckCircle2,
@@ -1003,6 +1004,9 @@ export default function ProductManagementLaunchpadPage() {
 
       {/* 5. TOOLS YOU'LL BUILD WITH (SCROLL-DRIVEN CONSTELLATION ANIMATION) */}
       <ToolsSection />
+
+      {/* 6. REAL STORIES FROM THE TRIBE (UPPER BELT LTR + LOWER OUTCOMES & COMMUNITY RTL) */}
+      <PMStoriesSection />
 
       {/* 6. STICKY BOTTOM ENROLMENT BAR */}
       <div
