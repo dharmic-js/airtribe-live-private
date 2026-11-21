@@ -18,6 +18,9 @@ import { ComeAsYouAreSection } from '@/components/ComeAsYouAreSection';
 import { YourCommitmentSection } from '@/components/YourCommitmentSection';
 import { CertificateSection } from '@/components/CertificateSection';
 import { PeerCommunityCarouselSection } from '@/components/PeerCommunityCarouselSection';
+import { ScholarshipsSection } from '@/components/ScholarshipsSection';
+import { FAQSection } from '@/components/FAQSection';
+import { PricingSection } from '@/components/PricingSection';
 import {
   X,
   CheckCircle2,
@@ -1043,6 +1046,15 @@ export default function ProductManagementLaunchpadPage() {
 
       {/* 15. A COMMUNITY FOR YOU TO THRIVE: BUILDING IS BETTER WITH PEERS */}
       <PeerCommunityCarouselSection />
+
+      {/* 16. SCHOLARSHIPS */}
+      <ScholarshipsSection />
+
+      {/* 17. FREQUENTLY ASKED QUESTIONS */}
+      <FAQSection />
+
+      {/* 18. PROGRAM PRICING & WHAT'S INCLUDED */}
+      <PricingSection />
 
       {/* 6. STICKY BOTTOM ENROLMENT BAR */}
       <div
