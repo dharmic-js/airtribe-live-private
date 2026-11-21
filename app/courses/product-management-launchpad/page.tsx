@@ -12,6 +12,7 @@ import { PMStoriesSection } from '@/components/PMStoriesSection';
 import { BonusPerksSection } from '@/components/BonusPerksSection';
 import { TrustedCompaniesSection } from '@/components/TrustedCompaniesSection';
 import { RealWorldProjectsSection } from '@/components/RealWorldProjectsSection';
+import { CareerSupportSection } from '@/components/CareerSupportSection';
 import {
   X,
   CheckCircle2,
@@ -1019,6 +1020,9 @@ export default function ProductManagementLaunchpadPage() {
 
       {/* 9. WORK ON REAL-WORLD PROJECTS */}
       <RealWorldProjectsSection />
+
+      {/* 10. CAREER SUPPORT, BUILT INTO THE PROGRAM */}
+      <CareerSupportSection />
 
       {/* 6. STICKY BOTTOM ENROLMENT BAR */}
       <div
