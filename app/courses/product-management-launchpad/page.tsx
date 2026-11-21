@@ -13,6 +13,10 @@ import { BonusPerksSection } from '@/components/BonusPerksSection';
 import { TrustedCompaniesSection } from '@/components/TrustedCompaniesSection';
 import { RealWorldProjectsSection } from '@/components/RealWorldProjectsSection';
 import { CareerSupportSection } from '@/components/CareerSupportSection';
+import { WeeklyInterviewSection } from '@/components/WeeklyInterviewSection';
+import { ComeAsYouAreSection } from '@/components/ComeAsYouAreSection';
+import { YourCommitmentSection } from '@/components/YourCommitmentSection';
+import { CertificateSection } from '@/components/CertificateSection';
 import {
   X,
   CheckCircle2,
@@ -1023,6 +1027,18 @@ export default function ProductManagementLaunchpadPage() {
 
       {/* 10. CAREER SUPPORT, BUILT INTO THE PROGRAM */}
       <CareerSupportSection />
+
+      {/* 11. WEEKLY INTERVIEW PREPARATION */}
+      <WeeklyInterviewSection />
+
+      {/* 12. COME AS YOU ARE. LEAVE AS AN AI-FIRST PM */}
+      <ComeAsYouAreSection />
+
+      {/* 13. YOUR COMMITMENT */}
+      <YourCommitmentSection />
+
+      {/* 14. CERTIFICATE OF COMPLETION */}
+      <CertificateSection />
 
       {/* 6. STICKY BOTTOM ENROLMENT BAR */}
       <div
