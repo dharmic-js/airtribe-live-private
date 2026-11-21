@@ -76,7 +76,7 @@ export function ProgramsAtAGlanceSection() {
   };
 
   return (
-    <section className="w-full bg-black py-20 sm:py-28 border-b border-[#232328]">
+    <section id="programs-at-a-glance" className="w-full bg-black py-20 sm:py-28 border-b border-[#232328]">
       <div className="max-w-[1440px] mx-auto border-x border-[#232328] px-4 sm:px-8 lg:px-12">
         
         {/* Section Header */}

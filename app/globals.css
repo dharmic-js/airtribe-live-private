@@ -175,52 +175,52 @@ body {
   animation: folder-bob 4.5s ease-in-out infinite;
 }
 
-/* Success Factors Curving INTO the Folder (Left to Center-Mouth along arched path) */
+/* Success Factors Curving INTO the Folder (Left to Center-Mouth along arched path matching Image 2) */
 @keyframes curve-in-stream {
   0% {
-    transform: translate(-340px, 60px) rotate(-8deg) scale(0.8);
+    transform: translate(-380px, 70px) rotate(-30deg) scale(0.7);
     opacity: 0;
   }
   15% {
     opacity: 1;
   }
-  50% {
-    transform: translate(-180px, -50px) rotate(-16deg) scale(1);
+  45% {
+    transform: translate(-190px, -55px) rotate(-10deg) scale(1);
     opacity: 1;
   }
-  85% {
-    transform: translate(-40px, 15px) rotate(-28deg) scale(0.75);
+  80% {
+    transform: translate(-65px, -10px) rotate(18deg) scale(0.9);
     opacity: 0.95;
   }
   100% {
-    transform: translate(0px, 45px) rotate(-35deg) scale(0.2);
+    transform: translate(0px, 0px) rotate(30deg) scale(0.18);
     opacity: 0;
   }
 }
 
 .animate-curve-in-1 {
-  top: 50%;
+  top: 45%;
   left: 50%;
   animation: curve-in-stream 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
   animation-delay: 0s;
 }
 
 .animate-curve-in-2 {
-  top: 50%;
+  top: 45%;
   left: 50%;
   animation: curve-in-stream 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
   animation-delay: 1.5s;
 }
 
 .animate-curve-in-3 {
-  top: 50%;
+  top: 45%;
   left: 50%;
   animation: curve-in-stream 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
   animation-delay: 3s;
 }
 
 .animate-curve-in-4 {
-  top: 50%;
+  top: 45%;
   left: 50%;
   animation: curve-in-stream 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
   animation-delay: 4.5s;
@@ -229,50 +229,50 @@ body {
 /* Transformed Tiles Curving OUT of the Folder (Center-Mouth to Top-Right and down along mirrored arched path) */
 @keyframes curve-out-stream {
   0% {
-    transform: translate(0px, 45px) rotate(35deg) scale(0.2);
+    transform: translate(0px, 0px) rotate(-30deg) scale(0.18);
     opacity: 0;
   }
   15% {
-    transform: translate(40px, 15px) rotate(28deg) scale(0.75);
+    transform: translate(65px, -10px) rotate(-18deg) scale(0.9);
     opacity: 0.95;
   }
   50% {
-    transform: translate(180px, -50px) rotate(16deg) scale(1);
+    transform: translate(190px, -55px) rotate(10deg) scale(1);
     opacity: 1;
   }
   85% {
-    transform: translate(320px, 45px) rotate(10deg) scale(0.85);
-    opacity: 0.9;
+    transform: translate(320px, 20px) rotate(22deg) scale(0.85);
+    opacity: 0.85;
   }
   100% {
-    transform: translate(360px, 80px) rotate(5deg) scale(0.6);
+    transform: translate(390px, 75px) rotate(30deg) scale(0.6);
     opacity: 0;
   }
 }
 
 .animate-curve-out-1 {
-  top: 50%;
+  top: 45%;
   left: 50%;
   animation: curve-out-stream 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   animation-delay: 0.75s;
 }
 
 .animate-curve-out-2 {
-  top: 50%;
+  top: 45%;
   left: 50%;
   animation: curve-out-stream 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   animation-delay: 2.25s;
 }
 
 .animate-curve-out-3 {
-  top: 50%;
+  top: 45%;
   left: 50%;
   animation: curve-out-stream 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   animation-delay: 3.75s;
 }
 
 .animate-curve-out-4 {
-  top: 50%;
+  top: 45%;
   left: 50%;
   animation: curve-out-stream 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   animation-delay: 5.25s;
