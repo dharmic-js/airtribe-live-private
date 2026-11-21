@@ -11,6 +11,7 @@ import { ProgramsAtAGlanceSection } from '@/components/ProgramsAtAGlanceSection'
 import { PMStoriesSection } from '@/components/PMStoriesSection';
 import { BonusPerksSection } from '@/components/BonusPerksSection';
 import { TrustedCompaniesSection } from '@/components/TrustedCompaniesSection';
+import { RealWorldProjectsSection } from '@/components/RealWorldProjectsSection';
 import {
   X,
   CheckCircle2,
@@ -1015,6 +1016,9 @@ export default function ProductManagementLaunchpadPage() {
 
       {/* 8. TRUSTED BY LEADING COMPANIES */}
       <TrustedCompaniesSection />
+
+      {/* 9. WORK ON REAL-WORLD PROJECTS */}
+      <RealWorldProjectsSection />
 
       {/* 6. STICKY BOTTOM ENROLMENT BAR */}
       <div
