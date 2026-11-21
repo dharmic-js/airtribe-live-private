@@ -4,12 +4,12 @@ import React from 'react';
 import Image from 'next/image';
 import { useApplyModal } from './ApplyModalContext';
 
-interface IncludedItem {
+export interface IncludedItem {
   title: string;
   desc: string;
 }
 
-const includedItems: IncludedItem[] = [
+const defaultIncludedItems: IncludedItem[] = [
   {
     title: 'Live sessions with product leaders',
     desc: '40+ live sessions and weekly assignments with PMs from top companies',
@@ -32,7 +32,23 @@ const includedItems: IncludedItem[] = [
   },
 ];
 
-export function PricingSection() {
+interface PricingSectionProps {
+  courseTitle?: string;
+  originalPrice?: string;
+  discountPrice?: string;
+  specialNote?: string;
+  includedItems?: IncludedItem[];
+  courseId?: string;
+}
+
+export function PricingSection({
+  courseTitle = 'AI-First Product Management',
+  originalPrice = '₹1,75,000',
+  discountPrice = '₹1,44,999',
+  specialNote = 'Special price applicable for next 15 seats only.',
+  includedItems = defaultIncludedItems,
+  courseId = 'AI-First Product Management',
+}: PricingSectionProps = {}) {
   const { openModal } = useApplyModal();
 
   return (
@@ -74,18 +90,18 @@ export function PricingSection() {
               <div className="lg:col-span-5 flex flex-col justify-between">
                 <div>
                   <h3 className="font-editorial text-[30px] sm:text-[38px] text-white font-normal leading-tight tracking-tight">
-                    AI-First Product Management
+                    {courseTitle}
                   </h3>
 
                   <div className="mt-8 sm:mt-10">
                     <p className="text-zinc-500 line-through text-base sm:text-lg font-medium">
-                      ₹1,75,000
+                      {originalPrice}
                     </p>
                     <p className="font-editorial text-[46px] sm:text-[56px] text-white font-normal leading-none tracking-tight mt-1">
-                      ₹1,44,999
+                      {discountPrice}
                     </p>
                     <p className="text-zinc-300 text-xs sm:text-sm mt-3 font-normal">
-                      Special price applicable for next 15 seats only.
+                      {specialNote}
                     </p>
                     <p className="text-zinc-400 text-xs mt-1">
                       No-cost EMI available
@@ -96,7 +112,7 @@ export function PricingSection() {
                 {/* Button Actions */}
                 <div className="mt-10 flex flex-wrap items-center gap-3">
                   <button
-                    onClick={() => openModal('AI-First Product Management')}
+                    onClick={() => openModal(courseId)}
                     className="group inline-flex items-center gap-3 bg-white text-black text-xs sm:text-sm font-medium px-6 py-3 rounded-sm transition-all duration-300 hover:bg-zinc-100 shadow-lg cursor-pointer"
                   >
                     <span>Apply now</span>
@@ -106,7 +122,7 @@ export function PricingSection() {
                   </button>
 
                   <button
-                    onClick={() => openModal('AI-First Product Management')}
+                    onClick={() => openModal(courseId)}
                     className="border border-zinc-700 hover:border-zinc-500 text-white text-xs sm:text-sm font-medium px-5 py-3 rounded-sm transition-colors cursor-pointer"
                   >
                     Request a callback

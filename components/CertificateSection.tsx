@@ -3,7 +3,15 @@
 import React from 'react';
 import Image from 'next/image';
 
-export function CertificateSection() {
+interface CertificateSectionProps {
+  certificateImage?: string;
+  courseTitle?: string;
+}
+
+export function CertificateSection({
+  certificateImage = '/images/certificate/certificate-pml.webp',
+  courseTitle = 'AI-First Product Management'
+}: CertificateSectionProps = {}) {
   return (
     <section className="bg-black text-white py-24 sm:py-32 relative overflow-hidden border-t border-[#232328]">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
@@ -52,8 +60,8 @@ export function CertificateSection() {
           {/* 4. Center Main: Certificate of Completion */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[72%] max-w-[580px] lg:max-w-[640px] z-10 shadow-2xl rounded-lg overflow-hidden border border-white/10 group hover:scale-[1.01] transition-transform duration-300">
             <Image
-              src="/images/certificate/certificate-pml.webp"
-              alt="Airtribe Certificate of Completion — AI-First Product Management"
+              src={certificateImage}
+              alt={`Airtribe Certificate of Completion — ${courseTitle}`}
               width={1371}
               height={970}
               className="w-full h-auto object-contain"
@@ -77,8 +85,8 @@ export function CertificateSection() {
 
           <div className="relative z-10 w-full max-w-[340px] shadow-2xl rounded-lg overflow-hidden border border-white/10">
             <Image
-              src="/images/certificate/certificate-pml.webp"
-              alt="Airtribe Certificate of Completion"
+              src={certificateImage}
+              alt={`Airtribe Certificate of Completion — ${courseTitle}`}
               width={1371}
               height={970}
               className="w-full h-auto object-contain"

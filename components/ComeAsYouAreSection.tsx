@@ -17,7 +17,17 @@ const roleTagsDesktop = [
   { label: 'Sales executive', left: '20px', top: '469px' },
 ];
 
-export function ComeAsYouAreSection() {
+interface ComeAsYouAreProps {
+  targetRole?: string;
+  courseId?: string;
+  roleDescription?: string;
+}
+
+export function ComeAsYouAreSection({
+  targetRole = 'PM',
+  courseId = 'AI-First Product Management',
+  roleDescription = "Great builders come from everywhere. It's not where you start that matters, it's how fast you learn to build with AI. We turn your background into your edge, and point it at the roles everyone's hiring for."
+}: ComeAsYouAreProps = {}) {
   const { openModal } = useApplyModal();
 
   return (
@@ -68,14 +78,14 @@ export function ComeAsYouAreSection() {
           {/* Right: Copy & Actions */}
           <div className="flex flex-col gap-8 max-w-xl pl-8">
             <h2 className="font-editorial text-[42px] sm:text-[52px] text-white font-normal leading-[1.08] tracking-tight">
-              Come as you are. Leave as an AI-first PM.
+              Come as you are. Leave as an AI-first {targetRole}.
             </h2>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-4">
               <button
                 type="button"
-                onClick={() => openModal('AI-First Product Management')}
+                onClick={() => openModal(courseId)}
                 className="group relative flex h-12 w-44 shrink-0 cursor-pointer items-center justify-between overflow-hidden bg-white px-5 text-black transition-colors duration-300 hover:bg-zinc-200"
               >
                 <span className="text-sm font-semibold">Apply now</span>
@@ -92,7 +102,7 @@ export function ComeAsYouAreSection() {
             </div>
 
             <p className="text-zinc-400 text-sm sm:text-base leading-relaxed">
-              Great PMs come from everywhere. It&apos;s not where you start that matters, it&apos;s how fast you learn to build with AI. We turn your background into your edge, and point it at the roles everyone&apos;s hiring for.
+              {roleDescription}
             </p>
           </div>
 

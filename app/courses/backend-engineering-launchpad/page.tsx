@@ -1,196 +1,618 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useApplyModal } from '@/components/ApplyModalContext';
-import { 
-  Code, 
-  Clock, 
-  Users, 
-  Star, 
-  ChevronDown, 
-  ChevronUp, 
-  Download, 
-  Server, 
-  Database, 
-  Layers, 
-  GitBranch, 
-  Activity 
-} from 'lucide-react';
+import { AirtribeButton } from '@/components/AirtribeButton';
+import { BELProgramsAtAGlanceSection } from '@/components/BELProgramsAtAGlanceSection';
+import { BELCurriculumSection } from '@/components/BELCurriculumSection';
+import { BELExpertsCarouselSection } from '@/components/BELExpertsCarouselSection';
+import { BELToolsSection } from '@/components/BELToolsSection';
+import { BELStoriesSection } from '@/components/BELStoriesSection';
+import { BonusPerksSection } from '@/components/BonusPerksSection';
+import { TrustedCompaniesSection } from '@/components/TrustedCompaniesSection';
+import { BELRealWorldProjectsSection } from '@/components/BELRealWorldProjectsSection';
+import { CareerSupportSection } from '@/components/CareerSupportSection';
+import { ComeAsYouAreSection } from '@/components/ComeAsYouAreSection';
+import { YourCommitmentSection } from '@/components/YourCommitmentSection';
+import { CertificateSection } from '@/components/CertificateSection';
+import { PeerCommunityCarouselSection } from '@/components/PeerCommunityCarouselSection';
+import { ScholarshipsSection } from '@/components/ScholarshipsSection';
+import { BELFAQSection } from '@/components/BELFAQSection';
+import { PricingSection } from '@/components/PricingSection';
+import { X, ChevronRight, CheckCircle2 } from 'lucide-react';
 
-const syllabus = [
-  {
-    week: 'Weeks 1-2',
-    title: 'Advanced Concurrency, Go/Node Internals & Thread Pools',
-    desc: 'Goroutines, channels, memory models, Node event loop mechanics, async I/O, deadlock prevention, and non-blocking architecture under high concurrent loads.',
-  },
-  {
-    week: 'Weeks 3-4',
-    title: 'Database Architecture, Indexing Deep-Dive & Query Optimization',
-    desc: 'B-Trees vs LSM Trees, WAL (Write-Ahead Logging), isolation levels (ACID, MVCC), index scans, query execution plans, PostgreSQL tuning, and partition strategies.',
-  },
-  {
-    week: 'Weeks 5-6',
-    title: 'Distributed Caching Strategies & Redis Mastery',
-    desc: 'Cache invalidation patterns (Write-through, Write-back, Cache-aside), Redis data structures (Streams, Bitmaps, Sorted Sets), cluster sharding, and thundering herd mitigation.',
-  },
-  {
-    week: 'Weeks 7-8',
-    title: 'Message Queues, Event-Driven Architecture & Apache Kafka',
-    desc: 'Kafka partitions, consumer groups, exactly-once semantics (EOS), idempotency keys, dead-letter queues, event sourcing, and CQRS patterns for decoupled services.',
-  },
-  {
-    week: 'Weeks 9-10',
-    title: 'High-Scale System Design Teardowns (Uber, WhatsApp, Netflix)',
-    desc: 'Geohash indexing for ride matching, WebSocket connections for 10M concurrent users, distributed rate limiters (Token Bucket, Leaky Bucket), and content delivery edge caching.',
-  },
-  {
-    week: 'Weeks 11-12',
-    title: 'Resilience Engineering: Circuit Breakers, Bulkheads & Observability',
-    desc: 'Implementing resilience with Netflix Hystrix/Resilience4j principles, OpenTelemetry distributed tracing, Prometheus metrics, and Grafana alert dashboards.',
-  },
-  {
-    week: 'Weeks 13-14',
-    title: 'Containerization, Kubernetes Orchestration & Cloud CI/CD',
-    desc: 'Multi-stage Docker builds, Kubernetes Pods, Deployments, Horizontal Pod Autoscalers (HPA), Ingress controllers, and automated zero-downtime deployment pipelines.',
-  },
-  {
-    week: 'Weeks 15-16',
-    title: 'AI-Augmented Engineering Workflows & Capstone Production Demo',
-    desc: 'Leveraging AI coding agents for automated schema migrations and integration tests, finalizing your capstone microservice, and presenting to Principal Engineers.',
-  },
+const partnerLogos = [
+  { name: 'Adobe', src: '/logos/adobe.bed3d518.svg', width: 44, height: 36 },
+  { name: 'Shopify', src: '/logos/shopify.d0cf7ff1.svg', width: 34, height: 36 },
+  { name: 'Flipkart', src: '/flipkart.600cc75b.webp', width: 48, height: 28 },
+  { name: 'PhonePe', src: '/phonepe.a21c03c3.webp', width: 46, height: 26 },
+  { name: 'CRED', src: '/logos/cred.a4cd9d0e.svg', width: 42, height: 24 },
+  { name: 'Zepto', src: '/zepto.a70f9f38.webp', width: 46, height: 22 },
+  { name: 'Meesho', src: '/meesho.25371ed5.webp', width: 44, height: 24 },
+  { name: 'Paytm', src: '/logos/paytm.83ecf65f.svg', width: 48, height: 18 },
+  { name: 'OYO', src: '/oyo.bf15604e.webp', width: 40, height: 22 },
+  { name: 'Rapido', src: '/rapido.01bff05a.svg', width: 46, height: 22 },
 ];
 
-export default function BackendEngineeringPage() {
+export default function BackendEngineeringLaunchpadPage() {
+  const router = useRouter();
   const { openModal } = useApplyModal();
-  const [openWeek, setOpenWeek] = useState<number | null>(0);
+  const [bannerVisible, setBannerVisible] = useState(true);
+
+  // Curriculum modal state
+  const [curriculumModalOpen, setCurriculumModalOpen] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [leadForm, setLeadForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    role: '',
+    experience: '1-3 years',
+  });
+
+  // Countdown timer state
+  const [timeLeft, setTimeLeft] = useState({
+    days: 1,
+    hours: 3,
+    mins: 5,
+    secs: 50,
+  });
+
+  // Sticky Bottom Bar visibility
+  const [showStickyBar, setShowStickyBar] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const glanceEl = document.getElementById('programs-at-a-glance');
+      if (glanceEl) {
+        const rect = glanceEl.getBoundingClientRect();
+        setShowStickyBar(rect.top <= 160);
+      } else {
+        setShowStickyBar(window.scrollY > 850);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        let { days, hours, mins, secs } = prev;
+        if (secs > 0) {
+          secs -= 1;
+        } else {
+          secs = 59;
+          if (mins > 0) {
+            mins -= 1;
+          } else {
+            mins = 59;
+            if (hours > 0) {
+              hours -= 1;
+            } else {
+              hours = 23;
+              if (days > 0) days -= 1;
+            }
+          }
+        }
+        return { days, hours, mins, secs };
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const format2 = (n: number) => String(n).padStart(2, '0');
+
+  const handleCurriculumSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!leadForm.name || !leadForm.email || !leadForm.phone) return;
+    setFormSubmitted(true);
+    setTimeout(() => {
+      setCurriculumModalOpen(false);
+      window.open('https://airtribe.link/BEL_Brochure', '_blank');
+    }, 600);
+  };
 
   return (
-    <div className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      
-      {/* Hero */}
-      <div className="max-w-4xl mx-auto text-center mb-16">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 text-xs sm:text-sm font-semibold mb-6">
-          <Code className="w-4 h-4 text-blue-400" />
-          Flagship Software Engineering Track
-        </div>
-        <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-6">
-          AI-First Software Engineering
-        </h1>
-        <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto mb-8">
-          Master distributed systems, concurrency, and high-scale backend architecture. Build production microservices capable of handling millions of QPS alongside Principal Engineers from Uber & Razorpay.
-        </p>
+    <div className="w-full bg-black text-white min-h-screen relative selection:bg-purple-500 selection:text-white pb-24">
 
-        {/* Cohort Meta Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-4 text-xs sm:text-sm text-gray-300 mb-10">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-dark-850 border border-white/5">
-            <Clock className="w-4 h-4 text-blue-400" />
-            <span>16 Weeks (Live Weekend Masterclasses)</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-dark-850 border border-white/5">
-            <Users className="w-4 h-4 text-blue-400" />
-            <span>Small Cohorts • 1:1 Code Reviews</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-dark-850 border border-white/5">
-            <Star className="w-4 h-4 text-emerald-400 fill-emerald-400" />
-            <span>4.92/5 Rating (1,200+ reviews)</span>
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button
-            onClick={() => openModal('AI-First Software Engineering')}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-xl shadow-blue-500/30 active:scale-95 text-base"
-          >
-            Apply for Dec 2026 Batch
-          </button>
-          <button
-            onClick={() => openModal('AI-First Software Engineering - Syllabus')}
-            className="w-full sm:w-auto px-6 py-4 rounded-xl font-semibold text-gray-300 bg-dark-850 hover:bg-dark-800 border border-white/10 transition-colors flex items-center justify-center gap-2"
-          >
-            <Download className="w-4 h-4 text-gray-400" />
-            Download Detailed Syllabus
-          </button>
-        </div>
-      </div>
-
-      {/* Tech Stack */}
-      <div className="p-6 rounded-2xl bg-dark-850 border border-white/5 max-w-5xl mx-auto mb-20 text-center">
-        <div className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">
-          Architecture & Tools Mastered
-        </div>
-        <div className="flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm font-medium text-gray-200">
-          {['Go / Golang', 'Node.js / TypeScript', 'PostgreSQL', 'Redis Clusters', 'Apache Kafka', 'Docker', 'Kubernetes', 'gRPC & Protocol Buffers', 'Prometheus', 'Grafana', 'AWS / GCP'].map((t, idx) => (
-            <span key={idx} className="px-3.5 py-1.5 rounded-lg bg-dark-900 border border-white/10 text-gray-300">
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Syllabus */}
-      <div className="max-w-4xl mx-auto mb-24">
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-2 block">
-            16-Week Curriculum
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-            From Code Craft to Scaled Cloud Architectures
-          </h2>
-        </div>
-
-        <div className="space-y-4">
-          {syllabus.map((item, idx) => (
-            <div
-              key={idx}
-              className="rounded-xl border border-white/10 bg-dark-850 overflow-hidden transition-colors"
+      {/* 1. TOP ANNOUNCEMENT BANNER */}
+      {bannerVisible && (
+        <div className="w-full bg-[#6366f1] text-white px-4 py-2.5 text-xs sm:text-sm font-medium flex items-center justify-between relative z-30 transition-all">
+          <div className="mx-auto flex items-center gap-2 text-center">
+            <span>Apply now and get our Docker crash course for free</span>
+            <button
+              onClick={() => openModal('AI-First Software Engineering')}
+              className="underline hover:text-white/80 transition-colors inline-flex items-center gap-1 font-semibold ml-1 cursor-pointer"
             >
-              <button
-                onClick={() => setOpenWeek(openWeek === idx ? null : idx)}
-                className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-white/[0.02]"
-              >
-                <div className="flex items-center gap-4">
-                  <span className="px-2.5 py-1 rounded bg-blue-500/10 text-blue-300 text-xs font-bold shrink-0">
-                    {item.week}
-                  </span>
-                  <span className="font-semibold text-white text-sm sm:text-base">
-                    {item.title}
-                  </span>
-                </div>
-                {openWeek === idx ? (
-                  <ChevronUp className="w-5 h-5 text-blue-400 shrink-0" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-400 shrink-0" />
-                )}
-              </button>
+              Apply now &rarr;
+            </button>
+          </div>
+          <button
+            onClick={() => setBannerVisible(false)}
+            className="text-white/80 hover:text-white p-1 transition-colors shrink-0"
+            aria-label="Close Announcement"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
-              {openWeek === idx && (
-                <div className="px-5 pb-5 pt-1 text-sm text-gray-400 leading-relaxed border-t border-white/5">
-                  {item.desc}
-                </div>
-              )}
+      {/* 2. HERO SECTION */}
+      <section className="relative w-full bg-black border-b border-[#232328] overflow-hidden pt-12 sm:pt-16 pb-0">
+
+        {/* Ambient Backlight Aura */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/3 w-[720px] h-[520px] bg-gradient-to-tr from-blue-600/20 via-indigo-600/20 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-[1440px] mx-auto border-x border-[#232328] px-4 sm:px-8 lg:px-12 relative z-10 flex flex-col items-center text-center">
+
+          {/* GitHub Partner Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/15 bg-white/5 backdrop-blur-sm mb-8 hover:border-white/30 transition-colors">
+            <div className="w-4 h-4 relative">
+              <Image
+                src="/github-partner.webp"
+                alt="GitHub"
+                fill
+                className="object-contain"
+              />
             </div>
-          ))}
+            <span className="text-xs sm:text-[13px] text-zinc-300 font-medium">
+              Official <span className="font-bold text-white">GitHub</span> Education Program Partner
+            </span>
+          </div>
+
+          {/* Hero Heading */}
+          <h1 className="text-[44px] sm:text-[68px] lg:text-[84px] font-normal leading-[1.0] tracking-[-0.04em] text-white max-w-4xl mb-6">
+            Become an
+            <span className="block font-editorial italic font-normal text-white mt-1">
+              AI-First Software Engineer
+            </span>
+          </h1>
+
+          {/* Hero Subtitle */}
+          <p className="text-zinc-400 text-sm sm:text-base lg:text-[18px] leading-[1.65] max-w-2xl mx-auto mb-10 font-light">
+            Software engineering is evolving fast. In the AI era, the best engineers don&apos;t just write code. They design systems, automate intelligently, and deploy AI-native solutions at scale.
+          </p>
+
+          {/* Hero CTAs */}
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-16 sm:mb-20">
+            <button
+              onClick={() => setCurriculumModalOpen(true)}
+              className="px-6 py-3 rounded-md text-sm font-medium text-white bg-transparent border border-[#333] hover:border-zinc-400 transition-colors cursor-pointer"
+            >
+              Get the full curriculum
+            </button>
+
+            <AirtribeButton
+              text="Apply now"
+              onClick={() => openModal('AI-First Software Engineering')}
+              className="!w-36 !h-11"
+            />
+          </div>
+
+          {/* Cohort Badges */}
+          <div className="inline-flex items-center gap-3 text-xs sm:text-sm text-zinc-400 font-medium mb-12">
+            <span className="text-white font-medium">6 Months</span>
+            <span className="text-zinc-600">|</span>
+            <span>Enrolment ends 22 Nov</span>
+          </div>
+
+          {/* HERO VISUAL: COSMIC GLOWING VORTEX VIDEO */}
+          <div className="relative w-full max-w-[1100px] h-[360px] sm:h-[460px] lg:h-[540px] flex items-end justify-center overflow-hidden select-none pb-0">
+            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-[540px] h-[320px] bg-gradient-to-t from-blue-600/35 via-indigo-600/20 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
+
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              poster="/hero-bel-poster.webp"
+              className="w-full h-full object-cover object-bottom pointer-events-none select-none"
+              style={{
+                mixBlendMode: 'screen',
+                WebkitMaskImage: 'radial-gradient(ellipse 95% 85% at 50% 100%, black 50%, transparent 100%)',
+                maskImage: 'radial-gradient(ellipse 95% 85% at 50% 100%, black 50%, transparent 100%)',
+              }}
+            >
+              <source src="/videos/hero-bel.mp4" type="video/mp4" />
+            </video>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 3. PROGRAM HIGHLIGHTS / STATS BAR */}
+      <section className="w-full bg-black border-b border-[#232328]">
+        <div className="max-w-[1440px] mx-auto border-x border-[#232328]">
+
+          {/* Top Row: 6 months | 15+ experts | 22 Nov Countdown & CTAs */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 border-b border-[#232328]">
+
+            {/* Stat 1: 6 months */}
+            <div className="lg:col-span-2 p-6 sm:p-8 border-b lg:border-b-0 lg:border-r border-[#232328] flex flex-col justify-center">
+              <span className="text-[44px] sm:text-[54px] font-normal leading-[1.0] text-white tracking-tight">
+                6
+              </span>
+              <span className="text-zinc-400 text-sm font-medium mt-1">
+                months
+              </span>
+            </div>
+
+            {/* Stat 2: 15+ experts */}
+            <div className="lg:col-span-2 p-6 sm:p-8 border-b lg:border-b-0 lg:border-r border-[#232328] flex flex-col justify-center">
+              <span className="text-[44px] sm:text-[54px] font-normal leading-[1.0] text-white tracking-tight">
+                15+
+              </span>
+              <span className="text-zinc-400 text-sm font-medium mt-1">
+                experts
+              </span>
+            </div>
+
+            {/* Stat 3: 22 Nov Countdown + Apply Now & Get Full Curriculum */}
+            <div className="lg:col-span-8 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+              <div>
+                <span className="text-[32px] sm:text-[40px] font-normal leading-[1.0] text-white tracking-tight block">
+                  22 Nov
+                </span>
+                <span className="text-zinc-400 text-xs sm:text-sm font-normal mt-1.5 flex items-center gap-1.5">
+                  enrolment ends in{' '}
+                  <span className="font-mono text-white font-semibold">
+                    {format2(timeLeft.days)}:{format2(timeLeft.hours)}:{format2(timeLeft.mins)}:{format2(timeLeft.secs)}
+                  </span>
+                </span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-3 flex-wrap">
+                <AirtribeButton
+                  text="Apply now"
+                  onClick={() => openModal('AI-First Software Engineering')}
+                  className="!w-32 !h-10"
+                />
+
+                <button
+                  onClick={() => setCurriculumModalOpen(true)}
+                  className="px-5 py-2.5 rounded-md text-xs sm:text-sm font-medium text-white bg-transparent border border-[#333] hover:border-zinc-400 transition-colors cursor-pointer"
+                >
+                  Get the full curriculum
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Bottom Strip: Mentors from 4 Avatars + Company Logo Ribbon */}
+          <div className="flex flex-col lg:flex-row items-stretch overflow-hidden">
+
+            <div className="flex items-center gap-4 px-6 sm:px-8 py-4 shrink-0 border-b lg:border-b-0 lg:border-r border-[#232328] bg-black z-10">
+              <span className="text-zinc-400 text-xs sm:text-sm font-medium whitespace-nowrap">
+                Engineers from
+              </span>
+              <div className="flex items-center">
+                <img
+                  src="/portraits/sanchit.webp"
+                  alt="Sanchit Tanwar"
+                  className="w-7 h-7 rounded-full border border-black object-cover shrink-0 grayscale"
+                />
+                <img
+                  src="/portraits/gurmandeep.webp"
+                  alt="Gurmandeep Bedi"
+                  className="w-7 h-7 rounded-full border border-black object-cover -ml-2 shrink-0 grayscale"
+                />
+                <img
+                  src="/portraits/dhaval.webp"
+                  alt="Dhaval Trivedi"
+                  className="w-7 h-7 rounded-full border border-black object-cover -ml-2 shrink-0 grayscale"
+                />
+                <img
+                  src="/portraits/hero-avatar-1.jpg"
+                  alt="Alumni"
+                  className="w-7 h-7 rounded-full border border-black object-cover -ml-2 shrink-0"
+                />
+              </div>
+            </div>
+
+            {/* Marquee of Partner Logos */}
+            <div className="flex-1 overflow-hidden relative flex items-center py-3.5 [mask-image:linear-gradient(to_right,transparent,black_40px,black_calc(100%-40px),transparent)]">
+              <div className="animate-logo-strip flex items-center">
+                {[...partnerLogos, ...partnerLogos].map((logo, idx) => (
+                  <div
+                    key={idx}
+                    className="w-24 sm:w-28 h-12 flex items-center justify-center shrink-0 border-r border-[#232328]/60 px-4"
+                  >
+                    <img
+                      src={logo.src}
+                      alt={logo.name}
+                      style={{ width: `${logo.width}px`, height: `${logo.height}px` }}
+                      className="max-h-8 max-w-[65px] object-contain opacity-80 hover:opacity-100 transition-opacity"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* 4. PARTNER LOGOS BAR (GitHub Education & EDC, IIT Delhi Laurel Flank) */}
+      <section className="w-full bg-black border-b border-[#232328]">
+        <div className="max-w-[1440px] mx-auto border-x border-[#232328] grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#232328] py-8 sm:py-12">
+
+          {/* Left: GitHub Education Partner */}
+          <div className="relative flex items-center justify-center p-6">
+            <div className="flex items-center justify-center gap-6 sm:gap-8">
+              <img
+                src="/logos/laurel-edc-l.svg"
+                alt=""
+                style={{ height: '76px' }}
+                className="w-auto shrink-0 opacity-80"
+              />
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 relative">
+                  <Image
+                    src="/github-partner.webp"
+                    alt="GitHub"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <p className="text-zinc-300 text-center text-sm sm:text-base leading-tight font-sans">
+                  Official Github Education<br />Program Partner
+                </p>
+              </div>
+              <img
+                src="/logos/laurel-edc-l.svg"
+                alt=""
+                style={{ height: '76px' }}
+                className="w-auto shrink-0 -scale-x-100 opacity-80"
+              />
+            </div>
+          </div>
+
+          {/* Right: EDC, IIT Delhi Knowledge Partner */}
+          <div className="relative flex items-center justify-center p-6">
+            <div className="flex items-center justify-center gap-6 sm:gap-8">
+              <img
+                src="/logos/laurel-edc-l.svg"
+                alt=""
+                style={{ height: '76px' }}
+                className="w-auto shrink-0 opacity-80"
+              />
+              <div className="flex flex-col items-center gap-1">
+                <p className="font-editorial text-[34px] sm:text-[44px] leading-[1.2] font-semibold text-white">
+                  EDC, IIT Delhi
+                </p>
+                <p className="text-zinc-400 text-sm sm:text-base">
+                  Knowledge partner
+                </p>
+              </div>
+              <img
+                src="/logos/laurel-edc-l.svg"
+                alt=""
+                style={{ height: '76px' }}
+                className="w-auto shrink-0 -scale-x-100 opacity-80"
+              />
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 5. PROGRAMS AT A GLANCE (5 Interactive Tabs + Code Test Terminal) */}
+      <BELProgramsAtAGlanceSection />
+
+      {/* 6. PROGRAM CURRICULUM SECTION (6 Phases + DSA, Multi-Language Switchers) */}
+      <BELCurriculumSection onOpenCurriculumModal={() => setCurriculumModalOpen(true)} />
+
+      {/* 7. EXPERTS CAROUSEL (Sanchit Tanwar, Dhaval Trivedi, Gurmandeep Singh Bedi) */}
+      <BELExpertsCarouselSection onOpenCurriculumModal={() => setCurriculumModalOpen(true)} />
+
+      {/* 8. TOOLS & TECHNOLOGIES CONSTELLATION SECTION */}
+      <BELToolsSection />
+
+      {/* 9. REAL STORIES FROM THE TRIBE */}
+      <BELStoriesSection />
+
+      {/* 10. BONUS PERKS SECTION */}
+      <BonusPerksSection />
+
+      {/* 11. TRUSTED BY LEADING COMPANIES SECTION */}
+      <TrustedCompaniesSection />
+
+      {/* 12. WORK ON REAL-WORLD PROJECTS (Zero prohibited words) */}
+      <BELRealWorldProjectsSection />
+
+      {/* 13. CAREER SUPPORT BUILT INTO THE PROGRAM */}
+      <CareerSupportSection />
+
+      {/* 14. COME AS YOU ARE. LEAVE AS AN AI-FIRST ENGINEER. */}
+      <ComeAsYouAreSection
+        targetRole="engineer"
+        courseId="AI-First Software Engineering"
+        roleDescription="Great engineers come from everywhere. It's not where you start that matters, it's how fast you learn to design distributed architectures and build with AI. We turn your foundation into your edge, and point it at the systems roles everyone's hiring for."
+      />
+
+      {/* 15. YOUR COMMITMENT SECTION */}
+      <YourCommitmentSection />
+
+      {/* 16. A CERTIFICATE YOU'LL ACTUALLY WANT TO SHARE */}
+      <CertificateSection
+        certificateImage="/images/certificate/certificate-bel.webp"
+        courseTitle="AI-First Software Engineering"
+      />
+
+      {/* 17. 3D REVOLVING PEER COMMUNITY CAROUSEL */}
+      <PeerCommunityCarouselSection />
+
+      {/* 18. SCHOLARSHIPS SECTION */}
+      <ScholarshipsSection />
+
+      {/* 19. FREQUENTLY ASKED QUESTIONS */}
+      <BELFAQSection />
+
+      {/* 20. PRICING SECTION */}
+      <PricingSection
+        courseTitle="AI-First Software Engineering"
+        courseId="AI-First Software Engineering"
+        originalPrice="₹1,85,000"
+        discountPrice="₹1,49,999"
+        specialNote="Special price applicable for next 15 seats only."
+        includedItems={[
+          {
+            title: 'Live masterclasses with Principal Engineers',
+            desc: '60+ live sessions and hands-on code reviews with tech leads from Uber, Microsoft and Atlassian',
+          },
+          {
+            title: 'A production system portfolio',
+            desc: 'A production-grade microservice deliverable from every phase, and a high-throughput capstone',
+          },
+          {
+            title: '₹50,000+ worth of AI and engineering tools',
+            desc: 'Access to Claude Code, OpenAI API credits, Docker Pro and Cursor',
+          },
+          {
+            title: 'Career assistance & referral network',
+            desc: 'Mock interviews, DSA problem-solving defense, resume reviews, and direct hiring partner referrals',
+          },
+          {
+            title: '1 year of access',
+            desc: 'Recordings, architectures, codebases, and the community for 1 year from your start date',
+          },
+        ]}
+      />
+
+      {/* 21. STICKY BOTTOM ENROLMENT BAR */}
+      <div
+        className={`fixed bottom-0 left-0 w-full bg-black/95 backdrop-blur-md border-t border-[#232328] py-3.5 px-4 sm:px-8 z-40 transition-all duration-300 ease-in-out ${
+          showStickyBar ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-6 text-xs sm:text-sm text-zinc-300 flex-wrap justify-center md:justify-start">
+            <div className="flex flex-col">
+              <span className="text-[10px] text-zinc-500 uppercase tracking-wider">Enrolment ends on</span>
+              <span className="font-semibold text-white">22 November</span>
+            </div>
+            <div className="hidden sm:block w-px h-6 bg-[#232328]" />
+            <div className="flex flex-col">
+              <span className="text-[10px] text-zinc-500 uppercase tracking-wider">Course starting on</span>
+              <span className="font-semibold text-white">29 November</span>
+            </div>
+            <div className="hidden sm:block w-px h-6 bg-[#232328]" />
+            <div className="flex flex-col">
+              <span className="text-[10px] text-zinc-500 uppercase tracking-wider">Your commitment</span>
+              <span className="font-semibold text-white">12-14 hrs/week</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <span className="text-xs text-zinc-400 hidden lg:inline">
+              Limited seats available
+            </span>
+            <AirtribeButton
+              text="Apply now"
+              onClick={() => openModal('AI-First Software Engineering')}
+              className="!w-36 !h-10"
+            />
+          </div>
         </div>
       </div>
 
-      {/* CTA Box */}
-      <div className="glass-card p-8 sm:p-12 rounded-3xl max-w-4xl mx-auto text-center border border-blue-500/30 bg-gradient-to-b from-blue-500/10 to-transparent">
-        <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">
-          Step Up to Senior & Staff Software Engineer
-        </h3>
-        <p className="text-gray-300 text-sm sm:text-base max-w-xl mx-auto mb-8">
-          Gain the system design intuition and distributed backend expertise needed to lead architectural decisions at top tier tech companies.
-        </p>
-        <button
-          onClick={() => openModal('AI-First Software Engineering')}
-          className="px-8 py-4 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-xl shadow-blue-500/30 active:scale-95"
-        >
-          Apply for Software Engineering Cohort
-        </button>
-      </div>
+      {/* 22. GET FULL CURRICULUM LEAD MODAL */}
+      {curriculumModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+          <div className="relative w-full max-w-md bg-[#0d0e14] border border-zinc-700 rounded-2xl p-6 sm:p-8 shadow-2xl">
+            <button
+              onClick={() => setCurriculumModalOpen(false)}
+              className="absolute top-4 right-4 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h3 className="text-2xl font-editorial font-normal text-white mb-2">
+              Get the full curriculum
+            </h3>
+            <p className="text-xs sm:text-sm text-zinc-400 mb-6 leading-relaxed">
+              Enter your details to receive the comprehensive 40+ module syllabus, architecture breakdowns, and schedules.
+            </p>
+
+            {formSubmitted ? (
+              <div className="py-8 text-center space-y-3">
+                <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
+                <h4 className="text-lg font-semibold text-white">Curriculum downloading</h4>
+                <p className="text-xs text-zinc-400">Opening full course syllabus brochure...</p>
+              </div>
+            ) : (
+              <form onSubmit={handleCurriculumSubmit} className="space-y-4 text-left">
+                <div>
+                  <label className="text-xs text-zinc-400 block mb-1">Full Name</label>
+                  <input
+                    type="text"
+                    required
+                    value={leadForm.name}
+                    onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
+                    placeholder="Srinivasa Ramanujan"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white text-sm focus:outline-none focus:border-purple-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs text-zinc-400 block mb-1">Email Address</label>
+                  <input
+                    type="email"
+                    required
+                    value={leadForm.email}
+                    onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
+                    placeholder="name@company.com"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white text-sm focus:outline-none focus:border-purple-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs text-zinc-400 block mb-1">Phone Number</label>
+                  <input
+                    type="tel"
+                    required
+                    value={leadForm.phone}
+                    onChange={(e) => setLeadForm({ ...leadForm, phone: e.target.value })}
+                    placeholder="+91 98765 43210"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white text-sm focus:outline-none focus:border-purple-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs text-zinc-400 block mb-1">Years of Experience</label>
+                  <select
+                    value={leadForm.experience}
+                    onChange={(e) => setLeadForm({ ...leadForm, experience: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white text-sm focus:outline-none focus:border-purple-500"
+                  >
+                    <option value="0-1 years">0 - 1 years (Student / Entry)</option>
+                    <option value="1-3 years">1 - 3 years (Junior / Mid)</option>
+                    <option value="3-5 years">3 - 5 years (Mid / Senior)</option>
+                    <option value="5+ years">5+ years (Senior / Staff)</option>
+                  </select>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full mt-2 py-3 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm transition-colors cursor-pointer shadow-lg shadow-purple-600/30"
+                >
+                  Download Complete Curriculum
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
 
     </div>
   );
 }
-
