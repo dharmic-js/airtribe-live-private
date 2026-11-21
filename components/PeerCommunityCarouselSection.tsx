@@ -5,8 +5,9 @@ import Image from 'next/image';
 
 interface CarouselCard {
   id: string;
-  type: 'yellow-quote' | 'blue-quote' | 'red-quote' | 'purple-quote' | 'photo';
+  type: 'yellow-quote' | 'blue-quote' | 'red-quote' | 'purple-quote' | 'violet-quote' | 'photo';
   title?: string;
+  align?: 'bottom' | 'top';
   image?: string;
   alt?: string;
 }
@@ -16,6 +17,7 @@ const carouselCards: CarouselCard[] = [
     id: 'yellow-1',
     type: 'yellow-quote',
     title: 'Promoted\nwithin the\nyear',
+    align: 'bottom',
   },
   {
     id: 'photo-1',
@@ -24,9 +26,10 @@ const carouselCards: CarouselCard[] = [
     alt: 'Cohort fellows collaborating in offline sprint',
   },
   {
-    id: 'blue-1',
-    type: 'blue-quote',
-    title: 'I actually\nbuild now',
+    id: 'red-1',
+    type: 'red-quote',
+    title: 'Promoted\nwithin the\nyear',
+    align: 'bottom',
   },
   {
     id: 'photo-2',
@@ -35,9 +38,10 @@ const carouselCards: CarouselCard[] = [
     alt: 'Product management cohort teardown workshop',
   },
   {
-    id: 'red-1',
-    type: 'red-quote',
-    title: 'Promoted\nwithin the\nyear',
+    id: 'purple-1',
+    type: 'purple-quote',
+    title: 'I actually\nbuild now',
+    align: 'top',
   },
   {
     id: 'photo-3',
@@ -46,15 +50,28 @@ const carouselCards: CarouselCard[] = [
     alt: 'Product builders offline meetup session',
   },
   {
-    id: 'purple-1',
-    type: 'purple-quote',
-    title: 'I actually\nbuild now',
+    id: 'yellow-2',
+    type: 'yellow-quote',
+    title: 'Promoted\nwithin the\nyear',
+    align: 'bottom',
   },
   {
     id: 'photo-4',
     type: 'photo',
     image: '/images/039_photo-1.40e9adf3.jpg',
     alt: 'Airtribe community immersion gathering',
+  },
+  {
+    id: 'violet-1',
+    type: 'violet-quote',
+    title: 'I actually\nbuild now',
+    align: 'top',
+  },
+  {
+    id: 'photo-5',
+    type: 'photo',
+    image: '/buildcon.e33afc6a.webp',
+    alt: 'Cohort builders conference and meetup',
   },
 ];
 
@@ -68,22 +85,22 @@ export function PeerCommunityCarouselSection() {
   const animRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [radiusX, setRadiusX] = useState<number>(440);
-  const [radiusZ, setRadiusZ] = useState<number>(180);
+  const [radiusX, setRadiusX] = useState<number>(430);
+  const [radiusZ, setRadiusZ] = useState<number>(190);
 
   // Responsive radius calculation based on container width
   const updateRadius = useCallback(() => {
     if (typeof window !== 'undefined') {
       const width = window.innerWidth;
       if (width < 640) {
-        setRadiusX(170);
-        setRadiusZ(90);
+        setRadiusX(160);
+        setRadiusZ(80);
       } else if (width < 1024) {
-        setRadiusX(300);
-        setRadiusZ(140);
+        setRadiusX(290);
+        setRadiusZ(130);
       } else {
-        setRadiusX(440);
-        setRadiusZ(180);
+        setRadiusX(430);
+        setRadiusZ(190);
       }
     }
   }, []);
@@ -94,9 +111,7 @@ export function PeerCommunityCarouselSection() {
     return () => window.removeEventListener('resize', updateRadius);
   }, [updateRadius]);
 
-  // Slower, smooth continuous rotational step around the central axis
-  // Revolving left to right across the front (Z > 0)
-  // ~5.5 degrees per second -> full revolution in ~65 seconds (gentle, luxurious pacing)
+  // Gentle, slow continuous rotation around central vertical axis (left to right across front)
   useEffect(() => {
     const loop = (currentTime: number) => {
       if (lastTimeRef.current === null) {
@@ -106,7 +121,8 @@ export function PeerCommunityCarouselSection() {
       lastTimeRef.current = currentTime;
 
       if (!isHovered && !isDragging) {
-        setRotation((prev) => (prev + delta * 5.5) % 360);
+        // ~4.5 degrees per second -> full revolution in ~80s (smooth, luxurious drift)
+        setRotation((prev) => (prev + delta * 4.5) % 360);
       }
 
       animRef.current = requestAnimationFrame(loop);
@@ -131,8 +147,7 @@ export function PeerCommunityCarouselSection() {
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return;
     const deltaX = e.clientX - dragStartXRef.current;
-    // Drag right rotates right (positive angle), drag left rotates left
-    const newRot = (dragStartRotRef.current + deltaX * 0.25) % 360;
+    const newRot = (dragStartRotRef.current + deltaX * 0.22) % 360;
     setRotation(newRot < 0 ? newRot + 360 : newRot);
   };
 
@@ -150,24 +165,24 @@ export function PeerCommunityCarouselSection() {
   const numCards = carouselCards.length;
 
   return (
-    <section className="bg-black text-white min-h-[580px] sm:min-h-[660px] lg:min-h-[720px] flex flex-col justify-center items-center py-14 sm:py-20 lg:py-24 relative overflow-hidden border-t border-[#232328]">
+    <section className="bg-black text-white pt-20 sm:pt-28 pb-24 sm:pb-32 relative overflow-hidden border-t border-[#232328]">
       {/* Container constrained strictly between the two guide lines */}
       <div className="max-w-[1440px] w-full mx-auto border-x border-[#232328] relative px-4 sm:px-8 flex flex-col items-center justify-center">
         
-        {/* Section Header with balanced, centered spacing */}
-        <div className="text-center mb-8 sm:mb-12">
+        {/* Section Header */}
+        <div className="text-center mb-14 sm:mb-20">
           <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-zinc-400 font-semibold mb-3">
             A COMMUNITY FOR YOU TO THRIVE
           </p>
-          <h2 className="font-editorial text-[36px] sm:text-[48px] text-white font-normal leading-tight tracking-tight">
+          <h2 className="font-editorial text-[38px] sm:text-[48px] text-white font-normal leading-tight tracking-tight">
             Building is better with peers
           </h2>
         </div>
 
-        {/* 3D Cylindrical Orbit Carousel Stage - centered vertically and horizontally */}
+        {/* 3D Cylindrical Orbit Carousel Stage */}
         <div
           ref={containerRef}
-          className="relative w-full h-[320px] sm:h-[370px] lg:h-[400px] flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing select-none"
+          className="relative w-full h-[320px] sm:h-[360px] lg:h-[380px] flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing select-none"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onPointerDown={handlePointerDown}
@@ -181,28 +196,28 @@ export function PeerCommunityCarouselSection() {
             const cardAngle = (rotation + (i * 360) / numCards) % 360;
             const rad = (cardAngle * Math.PI) / 180;
 
-            // Coordinates on horizontal ellipse:
+            // Coordinates on horizontal ellipse / cylinder:
             // X: -radiusX (left) to +radiusX (right)
             // Z: -radiusZ (back) to +radiusZ (front)
             const x = Math.sin(rad) * radiusX;
             const zNorm = Math.cos(rad); // -1 (back) to +1 (front)
             const z = zNorm * radiusZ;
 
-            // Scale: Front is full size (1.0), Back is smaller (~0.52)
-            const normalizedZ = (zNorm + 1) / 2; // 0 to 1
-            const scale = 0.55 + 0.45 * normalizedZ;
+            // Scale: Front is full size (1.0), Back is smaller (~0.45)
+            const normalizedZ = (zNorm + 1) / 2; // 0 (back) to 1 (front)
+            const scale = 0.48 + 0.52 * normalizedZ;
 
-            // Z-Index: Front cards render in front of back cards
+            // Z-Index: Front cards render on top of back cards
             const zIndex = Math.round(normalizedZ * 50);
 
-            // Opacity: Front cards 1.0, Back cards recede with depth (~0.60)
-            const opacity = 0.60 + 0.40 * normalizedZ;
+            // Opacity: Front cards 1.0, Back cards recede with depth (~0.65)
+            const opacity = 0.65 + 0.35 * normalizedZ;
 
-            // OUTWARD CURVATURE (Convex Cylinder):
-            // When card is on the right (x > 0, rad > 0), rotateY is POSITIVE so its right edge recedes away into the background
-            // When card is on the left (x < 0, rad < 0), rotateY is NEGATIVE so its left edge recedes away
-            // In the center (x = 0), rotateY is 0, bulging outward closest to the viewer!
-            const rotateY = Math.sin(rad) * 34;
+            // Convex outward curvature:
+            // Right cards (x > 0) have positive rotateY (right edge angles back away)
+            // Left cards (x < 0) have negative rotateY (left edge angles back away)
+            // Center card (x = 0) has rotateY = 0 (faces straight at viewer)
+            const rotateY = Math.sin(rad) * 30;
 
             return (
               <div
@@ -212,32 +227,19 @@ export function PeerCommunityCarouselSection() {
                   transform: `translate3d(${x}px, 0, ${z}px) scale(${scale}) rotateY(${rotateY}deg)`,
                   zIndex,
                   opacity,
-                  width: '320px',
-                  height: '220px',
+                  width: '230px',
+                  height: '260px',
                   transformOrigin: 'center center',
                 }}
               >
                 {/* Yellow Quote Card */}
                 {card.type === 'yellow-quote' && (
-                  <div className="relative w-full h-full bg-[#fde047] text-black p-7 flex flex-col justify-end border border-yellow-200 overflow-hidden shadow-lg">
+                  <div className="relative w-full h-full bg-[#fde047] text-black p-6 flex flex-col justify-end border border-yellow-200 overflow-hidden shadow-lg">
                     <div
                       className="absolute inset-0 opacity-20 pointer-events-none bg-repeat"
-                      style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '8px 8px' }}
+                      style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '7px 7px' }}
                     />
-                    <p className="font-editorial text-[28px] sm:text-[32px] leading-[1.08] font-normal text-zinc-950 whitespace-pre-line relative z-10">
-                      {card.title}
-                    </p>
-                  </div>
-                )}
-
-                {/* Light Cyan/Blue Quote Card */}
-                {card.type === 'blue-quote' && (
-                  <div className="relative w-full h-full bg-[#7dd3fc] text-white p-7 flex flex-col justify-end border border-sky-300 overflow-hidden shadow-lg">
-                    <div
-                      className="absolute inset-0 opacity-15 pointer-events-none bg-repeat"
-                      style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '8px 8px' }}
-                    />
-                    <p className="font-editorial text-[30px] sm:text-[34px] leading-[1.08] font-normal text-white whitespace-pre-line relative z-10">
+                    <p className="font-editorial text-[26px] sm:text-[29px] leading-[1.08] font-normal text-zinc-950 whitespace-pre-line relative z-10">
                       {card.title}
                     </p>
                   </div>
@@ -245,10 +247,23 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Coral / Red Quote Card */}
                 {card.type === 'red-quote' && (
-                  <div className="relative w-full h-full bg-[#e11d48] text-white p-7 flex flex-col justify-end border border-rose-400 overflow-hidden shadow-lg">
+                  <div className="relative w-full h-full bg-[#f43f5e] text-white p-6 flex flex-col justify-end border border-rose-400 overflow-hidden shadow-lg">
                     <div
                       className="absolute inset-0 opacity-20 pointer-events-none bg-repeat"
-                      style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '8px 8px' }}
+                      style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '7px 7px' }}
+                    />
+                    <p className="font-editorial text-[26px] sm:text-[29px] leading-[1.08] font-normal text-white whitespace-pre-line relative z-10">
+                      {card.title}
+                    </p>
+                  </div>
+                )}
+
+                {/* Purple / Violet Quote Card (Middle) */}
+                {card.type === 'purple-quote' && (
+                  <div className="relative w-full h-full bg-[#7c3aed] text-white p-6 flex flex-col justify-start pt-8 border border-purple-400 overflow-hidden shadow-lg">
+                    <div
+                      className="absolute inset-0 opacity-15 pointer-events-none bg-repeat"
+                      style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '7px 7px' }}
                     />
                     <p className="font-editorial text-[28px] sm:text-[32px] leading-[1.08] font-normal text-white whitespace-pre-line relative z-10">
                       {card.title}
@@ -256,20 +271,20 @@ export function PeerCommunityCarouselSection() {
                   </div>
                 )}
 
-                {/* Purple / Violet Quote Card */}
-                {card.type === 'purple-quote' && (
-                  <div className="relative w-full h-full bg-[#7c3aed] text-white p-7 flex flex-col justify-end border border-purple-400 overflow-hidden shadow-lg">
+                {/* Violet Quote Card */}
+                {card.type === 'violet-quote' && (
+                  <div className="relative w-full h-full bg-[#8b5cf6] text-white p-6 flex flex-col justify-start pt-8 border border-purple-300 overflow-hidden shadow-lg">
                     <div
                       className="absolute inset-0 opacity-15 pointer-events-none bg-repeat"
-                      style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '8px 8px' }}
+                      style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '7px 7px' }}
                     />
-                    <p className="font-editorial text-[30px] sm:text-[34px] leading-[1.08] font-normal text-white whitespace-pre-line relative z-10">
+                    <p className="font-editorial text-[28px] sm:text-[32px] leading-[1.08] font-normal text-white whitespace-pre-line relative z-10">
                       {card.title}
                     </p>
                   </div>
                 )}
 
-                {/* Immersion Photo Card */}
+                {/* Photo Immersion Card */}
                 {card.type === 'photo' && card.image && (
                   <div className="relative w-full h-full bg-zinc-900 border border-white/20 overflow-hidden shadow-lg">
                     <Image
