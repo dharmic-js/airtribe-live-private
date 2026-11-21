@@ -85,31 +85,60 @@ export function PeerCommunityCarouselSection() {
   const animRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [radiusX, setRadiusX] = useState<number>(430);
-  const [radiusZ, setRadiusZ] = useState<number>(190);
 
-  // Responsive radius calculation based on container width
-  const updateRadius = useCallback(() => {
+  // Responsive dimensions for orbital ring and enlarged cards
+  const [dimensions, setDimensions] = useState({
+    radiusX: 520,
+    radiusZ: 220,
+    cardWidth: 290,
+    cardHeight: 340,
+    centerXOffset: -32, // Positioned slightly to the left of the page per user instruction
+  });
+
+  const updateDimensions = useCallback(() => {
     if (typeof window !== 'undefined') {
       const width = window.innerWidth;
       if (width < 640) {
-        setRadiusX(160);
-        setRadiusZ(80);
+        setDimensions({
+          radiusX: 190,
+          radiusZ: 90,
+          cardWidth: 200,
+          cardHeight: 250,
+          centerXOffset: -12,
+        });
       } else if (width < 1024) {
-        setRadiusX(290);
-        setRadiusZ(130);
+        setDimensions({
+          radiusX: 350,
+          radiusZ: 150,
+          cardWidth: 250,
+          cardHeight: 300,
+          centerXOffset: -20,
+        });
+      } else if (width < 1280) {
+        setDimensions({
+          radiusX: 480,
+          radiusZ: 200,
+          cardWidth: 285,
+          cardHeight: 335,
+          centerXOffset: -28,
+        });
       } else {
-        setRadiusX(430);
-        setRadiusZ(190);
+        setDimensions({
+          radiusX: 540,
+          radiusZ: 230,
+          cardWidth: 305,
+          cardHeight: 355,
+          centerXOffset: -36,
+        });
       }
     }
   }, []);
 
   useEffect(() => {
-    updateRadius();
-    window.addEventListener('resize', updateRadius);
-    return () => window.removeEventListener('resize', updateRadius);
-  }, [updateRadius]);
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, [updateDimensions]);
 
   // Gentle, slow continuous rotation around central vertical axis (left to right across front)
   useEffect(() => {
@@ -121,8 +150,8 @@ export function PeerCommunityCarouselSection() {
       lastTimeRef.current = currentTime;
 
       if (!isHovered && !isDragging) {
-        // ~4.5 degrees per second -> full revolution in ~80s (smooth, luxurious drift)
-        setRotation((prev) => (prev + delta * 4.5) % 360);
+        // Smooth drift (~4.2 degrees per second)
+        setRotation((prev) => (prev + delta * 4.2) % 360);
       }
 
       animRef.current = requestAnimationFrame(loop);
@@ -165,81 +194,77 @@ export function PeerCommunityCarouselSection() {
   const numCards = carouselCards.length;
 
   return (
-    <section className="bg-black text-white pt-20 sm:pt-28 pb-24 sm:pb-32 relative overflow-hidden border-t border-[#232328]">
+    <section className="bg-black text-white pt-16 sm:pt-24 pb-20 sm:pb-28 relative overflow-hidden border-t border-[#232328]">
       {/* Container constrained strictly between the two guide lines */}
       <div className="max-w-[1440px] w-full mx-auto border-x border-[#232328] relative px-4 sm:px-8 flex flex-col items-center justify-center">
         
         {/* Section Header */}
-        <div className="text-center mb-14 sm:mb-20">
+        <div className="text-center mb-10 sm:mb-14">
           <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-zinc-400 font-semibold mb-3">
             A COMMUNITY FOR YOU TO THRIVE
           </p>
-          <h2 className="font-editorial text-[38px] sm:text-[48px] text-white font-normal leading-tight tracking-tight">
+          <h2 className="font-editorial text-[36px] sm:text-[48px] md:text-[54px] text-white font-normal leading-tight tracking-tight">
             Building is better with peers
           </h2>
         </div>
 
-        {/* 3D Cylindrical Orbit Carousel Stage */}
+        {/* 3D Cylindrical Orbit Carousel Stage - Generous height so enlarged cards are 100% visible */}
         <div
           ref={containerRef}
-          className="relative w-full h-[320px] sm:h-[360px] lg:h-[380px] flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing select-none"
+          className="relative w-full h-[400px] sm:h-[460px] lg:h-[510px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
-          style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
+          style={{ perspective: '1400px', transformStyle: 'preserve-3d' }}
         >
           {carouselCards.map((card, i) => {
-            // Angle around the central vertical axis
+            // Angle around central vertical axis
             const cardAngle = (rotation + (i * 360) / numCards) % 360;
             const rad = (cardAngle * Math.PI) / 180;
 
             // Coordinates on horizontal ellipse / cylinder:
-            // X: -radiusX (left) to +radiusX (right)
-            // Z: -radiusZ (back) to +radiusZ (front)
-            const x = Math.sin(rad) * radiusX;
+            // Shifted slightly to the left per user instruction
+            const x = Math.sin(rad) * dimensions.radiusX + dimensions.centerXOffset;
             const zNorm = Math.cos(rad); // -1 (back) to +1 (front)
-            const z = zNorm * radiusZ;
+            const z = zNorm * dimensions.radiusZ;
 
-            // Scale: Front is full size (1.0), Back is smaller (~0.45)
+            // Scale: Front is full size (1.02), Back is smaller (~0.52)
             const normalizedZ = (zNorm + 1) / 2; // 0 (back) to 1 (front)
-            const scale = 0.48 + 0.52 * normalizedZ;
+            const scale = 0.52 + 0.50 * normalizedZ;
 
             // Z-Index: Front cards render on top of back cards
             const zIndex = Math.round(normalizedZ * 50);
 
-            // Opacity: Front cards 1.0, Back cards recede with depth (~0.65)
-            const opacity = 0.65 + 0.35 * normalizedZ;
+            // Opacity: Front cards 1.0, Back cards recede with depth (~0.60)
+            const opacity = 0.60 + 0.40 * normalizedZ;
 
-            // Convex outward curvature:
-            // Right cards (x > 0) have positive rotateY (right edge angles back away)
-            // Left cards (x < 0) have negative rotateY (left edge angles back away)
-            // Center card (x = 0) has rotateY = 0 (faces straight at viewer)
-            const rotateY = Math.sin(rad) * 30;
+            // Convex outward curvature
+            const rotateY = Math.sin(rad) * 32;
 
             return (
               <div
                 key={card.id}
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden shadow-2xl transition-transform duration-75 select-none pointer-events-none"
+                className="absolute left-1/2 top-1/2 rounded-2xl overflow-hidden shadow-2xl transition-transform duration-75 select-none pointer-events-none"
                 style={{
-                  transform: `translate3d(${x}px, 0, ${z}px) scale(${scale}) rotateY(${rotateY}deg)`,
+                  width: `${dimensions.cardWidth}px`,
+                  height: `${dimensions.cardHeight}px`,
+                  transform: `translate3d(calc(-50% + ${x}px), -50%, ${z}px) scale(${scale}) rotateY(${rotateY}deg)`,
                   zIndex,
                   opacity,
-                  width: '230px',
-                  height: '260px',
                   transformOrigin: 'center center',
                 }}
               >
                 {/* Yellow Quote Card */}
                 {card.type === 'yellow-quote' && (
-                  <div className="relative w-full h-full bg-[#fde047] text-black p-6 flex flex-col justify-end border border-yellow-200 overflow-hidden shadow-lg">
+                  <div className="relative w-full h-full bg-[#fde047] text-black p-6 sm:p-7 flex flex-col justify-end border border-yellow-200 overflow-hidden shadow-lg">
                     <div
                       className="absolute inset-0 opacity-20 pointer-events-none bg-repeat"
                       style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '7px 7px' }}
                     />
-                    <p className="font-editorial text-[26px] sm:text-[29px] leading-[1.08] font-normal text-zinc-950 whitespace-pre-line relative z-10">
+                    <p className="font-editorial text-[30px] sm:text-[34px] leading-[1.06] font-normal text-zinc-950 whitespace-pre-line relative z-10">
                       {card.title}
                     </p>
                   </div>
@@ -247,12 +272,12 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Coral / Red Quote Card */}
                 {card.type === 'red-quote' && (
-                  <div className="relative w-full h-full bg-[#f43f5e] text-white p-6 flex flex-col justify-end border border-rose-400 overflow-hidden shadow-lg">
+                  <div className="relative w-full h-full bg-[#f43f5e] text-white p-6 sm:p-7 flex flex-col justify-end border border-rose-400 overflow-hidden shadow-lg">
                     <div
                       className="absolute inset-0 opacity-20 pointer-events-none bg-repeat"
                       style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '7px 7px' }}
                     />
-                    <p className="font-editorial text-[26px] sm:text-[29px] leading-[1.08] font-normal text-white whitespace-pre-line relative z-10">
+                    <p className="font-editorial text-[30px] sm:text-[34px] leading-[1.06] font-normal text-white whitespace-pre-line relative z-10">
                       {card.title}
                     </p>
                   </div>
@@ -260,12 +285,12 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Purple / Violet Quote Card (Middle) */}
                 {card.type === 'purple-quote' && (
-                  <div className="relative w-full h-full bg-[#7c3aed] text-white p-6 flex flex-col justify-start pt-8 border border-purple-400 overflow-hidden shadow-lg">
+                  <div className="relative w-full h-full bg-[#7c3aed] text-white p-6 sm:p-7 flex flex-col justify-start pt-8 sm:pt-10 border border-purple-400 overflow-hidden shadow-lg">
                     <div
                       className="absolute inset-0 opacity-15 pointer-events-none bg-repeat"
                       style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '7px 7px' }}
                     />
-                    <p className="font-editorial text-[28px] sm:text-[32px] leading-[1.08] font-normal text-white whitespace-pre-line relative z-10">
+                    <p className="font-editorial text-[32px] sm:text-[36px] leading-[1.06] font-normal text-white whitespace-pre-line relative z-10">
                       {card.title}
                     </p>
                   </div>
@@ -273,12 +298,12 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Violet Quote Card */}
                 {card.type === 'violet-quote' && (
-                  <div className="relative w-full h-full bg-[#8b5cf6] text-white p-6 flex flex-col justify-start pt-8 border border-purple-300 overflow-hidden shadow-lg">
+                  <div className="relative w-full h-full bg-[#8b5cf6] text-white p-6 sm:p-7 flex flex-col justify-start pt-8 sm:pt-10 border border-purple-300 overflow-hidden shadow-lg">
                     <div
                       className="absolute inset-0 opacity-15 pointer-events-none bg-repeat"
                       style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '7px 7px' }}
                     />
-                    <p className="font-editorial text-[28px] sm:text-[32px] leading-[1.08] font-normal text-white whitespace-pre-line relative z-10">
+                    <p className="font-editorial text-[32px] sm:text-[36px] leading-[1.06] font-normal text-white whitespace-pre-line relative z-10">
                       {card.title}
                     </p>
                   </div>
