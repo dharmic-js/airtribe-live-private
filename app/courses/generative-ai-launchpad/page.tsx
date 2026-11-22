@@ -1,246 +1,240 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useApplyModal } from '@/components/ApplyModalContext';
-import { 
-  Sparkles, 
-  Calendar, 
-  Clock, 
-  Users, 
-  CheckCircle2, 
-  ChevronDown, 
-  ChevronUp, 
-  ArrowRight, 
-  Download, 
-  Star, 
-  Cpu, 
-  Code, 
-  Terminal, 
-  Zap, 
-  ShieldCheck 
-} from 'lucide-react';
-
-const syllabus = [
-  {
-    week: 'Week 1',
-    title: 'Foundations of LLMs, Prompt Engineering & API Architecture',
-    desc: 'Tokenization, temperature, top_p, context windows, structured outputs with function calling, and robust error handling across OpenAI, Anthropic, and open-source models (Llama 3).',
-  },
-  {
-    week: 'Week 2',
-    title: 'Vector Embeddings & Semantic Search Pipelines',
-    desc: 'Dense vs sparse embeddings, embedding dimensions, cosine similarity, vector indexing strategies (HNSW, IVF), and setting up production vector databases (Pinecone, Qdrant, Weaviate).',
-  },
-  {
-    week: 'Week 3',
-    title: 'Advanced Retrieval-Augmented Generation (RAG)',
-    desc: 'Chunking algorithms (recursive character, semantic chunking), hybrid search (BM25 + Dense vector), rerankers (Cohere Rerank), contextual compression, and handling tabular data.',
-  },
-  {
-    week: 'Week 4',
-    title: 'GraphRAG & Knowledge Graph Powered Intelligence',
-    desc: 'Constructing dynamic knowledge graphs from unstructured documentation, combining graph traversals with vector retrieval, and mitigating hallucinations.',
-  },
-  {
-    week: 'Week 5',
-    title: 'Building Autonomous AI Agents with LangChain & LangGraph',
-    desc: 'ReAct reasoning loops, Plan-and-Solve patterns, tool integration (code execution, SQL database querying, web search), and multi-turn stateful persistence.',
-  },
-  {
-    week: 'Week 6',
-    title: 'Multi-Agent Orchestration & CrewAI Workflows',
-    desc: 'Designing hierarchical and collaborative agent swarms: research agents, writer agents, critique agents, and code-review bots working together to solve end-to-end tasks.',
-  },
-  {
-    week: 'Week 7',
-    title: 'Fine-Tuning, LoRA & Model Alignment',
-    desc: 'Dataset preparation for supervised fine-tuning (SFT), Parameter Efficient Fine-Tuning (PEFT / LoRA / QLoRA) using Unsloth and HuggingFace, and evaluating model drift.',
-  },
-  {
-    week: 'Week 8',
-    title: 'Production LLM Ops, Tracing & Capstone Demo Day',
-    desc: 'Observability with LangSmith / Langfuse, token cost optimization, caching with Redis, latency profiling, and live presentation of your production capstone to VP mentors.',
-  },
-];
+import { GenAIHeroSection } from '@/components/GenAIHeroSection';
+import { GenAIStatsPartnerSection } from '@/components/GenAIStatsPartnerSection';
+import { GenAIWorkChangesSection } from '@/components/GenAIWorkChangesSection';
+import { GenAIExpertsCarouselSection } from '@/components/GenAIExpertsCarouselSection';
+import { BonusPerksSection } from '@/components/BonusPerksSection';
+import { TrustedCompaniesSection } from '@/components/TrustedCompaniesSection';
+import { CareerSupportSection } from '@/components/CareerSupportSection';
+import { ComeAsYouAreSection } from '@/components/ComeAsYouAreSection';
+import { YourCommitmentSection } from '@/components/YourCommitmentSection';
+import { CertificateSection } from '@/components/CertificateSection';
+import { PeerCommunityCarouselSection } from '@/components/PeerCommunityCarouselSection';
+import { ScholarshipsSection } from '@/components/ScholarshipsSection';
+import { PricingSection } from '@/components/PricingSection';
+import { FAQSection } from '@/components/FAQSection';
+import { AirtribeButton } from '@/components/AirtribeButton';
+import { X, CheckCircle2 } from 'lucide-react';
 
 export default function GenAILaunchpadPage() {
+  const router = useRouter();
   const { openModal } = useApplyModal();
-  const [openWeek, setOpenWeek] = useState<number | null>(0);
+
+  // Curriculum modal state
+  const [curriculumModalOpen, setCurriculumModalOpen] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [leadForm, setLeadForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    role: '',
+    experience: '1-3 years',
+  });
+
+  const handleCurriculumSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormSubmitted(true);
+    setTimeout(() => {
+      setCurriculumModalOpen(false);
+      setFormSubmitted(false);
+      window.open('/curriculum-genai.pdf', '_blank');
+    }, 1200);
+  };
 
   return (
-    <div className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div className="min-h-screen bg-black text-white relative font-sans selection:bg-purple-900 selection:text-white">
       
-      {/* Hero */}
-      <div className="max-w-4xl mx-auto text-center mb-16">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 text-xs sm:text-sm font-semibold mb-6">
-          <Sparkles className="w-4 h-4 text-purple-400" />
-          Airtribe Flagship Cohort • Dec 2026 Batch
-        </div>
-        <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-6">
-          The GenAI Launchpad
-        </h1>
-        <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto mb-8">
-          Become a production-grade Generative AI engineer. Learn to architect enterprise RAG pipelines, fine-tune models, and deploy autonomous multi-agent systems with industry staff engineers.
-        </p>
+      {/* 1. HERO SECTION */}
+      <GenAIHeroSection onApplyClick={() => openModal('The GenAI Launchpad')} />
 
-        {/* Cohort Meta Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-4 text-xs sm:text-sm text-gray-300 mb-10">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-dark-850 border border-white/5">
-            <Clock className="w-4 h-4 text-brand-400" />
-            <span>8 Weeks (Weekend Live Cohort)</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-dark-850 border border-white/5">
-            <Users className="w-4 h-4 text-brand-400" />
-            <span>Strictly 40 Seats Per Batch</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-dark-850 border border-white/5">
-            <Star className="w-4 h-4 text-emerald-400 fill-emerald-400" />
-            <span>4.95/5 Rating (840+ reviews)</span>
-          </div>
-        </div>
+      {/* 2. STATS & PARTNERS SECTION */}
+      <GenAIStatsPartnerSection
+        onApplyClick={() => openModal('The GenAI Launchpad')}
+        onOpenCurriculumModal={() => setCurriculumModalOpen(true)}
+      />
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button
-            onClick={() => openModal('The GenAI Launchpad')}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-white bg-brand-500 hover:bg-brand-600 transition-all shadow-xl shadow-brand-500/30 active:scale-95 text-base"
-          >
-            Apply for Dec 2026 Batch
-          </button>
-          <button
-            onClick={() => openModal('The GenAI Launchpad - Syllabus Download')}
-            className="w-full sm:w-auto px-6 py-4 rounded-xl font-semibold text-gray-300 bg-dark-850 hover:bg-dark-800 border border-white/10 transition-colors flex items-center justify-center gap-2"
-          >
-            <Download className="w-4 h-4 text-gray-400" />
-            Download Syllabus (PDF)
-          </button>
+      {/* 3. HOW YOUR WORK CHANGES SECTION */}
+      <GenAIWorkChangesSection />
+
+      {/* 4. LEARN FROM EXPERTS WHO BUILD WITH AI */}
+      <GenAIExpertsCarouselSection />
+
+      {/* 5. BONUS PERKS & TOOLSTACK (₹50,000+ INCLUDED TOOLS) */}
+      <BonusPerksSection />
+
+      {/* 6. TRUSTED BY BUILDERS FROM LEADING COMPANIES */}
+      <TrustedCompaniesSection />
+
+      {/* 7. CAREER SUPPORT BUILT INTO THE PROGRAM */}
+      <CareerSupportSection />
+
+      {/* 8. COME AS YOU ARE (DIVERSE PEER COHORTS) */}
+      <ComeAsYouAreSection />
+
+      {/* 9. YOUR COMMITMENT */}
+      <YourCommitmentSection />
+
+      {/* 10. CERTIFICATE OF COMPLETION */}
+      <CertificateSection courseTitle="Generative AI Launchpad" />
+
+      {/* 11. REVOLVING PEER COMMUNITY CAROUSEL */}
+      <PeerCommunityCarouselSection />
+
+      {/* 12. SCHOLARSHIPS */}
+      <ScholarshipsSection />
+
+      {/* 13. PRICING & ENROLLMENT */}
+      <PricingSection
+        courseTitle="The GenAI Launchpad"
+        originalPrice="₹1,25,000"
+        discountPrice="₹94,999"
+        specialNote="Special cohort pricing available for the upcoming round."
+        courseId="The GenAI Launchpad"
+        includedItems={[
+          {
+            title: 'Live sessions with GenAI leaders',
+            desc: '30+ live interactive masterclasses and architecture workshops with staff AI practitioners.',
+          },
+          {
+            title: 'Production portfolio you can showcase',
+            desc: 'Multi-agent orchestration, enterprise RAG pipelines, fine-tuned models, and a showcase capstone.',
+          },
+          {
+            title: '₹50,000+ worth of AI tools & credits',
+            desc: 'Direct access to n8n, Claude Pro / OpenAI API credits, Pinecone vector DB, and cloud GPU infra.',
+          },
+          {
+            title: 'Career acceleration & placement assistance',
+            desc: 'AI engineering portfolio reviews, technical mock interviews, and hiring network introductions.',
+          },
+          {
+            title: '1 year of continuous access',
+            desc: 'All recordings, complete architecture templates, repositories, and private cohort community access.',
+          },
+        ]}
+      />
+
+      {/* 14. FREQUENTLY ASKED QUESTIONS */}
+      <FAQSection />
+
+      {/* PADDING FOR FIXED FOOTER BAR */}
+      <div className="h-20" />
+
+      {/* 15. FIXED STICKY ENROLLMENT FOOTER BAR */}
+      <div className="fixed bottom-0 inset-x-0 z-40 bg-black/95 backdrop-blur-md border-t border-[#232328] py-2.5 px-4 sm:px-8">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+          
+          {/* Metadata Ticker on Left */}
+          <div className="flex items-center gap-6 sm:gap-10 text-xs sm:text-[13px] text-zinc-400">
+            <div>
+              <span className="block text-[10px] uppercase tracking-wider text-zinc-400">Enrolment ended on</span>
+              <span className="font-semibold text-white">21 November</span>
+            </div>
+
+            <div className="hidden sm:block">
+              <span className="block text-[10px] uppercase tracking-wider text-zinc-400">Course starting on</span>
+              <span className="font-semibold text-white">22 November</span>
+            </div>
+
+            <div className="hidden md:block">
+              <span className="block text-[10px] uppercase tracking-wider text-zinc-400">Your commitment</span>
+              <span className="font-semibold text-white">10-12 hrs/week</span>
+            </div>
+          </div>
+
+          {/* CTA on Right */}
+          <div className="flex items-center gap-3">
+            <span className="hidden lg:inline text-xs text-zinc-400 font-light">Limited seats available</span>
+            <AirtribeButton
+              text="Apply now"
+              onClick={() => openModal('The GenAI Launchpad')}
+              className="!w-32 sm:!w-36 !h-9 sm:!h-10 text-xs sm:text-sm"
+            />
+          </div>
+
         </div>
       </div>
 
-      {/* Tech Stack Marquee */}
-      <div className="p-6 rounded-2xl bg-dark-850 border border-white/5 max-w-5xl mx-auto mb-20 text-center">
-        <div className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">
-          Tools & Frameworks Mastered Hands-On
-        </div>
-        <div className="flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm font-medium text-gray-200">
-          {['LangChain', 'LangGraph', 'LlamaIndex', 'CrewAI', 'OpenAI GPT-4o', 'Claude 3.5 Sonnet', 'Pinecone', 'Qdrant', 'HuggingFace', 'DSPy', 'Ollama', 'Docker', 'FastAPI'].map((t, idx) => (
-            <span key={idx} className="px-3.5 py-1.5 rounded-lg bg-dark-900 border border-white/10 text-gray-300">
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Syllabus Section */}
-      <div className="max-w-4xl mx-auto mb-24">
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold uppercase tracking-widest text-brand-400 mb-2 block">
-            Comprehensive Curriculum
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-            8 Weeks from Fundamentals to Production Multi-Agent Systems
-          </h2>
-        </div>
-
-        <div className="space-y-4">
-          {syllabus.map((item, idx) => (
-            <div
-              key={idx}
-              className="rounded-xl border border-white/10 bg-dark-850 overflow-hidden transition-colors"
+      {/* 16. GET FULL CURRICULUM LEAD MODAL */}
+      {curriculumModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+          <div className="relative w-full max-w-md bg-[#0d0e14] border border-zinc-700 rounded-2xl p-6 sm:p-8 shadow-2xl">
+            <button
+              onClick={() => setCurriculumModalOpen(false)}
+              className="absolute top-4 right-4 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+              aria-label="Close"
             >
-              <button
-                onClick={() => setOpenWeek(openWeek === idx ? null : idx)}
-                className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-white/[0.02]"
-              >
-                <div className="flex items-center gap-4">
-                  <span className="px-2.5 py-1 rounded bg-brand-500/10 text-brand-300 text-xs font-bold shrink-0">
-                    {item.week}
-                  </span>
-                  <span className="font-semibold text-white text-sm sm:text-base">
-                    {item.title}
-                  </span>
+              <X className="w-5 h-5" />
+            </button>
+
+            <h3 className="text-2xl font-editorial font-normal text-white mb-2">
+              Get the full curriculum
+            </h3>
+            <p className="text-xs sm:text-sm text-zinc-400 mb-6 leading-relaxed">
+              Enter your details to receive the comprehensive 16-week syllabus, multi-agent modules, and architecture breakdowns.
+            </p>
+
+            {formSubmitted ? (
+              <div className="py-8 text-center space-y-3">
+                <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
+                <h4 className="text-lg font-semibold text-white">Curriculum downloading</h4>
+                <p className="text-xs text-zinc-400">Opening full course syllabus brochure...</p>
+              </div>
+            ) : (
+              <form onSubmit={handleCurriculumSubmit} className="space-y-4 text-left">
+                <div>
+                  <label className="text-xs text-zinc-400 block mb-1">Full Name</label>
+                  <input
+                    type="text"
+                    required
+                    value={leadForm.name}
+                    onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
+                    placeholder="Srinivasa Ramanujan"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white text-sm focus:outline-none focus:border-purple-500"
+                  />
                 </div>
-                {openWeek === idx ? (
-                  <ChevronUp className="w-5 h-5 text-brand-400 shrink-0" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-400 shrink-0" />
-                )}
-              </button>
 
-              {openWeek === idx && (
-                <div className="px-5 pb-5 pt-1 text-sm text-gray-400 leading-relaxed border-t border-white/5">
-                  {item.desc}
+                <div>
+                  <label className="text-xs text-zinc-400 block mb-1">Email Address</label>
+                  <input
+                    type="email"
+                    required
+                    value={leadForm.email}
+                    onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
+                    placeholder="name@company.com"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white text-sm focus:outline-none focus:border-purple-500"
+                  />
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Capstone Projects */}
-      <div className="max-w-5xl mx-auto mb-24">
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold uppercase tracking-widest text-brand-400 mb-2 block">
-            Portfolio Evidence
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-            What You Build in the Cohort
-          </h2>
-        </div>
+                <div>
+                  <label className="text-xs text-zinc-400 block mb-1">Phone Number</label>
+                  <input
+                    type="tel"
+                    required
+                    value={leadForm.phone}
+                    onChange={(e) => setLeadForm({ ...leadForm, phone: e.target.value })}
+                    placeholder="+91 98765 43210"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white text-sm focus:outline-none focus:border-purple-500"
+                  />
+                </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-dark-850 border border-white/5 hover:border-purple-500/30 transition-all">
-            <div className="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center mb-4">
-              <Zap className="w-5 h-5" />
-            </div>
-            <h4 className="text-lg font-bold text-white mb-2">Autonomous Dev Agent</h4>
-            <p className="text-xs text-gray-400 leading-relaxed mb-4">
-              A multi-agent codebase inspection tool that parses GitHub pull requests, runs security scanners, writes unit tests, and posts code reviews automatically.
-            </p>
-            <span className="text-[11px] text-brand-400 font-semibold">Tech: LangGraph, Python, AST, Claude API</span>
-          </div>
-
-          <div className="p-6 rounded-2xl bg-dark-850 border border-white/5 hover:border-blue-500/30 transition-all">
-            <div className="w-10 h-10 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center mb-4">
-              <Cpu className="w-5 h-5" />
-            </div>
-            <h4 className="text-lg font-bold text-white mb-2">Enterprise Hybrid RAG</h4>
-            <p className="text-xs text-gray-400 leading-relaxed mb-4">
-              A high-precision document search system indexing 100,000+ financial reports with hybrid BM25 + dense vectors, Cohere reranking, and citation tracking.
-            </p>
-            <span className="text-[11px] text-blue-400 font-semibold">Tech: Qdrant, LlamaIndex, FastAPI, Docker</span>
-          </div>
-
-          <div className="p-6 rounded-2xl bg-dark-850 border border-white/5 hover:border-emerald-500/30 transition-all">
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4">
-              <Terminal className="w-5 h-5" />
-            </div>
-            <h4 className="text-lg font-bold text-white mb-2">Domain LoRA Fine-Tuned Model</h4>
-            <p className="text-xs text-gray-400 leading-relaxed mb-4">
-              Fine-tune an open-source Llama 3 model on customized SQL queries and clinical notes, benchmarked against GPT-4o with latency under 150ms.
-            </p>
-            <span className="text-[11px] text-emerald-400 font-semibold">Tech: PyTorch, Unsloth, HuggingFace</span>
+                <div className="pt-2">
+                  <AirtribeButton
+                    text="Download full syllabus"
+                    onClick={() => {}}
+                    className="!w-full !h-11"
+                  />
+                </div>
+              </form>
+            )}
           </div>
         </div>
-      </div>
-
-      {/* CTA Box */}
-      <div className="glass-card p-8 sm:p-12 rounded-3xl max-w-4xl mx-auto text-center border border-brand-500/30 bg-gradient-to-b from-brand-500/10 to-transparent">
-        <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">
-          Become the AI Engineer Tech Companies Need
-        </h3>
-        <p className="text-gray-300 text-sm sm:text-base max-w-xl mx-auto mb-8">
-          Admissions are selective to maintain high cohort peer quality. Apply now to speak with our admissions lead and reserve your seat.
-        </p>
-        <button
-          onClick={() => openModal('The GenAI Launchpad')}
-          className="px-8 py-4 rounded-xl font-bold text-white bg-brand-500 hover:bg-brand-600 transition-all shadow-xl shadow-brand-500/30 active:scale-95"
-        >
-          Apply for Next Cohort
-        </button>
-      </div>
+      )}
 
     </div>
   );
 }
-
