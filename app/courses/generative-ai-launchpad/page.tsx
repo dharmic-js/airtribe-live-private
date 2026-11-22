@@ -6,12 +6,15 @@ import { useApplyModal } from '@/components/ApplyModalContext';
 import { GenAIHeroSection } from '@/components/GenAIHeroSection';
 import { GenAIStatsPartnerSection } from '@/components/GenAIStatsPartnerSection';
 import { GenAIWorkChangesSection } from '@/components/GenAIWorkChangesSection';
+import { GenAICurriculumSection } from '@/components/GenAICurriculumSection';
 import { GenAIExpertsCarouselSection } from '@/components/GenAIExpertsCarouselSection';
+import { GenAIToolsConstellationSection } from '@/components/GenAIToolsConstellationSection';
 import { BonusPerksSection } from '@/components/BonusPerksSection';
 import { TrustedCompaniesSection } from '@/components/TrustedCompaniesSection';
 import { CareerSupportSection } from '@/components/CareerSupportSection';
 import { ComeAsYouAreSection } from '@/components/ComeAsYouAreSection';
 import { YourCommitmentSection } from '@/components/YourCommitmentSection';
+import { GenAIWhyChooseSection } from '@/components/GenAIWhyChooseSection';
 import { CertificateSection } from '@/components/CertificateSection';
 import { PeerCommunityCarouselSection } from '@/components/PeerCommunityCarouselSection';
 import { ScholarshipsSection } from '@/components/ScholarshipsSection';
@@ -60,34 +63,46 @@ export default function GenAILaunchpadPage() {
       {/* 3. HOW YOUR WORK CHANGES SECTION */}
       <GenAIWorkChangesSection />
 
-      {/* 4. LEARN FROM EXPERTS WHO BUILD WITH AI */}
+      {/* 4. PROGRAM CURRICULUM SECTION (15 MODULES, 4 PHASES + ELECTIVE) */}
+      <GenAICurriculumSection onOpenCurriculumModal={() => setCurriculumModalOpen(true)} />
+
+      {/* 5. LEARN FROM EXPERTS WHO BUILD WITH AI */}
       <GenAIExpertsCarouselSection />
 
-      {/* 5. BONUS PERKS & TOOLSTACK (₹50,000+ INCLUDED TOOLS) */}
+      {/* 6. YOUR GENAI TOOLSTACK CONSTELLATION (SCROLL-DRIVEN PINNING ANIMATION) */}
+      <GenAIToolsConstellationSection />
+
+      {/* 7. BONUS PERKS & TOOLSTACK (₹50,000+ INCLUDED TOOLS) */}
       <BonusPerksSection />
 
-      {/* 6. TRUSTED BY BUILDERS FROM LEADING COMPANIES */}
+      {/* 8. TRUSTED BY BUILDERS FROM LEADING COMPANIES */}
       <TrustedCompaniesSection />
 
-      {/* 7. CAREER SUPPORT BUILT INTO THE PROGRAM */}
+      {/* 9. CAREER SUPPORT BUILT INTO THE PROGRAM */}
       <CareerSupportSection />
 
-      {/* 8. COME AS YOU ARE (DIVERSE PEER COHORTS) */}
+      {/* 10. COME AS YOU ARE (DIVERSE PEER COHORTS) */}
       <ComeAsYouAreSection />
 
-      {/* 9. YOUR COMMITMENT */}
+      {/* 11. YOUR COMMITMENT */}
       <YourCommitmentSection />
 
-      {/* 10. CERTIFICATE OF COMPLETION */}
+      {/* 12. WHY CHOOSE THIS PROGRAM? (PLACED BETWEEN YOUR COMMITMENT AND CERTIFICATE) */}
+      <GenAIWhyChooseSection
+        onApplyClick={() => openModal('The GenAI Launchpad')}
+        onTalkToCounsellorClick={() => openModal('The GenAI Launchpad')}
+      />
+
+      {/* 13. CERTIFICATE OF COMPLETION */}
       <CertificateSection courseTitle="Generative AI Launchpad" />
 
-      {/* 11. REVOLVING PEER COMMUNITY CAROUSEL */}
+      {/* 14. REVOLVING PEER COMMUNITY CAROUSEL */}
       <PeerCommunityCarouselSection />
 
-      {/* 12. SCHOLARSHIPS */}
+      {/* 15. SCHOLARSHIPS */}
       <ScholarshipsSection />
 
-      {/* 13. PRICING & ENROLLMENT */}
+      {/* 16. PRICING & ENROLLMENT */}
       <PricingSection
         courseTitle="The GenAI Launchpad"
         originalPrice="₹1,25,000"
@@ -118,13 +133,13 @@ export default function GenAILaunchpadPage() {
         ]}
       />
 
-      {/* 14. FREQUENTLY ASKED QUESTIONS */}
+      {/* 17. FREQUENTLY ASKED QUESTIONS */}
       <FAQSection />
 
       {/* PADDING FOR FIXED FOOTER BAR */}
       <div className="h-20" />
 
-      {/* 15. FIXED STICKY ENROLLMENT FOOTER BAR */}
+      {/* 18. FIXED STICKY ENROLLMENT FOOTER BAR */}
       <div className="fixed bottom-0 inset-x-0 z-40 bg-black/95 backdrop-blur-md border-t border-[#232328] py-2.5 px-4 sm:px-8">
         <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
           
@@ -159,7 +174,7 @@ export default function GenAILaunchpadPage() {
         </div>
       </div>
 
-      {/* 16. GET FULL CURRICULUM LEAD MODAL */}
+      {/* 19. GET FULL CURRICULUM LEAD MODAL */}
       {curriculumModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
           <div className="relative w-full max-w-md bg-[#0d0e14] border border-zinc-700 rounded-2xl p-6 sm:p-8 shadow-2xl">
