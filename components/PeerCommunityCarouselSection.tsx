@@ -88,11 +88,11 @@ export function PeerCommunityCarouselSection() {
 
   // Responsive dimensions for orbital ring and enlarged cards
   const [dimensions, setDimensions] = useState({
-    radiusX: 520,
-    radiusZ: 220,
-    cardWidth: 290,
-    cardHeight: 340,
-    centerXOffset: -32, // Positioned slightly to the left of the page per user instruction
+    radiusX: 560,
+    radiusZ: 230,
+    cardWidth: 305,
+    cardHeight: 355,
+    centerXOffset: -34, // Positioned slightly to the left of the page per user instruction
   });
 
   const updateDimensions = useCallback(() => {
@@ -108,7 +108,7 @@ export function PeerCommunityCarouselSection() {
         });
       } else if (width < 1024) {
         setDimensions({
-          radiusX: 350,
+          radiusX: 360,
           radiusZ: 150,
           cardWidth: 250,
           cardHeight: 300,
@@ -116,19 +116,19 @@ export function PeerCommunityCarouselSection() {
         });
       } else if (width < 1280) {
         setDimensions({
-          radiusX: 480,
-          radiusZ: 200,
+          radiusX: 500,
+          radiusZ: 210,
           cardWidth: 285,
           cardHeight: 335,
           centerXOffset: -28,
         });
       } else {
         setDimensions({
-          radiusX: 540,
+          radiusX: 560,
           radiusZ: 230,
           cardWidth: 305,
           cardHeight: 355,
-          centerXOffset: -36,
+          centerXOffset: -34,
         });
       }
     }
@@ -208,17 +208,17 @@ export function PeerCommunityCarouselSection() {
           </h2>
         </div>
 
-        {/* 3D Cylindrical Orbit Carousel Stage - Generous height so enlarged cards are 100% visible */}
+        {/* 3D Cylindrical Orbit Carousel Stage - Pure Layered Stacking without 3D polygon clipping */}
         <div
           ref={containerRef}
-          className="relative w-full h-[400px] sm:h-[460px] lg:h-[510px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
+          className="relative w-full h-[420px] sm:h-[480px] lg:h-[520px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
-          style={{ perspective: '1400px', transformStyle: 'preserve-3d' }}
+          style={{ isolation: 'isolate' }}
         >
           {carouselCards.map((card, i) => {
             // Angle around central vertical axis
@@ -229,20 +229,24 @@ export function PeerCommunityCarouselSection() {
             // Shifted slightly to the left per user instruction
             const x = Math.sin(rad) * dimensions.radiusX + dimensions.centerXOffset;
             const zNorm = Math.cos(rad); // -1 (back) to +1 (front)
-            const z = zNorm * dimensions.radiusZ;
 
             // Scale: Front is full size (1.02), Back is smaller (~0.52)
             const normalizedZ = (zNorm + 1) / 2; // 0 (back) to 1 (front)
             const scale = 0.52 + 0.50 * normalizedZ;
 
-            // Z-Index: Front cards render on top of back cards
-            const zIndex = Math.round(normalizedZ * 50);
+            // High-resolution Z-Index (0 to 1000):
+            // In a flat composite context, CSS zIndex strictly determines painting order.
+            // Cards in front are ALWAYS painted completely on top of cards behind them,
+            // with 0% polygon intersection, 0% z-fighting, and no cutting into one another.
+            const zIndex = Math.round((zNorm + 1) * 500);
 
-            // Opacity: Front cards 1.0, Back cards recede with depth (~0.60)
-            const opacity = 0.60 + 0.40 * normalizedZ;
+            // Opacity: Front cards 1.0, Back cards recede with depth (~0.55)
+            const opacity = 0.55 + 0.45 * normalizedZ;
 
-            // Convex outward curvature
-            const rotateY = Math.sin(rad) * 32;
+            // Convex outward curvature:
+            // Handled via local card perspective so each card curves outward naturally
+            // without intersecting into adjacent planes in a shared 3D depth buffer.
+            const rotateY = Math.sin(rad) * 28;
 
             return (
               <div
@@ -251,17 +255,18 @@ export function PeerCommunityCarouselSection() {
                 style={{
                   width: `${dimensions.cardWidth}px`,
                   height: `${dimensions.cardHeight}px`,
-                  transform: `translate3d(calc(-50% + ${x}px), -50%, ${z}px) scale(${scale}) rotateY(${rotateY}deg)`,
+                  transform: `translate(calc(-50% + ${x}px), -50%) scale(${scale}) perspective(1000px) rotateY(${rotateY}deg)`,
                   zIndex,
                   opacity,
                   transformOrigin: 'center center',
+                  willChange: 'transform, opacity',
                 }}
               >
                 {/* Yellow Quote Card */}
                 {card.type === 'yellow-quote' && (
-                  <div className="relative w-full h-full bg-[#fde047] text-black p-6 sm:p-7 flex flex-col justify-end border border-yellow-200 overflow-hidden shadow-lg">
+                  <div className="relative w-full h-full bg-[#fde047] text-black p-6 sm:p-7 flex flex-col justify-end border border-yellow-200 overflow-hidden shadow-lg rounded-2xl">
                     <div
-                      className="absolute inset-0 opacity-20 pointer-events-none bg-repeat"
+                      className="absolute inset-0 opacity-20 pointer-events-none bg-repeat rounded-2xl"
                       style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '7px 7px' }}
                     />
                     <p className="font-editorial text-[30px] sm:text-[34px] leading-[1.06] font-normal text-zinc-950 whitespace-pre-line relative z-10">
@@ -272,9 +277,9 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Coral / Red Quote Card */}
                 {card.type === 'red-quote' && (
-                  <div className="relative w-full h-full bg-[#f43f5e] text-white p-6 sm:p-7 flex flex-col justify-end border border-rose-400 overflow-hidden shadow-lg">
+                  <div className="relative w-full h-full bg-[#f43f5e] text-white p-6 sm:p-7 flex flex-col justify-end border border-rose-400 overflow-hidden shadow-lg rounded-2xl">
                     <div
-                      className="absolute inset-0 opacity-20 pointer-events-none bg-repeat"
+                      className="absolute inset-0 opacity-20 pointer-events-none bg-repeat rounded-2xl"
                       style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '7px 7px' }}
                     />
                     <p className="font-editorial text-[30px] sm:text-[34px] leading-[1.06] font-normal text-white whitespace-pre-line relative z-10">
@@ -285,9 +290,9 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Purple / Violet Quote Card (Middle) */}
                 {card.type === 'purple-quote' && (
-                  <div className="relative w-full h-full bg-[#7c3aed] text-white p-6 sm:p-7 flex flex-col justify-start pt-8 sm:pt-10 border border-purple-400 overflow-hidden shadow-lg">
+                  <div className="relative w-full h-full bg-[#7c3aed] text-white p-6 sm:p-7 flex flex-col justify-start pt-8 sm:pt-10 border border-purple-400 overflow-hidden shadow-lg rounded-2xl">
                     <div
-                      className="absolute inset-0 opacity-15 pointer-events-none bg-repeat"
+                      className="absolute inset-0 opacity-15 pointer-events-none bg-repeat rounded-2xl"
                       style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '7px 7px' }}
                     />
                     <p className="font-editorial text-[32px] sm:text-[36px] leading-[1.06] font-normal text-white whitespace-pre-line relative z-10">
@@ -298,9 +303,9 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Violet Quote Card */}
                 {card.type === 'violet-quote' && (
-                  <div className="relative w-full h-full bg-[#8b5cf6] text-white p-6 sm:p-7 flex flex-col justify-start pt-8 sm:pt-10 border border-purple-300 overflow-hidden shadow-lg">
+                  <div className="relative w-full h-full bg-[#8b5cf6] text-white p-6 sm:p-7 flex flex-col justify-start pt-8 sm:pt-10 border border-purple-300 overflow-hidden shadow-lg rounded-2xl">
                     <div
-                      className="absolute inset-0 opacity-15 pointer-events-none bg-repeat"
+                      className="absolute inset-0 opacity-15 pointer-events-none bg-repeat rounded-2xl"
                       style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '7px 7px' }}
                     />
                     <p className="font-editorial text-[32px] sm:text-[36px] leading-[1.06] font-normal text-white whitespace-pre-line relative z-10">
@@ -311,15 +316,15 @@ export function PeerCommunityCarouselSection() {
 
                 {/* Photo Immersion Card */}
                 {card.type === 'photo' && card.image && (
-                  <div className="relative w-full h-full bg-zinc-900 border border-white/20 overflow-hidden shadow-lg">
+                  <div className="relative w-full h-full bg-zinc-900 border border-white/20 overflow-hidden shadow-lg rounded-2xl">
                     <Image
                       src={card.image}
                       alt={card.alt || 'Airtribe cohort community'}
                       fill
-                      className="object-cover"
+                      className="object-cover rounded-2xl"
                       unoptimized
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none rounded-2xl" />
                   </div>
                 )}
               </div>
