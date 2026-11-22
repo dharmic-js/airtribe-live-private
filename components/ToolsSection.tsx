@@ -236,39 +236,42 @@ export function ToolsSection() {
         {/* Subtle Ambient Radial Lighting */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-purple-900/10 via-blue-900/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-        {/* 1. INITIAL HEADING: "The tools you'll build with" */}
-        <div
-          className="absolute inset-x-4 top-1/2 -translate-y-1/2 text-center pointer-events-none z-10 transition-opacity duration-300"
-          style={{
-            opacity: heading1Opacity,
-            transform: `translateY(calc(-50% + ${heading1TranslateY}px))`,
-            visibility: heading1Opacity <= 0 ? 'hidden' : 'visible',
-          }}
-        >
-          <h2 className="text-[34px] sm:text-[48px] md:text-[56px] font-editorial text-white font-normal leading-tight tracking-tight">
-            The tools you'll build with
-          </h2>
-          <p className="text-zinc-400 text-xs sm:text-[13px] md:text-sm font-light max-w-xl mx-auto mt-3 px-4 leading-relaxed">
-            Hands-on with the tools product teams use to plan, design, analyse and ship AI products.
-          </p>
-        </div>
+        {/* Constrained layout within the two site guide lines */}
+        <div className="max-w-[1440px] mx-auto border-x border-[#232328] relative w-full h-full flex items-center justify-center">
 
-        {/* 2. NEXT HEADING: "and many more" (appears on subsequent scroll after settling) */}
-        <div
-          className="absolute inset-x-4 top-1/2 -translate-y-1/2 text-center pointer-events-none z-10 transition-opacity duration-300"
-          style={{
-            opacity: heading2Opacity,
-            transform: `translateY(calc(-50% + ${heading2TranslateY}px))`,
-            visibility: heading2Opacity <= 0 ? 'hidden' : 'visible',
-          }}
-        >
-          <h2 className="text-[36px] sm:text-[52px] md:text-[60px] font-editorial text-white font-normal leading-none tracking-tight">
-            and many more
-          </h2>
-        </div>
+          {/* 1. INITIAL HEADING: "The tools you'll build with" */}
+          <div
+            className="absolute inset-x-4 top-1/2 -translate-y-1/2 text-center pointer-events-none z-10 transition-opacity duration-300"
+            style={{
+              opacity: heading1Opacity,
+              transform: `translateY(calc(-50% + ${heading1TranslateY}px))`,
+              visibility: heading1Opacity <= 0 ? 'hidden' : 'visible',
+            }}
+          >
+            <h2 className="text-[34px] sm:text-[48px] md:text-[56px] font-editorial text-white font-normal leading-tight tracking-tight">
+              The tools you'll build with
+            </h2>
+            <p className="text-zinc-400 text-xs sm:text-[13px] md:text-sm font-light max-w-xl mx-auto mt-3 px-4 leading-relaxed">
+              Hands-on with the tools product teams use to plan, design, analyse and ship AI products.
+            </p>
+          </div>
 
-        {/* 3. SCATTERED CONSTELLATION OF 15 AUTHENTIC TOOL ICONS EMERGING OUT OF THIN AIR */}
-        <div className="absolute inset-0 pointer-events-none max-w-[1440px] mx-auto">
+          {/* 2. NEXT HEADING: "and many more" (appears on subsequent scroll after settling) */}
+          <div
+            className="absolute inset-x-4 top-1/2 -translate-y-1/2 text-center pointer-events-none z-10 transition-opacity duration-300"
+            style={{
+              opacity: heading2Opacity,
+              transform: `translateY(calc(-50% + ${heading2TranslateY}px))`,
+              visibility: heading2Opacity <= 0 ? 'hidden' : 'visible',
+            }}
+          >
+            <h2 className="text-[36px] sm:text-[52px] md:text-[60px] font-editorial text-white font-normal leading-none tracking-tight">
+              and many more
+            </h2>
+          </div>
+
+          {/* 3. SCATTERED CONSTELLATION OF 15 AUTHENTIC TOOL ICONS EMERGING OUT OF THIN AIR */}
+          <div className="absolute inset-0 pointer-events-none">
           {toolsData.map((tool) => {
             // Compute item individual emergence progress:
             // 0 before startP, transitions to 1 by endP, stays 1 thereafter
@@ -310,6 +313,8 @@ export function ToolsSection() {
               </div>
             );
           })}
+        </div>
+
         </div>
 
       </div>

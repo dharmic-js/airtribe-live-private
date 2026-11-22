@@ -98,7 +98,7 @@ const interviewCards = [
 export function WeeklyInterviewSection() {
   return (
     <section className="bg-black text-white pt-24 sm:pt-32 pb-16 sm:pb-24 relative overflow-hidden border-t border-[#232328]">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-[1440px] mx-auto border-x border-[#232328] px-4 sm:px-8 lg:px-12">
         {/* Top Header with Compass Graphic */}
         <div className="relative mb-12 sm:mb-16 min-h-[160px] sm:min-h-[220px] flex items-center justify-between">
           <div className="relative z-10 max-w-xl">

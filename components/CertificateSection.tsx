@@ -14,7 +14,7 @@ export function CertificateSection({
 }: CertificateSectionProps = {}) {
   return (
     <section className="bg-black text-white py-24 sm:py-32 relative overflow-hidden border-t border-[#232328]">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-[1440px] mx-auto border-x border-[#232328] px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-16">
           <h2 className="font-editorial text-[34px] sm:text-[48px] text-white font-normal leading-tight tracking-tight">

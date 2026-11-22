@@ -52,7 +52,7 @@ export function YourCommitmentSection() {
           </div>
         </div>
 
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10 text-center">
+        <div className="max-w-[1440px] mx-auto border-x border-zinc-200 px-4 sm:px-8 lg:px-12 relative z-10 text-center">
           <h2 className="font-editorial text-[36px] sm:text-[48px] text-black font-normal leading-tight tracking-tight">
             Your commitment
           </h2>
@@ -63,7 +63,7 @@ export function YourCommitmentSection() {
       </div>
 
       {/* Schedule Table (Dark Theme matching image) */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-12 sm:py-20">
+      <div className="max-w-[1440px] mx-auto border-x border-[#232328] px-4 sm:px-8 lg:px-12 py-12 sm:py-20">
         <div className="border-t border-[#232328]">
           {commitmentSchedule.map((row, idx) => (
             <div

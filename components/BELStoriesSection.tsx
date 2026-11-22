@@ -71,7 +71,7 @@ const belStoryCards: BELStoryCard[] = [
 export function BELStoriesSection() {
   return (
     <section className="w-full bg-black py-20 sm:py-28 border-b border-[#232328] overflow-hidden select-none">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-12 sm:mb-16 text-center">
+      <div className="max-w-[1440px] mx-auto border-x border-[#232328] px-4 sm:px-8 lg:px-12 mb-12 sm:mb-16 text-center">
         <h2 className="text-[38px] sm:text-[54px] font-editorial italic font-normal text-white">
           Real stories from the tribe
         </h2>

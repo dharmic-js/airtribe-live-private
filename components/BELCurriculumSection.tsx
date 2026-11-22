@@ -233,7 +233,7 @@ export function BELCurriculumSection({ onOpenCurriculumModal }: BELCurriculumSec
 
   return (
     <section className="w-full bg-white text-black py-16 sm:py-24 border-b border-[#e5e7eb] select-text">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-[1440px] mx-auto border-x border-[#e5e7eb] px-4 sm:px-8 lg:px-12">
 
         {/* Centered Heading & Subtitle */}
         <div className="text-center mb-12 sm:mb-16">

@@ -98,6 +98,16 @@ interface BELExpertsProps {
 
 export function BELExpertsCarouselSection({ onOpenCurriculumModal }: BELExpertsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Auto-advance timer: moves every 4500ms, pauses on hover
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % expertsData.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [isPaused]);
 
   const prevExpert = () => {
     setCurrentIndex((prev) => (prev - 1 + expertsData.length) % expertsData.length);
@@ -114,7 +124,7 @@ export function BELExpertsCarouselSection({ onOpenCurriculumModal }: BELExpertsP
 
       {/* 1. PURPLE BANNER: "Want to dive deeper into the details?" */}
       <div className="w-full bg-[#6366f1] text-white py-4 px-4 sm:px-8 border-y border-indigo-400/30">
-        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-[1440px] mx-auto border-x border-indigo-400/30 flex flex-col sm:flex-row items-center justify-between gap-4">
           <h3 className="text-xl sm:text-2xl font-editorial font-normal tracking-tight text-white text-center sm:text-left">
             Want to dive deeper into the details?
           </h3>
@@ -130,7 +140,7 @@ export function BELExpertsCarouselSection({ onOpenCurriculumModal }: BELExpertsP
 
       {/* 2. MAIN EXPERTS CAROUSEL */}
       <div className="w-full py-20 sm:py-28 overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
+        <div className="max-w-[1440px] mx-auto border-x border-[#232328] relative overflow-hidden px-4 sm:px-8 lg:px-12">
 
           {/* Section Heading */}
           <div className="text-center mb-12 sm:mb-16">
@@ -140,7 +150,11 @@ export function BELExpertsCarouselSection({ onOpenCurriculumModal }: BELExpertsP
           </div>
 
           {/* Carousel Viewport Container */}
-          <div className="relative max-w-4xl mx-auto">
+          <div
+            className="relative max-w-4xl mx-auto"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
 
             {/* Left Chevron Button */}
             <button

@@ -241,7 +241,7 @@ CONFIDENTIAL - FOR AUTHORIZED AIRTRIBE PRODUCT MANAGEMENT FELLOWS ONLY
 
   return (
     <section className="bg-black text-white pt-24 sm:pt-32 pb-24 sm:pb-36 border-t border-[#232328]">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-[1440px] mx-auto border-x border-[#232328] px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
         <h2 className="font-editorial text-[32px] sm:text-[48px] text-white text-center font-normal leading-tight tracking-tight mb-12 sm:mb-16">
           Work on real-world projects

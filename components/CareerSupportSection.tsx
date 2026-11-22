@@ -90,7 +90,7 @@ export function CareerSupportSection() {
 
   return (
     <section className="bg-white text-black py-20 sm:py-28 relative overflow-hidden border-t border-zinc-200">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-[1440px] mx-auto border-x border-zinc-200 px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
         <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-3 text-center mb-12 sm:mb-16">
           <h2 className="font-editorial text-[34px] sm:text-[48px] text-black font-normal leading-tight tracking-tight">

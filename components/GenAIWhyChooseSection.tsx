@@ -54,7 +54,7 @@ export function GenAIWhyChooseSection({
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-30" />
 
       {/* Layout constrained within the dual vertical guide lines */}
-      <div className="max-w-[1440px] mx-auto border-x border-[#3b1968]/40 relative px-4 sm:px-8">
+      <div className="max-w-[1440px] mx-auto border-x border-[#232328] relative px-4 sm:px-8">
         
         {/* Section Heading */}
         <div className="text-left mb-12 sm:mb-16 max-w-xl">

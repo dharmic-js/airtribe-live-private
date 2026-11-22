@@ -156,59 +156,61 @@ export function TrustedCompaniesSection() {
   const row2Repeated = [...row2Companies, ...row2Companies, ...row2Companies, ...row2Companies];
 
   return (
-    <section className="bg-black text-white pt-24 sm:pt-32 pb-16 sm:pb-24 relative overflow-hidden">
-      {/* Section Header */}
-      <div className="mx-auto flex max-w-[760px] flex-col items-center gap-4 px-4 text-center relative z-20">
-        <h2 className="font-editorial text-[36px] sm:text-[48px] font-normal leading-tight tracking-tight text-white">
-          Trusted by leading companies
-        </h2>
-        <p className="text-zinc-400 text-sm sm:text-base font-normal max-w-lg leading-relaxed">
-          We partner with companies that bring real projects, practitioners, and opportunities to the tribe.
-        </p>
-      </div>
+    <section className="bg-black text-white pt-24 sm:pt-32 pb-16 sm:pb-24 relative overflow-hidden border-b border-[#232328]">
+      <div className="max-w-[1440px] mx-auto border-x border-[#232328] relative">
+        {/* Section Header */}
+        <div className="mx-auto flex max-w-[760px] flex-col items-center gap-4 px-4 text-center relative z-20">
+          <h2 className="font-editorial text-[36px] sm:text-[48px] font-normal leading-tight tracking-tight text-white">
+            Trusted by leading companies
+          </h2>
+          <p className="text-zinc-400 text-sm sm:text-base font-normal max-w-lg leading-relaxed">
+            We partner with companies that bring real projects, practitioners, and opportunities to the tribe.
+          </p>
+        </div>
 
-      {/* Belts Container */}
-      <div className="mt-14 sm:mt-16 relative overflow-hidden">
-        {/* Left Edge Fog / Gradient Blur */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 z-30 w-16 sm:w-28"
-          style={{
-            background: 'linear-gradient(to right, #000 20%, transparent 100%)',
-          }}
-        />
+        {/* Belts Container */}
+        <div className="mt-14 sm:mt-16 relative overflow-hidden">
+          {/* Left Edge Fog / Gradient Blur */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 left-0 z-30 w-16 sm:w-28"
+            style={{
+              background: 'linear-gradient(to right, #000 20%, transparent 100%)',
+            }}
+          />
 
-        {/* Right Edge Fog / Gradient Blur */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 z-30 w-16 sm:w-28"
-          style={{
-            background: 'linear-gradient(to left, #000 20%, transparent 100%)',
-          }}
-        />
+          {/* Right Edge Fog / Gradient Blur */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 right-0 z-30 w-16 sm:w-28"
+            style={{
+              background: 'linear-gradient(to left, #000 20%, transparent 100%)',
+            }}
+          />
 
-        <div className="flex flex-col gap-6 sm:gap-8">
-          {/* ROW 1: TOP BELT (Right to Left) */}
-          <div className="overflow-hidden border-b border-[#232328] group/row1">
-            <div
-              className="flex w-max animate-belt-rtl group-hover/row1:[animation-play-state:paused]"
-              style={{ animationDuration: '65s' }}
-            >
-              {row1Repeated.map((item, index) => (
-                <CompanyCard key={`row1-${item.id}-${index}`} item={item} />
-              ))}
+          <div className="flex flex-col gap-6 sm:gap-8">
+            {/* ROW 1: TOP BELT (Right to Left) */}
+            <div className="overflow-hidden border-b border-[#232328] group/row1">
+              <div
+                className="flex w-max animate-belt-rtl group-hover/row1:[animation-play-state:paused]"
+                style={{ animationDuration: '65s' }}
+              >
+                {row1Repeated.map((item, index) => (
+                  <CompanyCard key={`row1-${item.id}-${index}`} item={item} />
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* ROW 2: BOTTOM BELT (Left to Right) */}
-          <div className="overflow-hidden border-b border-[#232328] group/row2">
-            <div
-              className="flex w-max animate-belt-ltr group-hover/row2:[animation-play-state:paused]"
-              style={{ animationDuration: '65s' }}
-            >
-              {row2Repeated.map((item, index) => (
-                <CompanyCard key={`row2-${item.id}-${index}`} item={item} />
-              ))}
+            {/* ROW 2: BOTTOM BELT (Left to Right) */}
+            <div className="overflow-hidden border-b border-[#232328] group/row2">
+              <div
+                className="flex w-max animate-belt-ltr group-hover/row2:[animation-play-state:paused]"
+                style={{ animationDuration: '65s' }}
+              >
+                {row2Repeated.map((item, index) => (
+                  <CompanyCard key={`row2-${item.id}-${index}`} item={item} />
+                ))}
+              </div>
             </div>
           </div>
         </div>

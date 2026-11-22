@@ -47,7 +47,7 @@ export function BonusPerksSection() {
         }}
       />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto border-x border-zinc-200 px-4 sm:px-8 lg:px-12 relative z-10">
         
         {/* Section Header */}
         <div className="mb-12 sm:mb-16">

@@ -118,6 +118,16 @@ const genaiMentors: GenAIMentor[] = [
 
 export function GenAIExpertsCarouselSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Auto-advance timer: moves every 4500ms, pauses on hover
+  React.useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev === genaiMentors.length - 1 ? 0 : prev + 1));
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [isPaused]);
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev === 0 ? genaiMentors.length - 1 : prev - 1));
@@ -132,9 +142,9 @@ export function GenAIExpertsCarouselSection() {
   const nextMentor = genaiMentors[(currentIndex + 1) % genaiMentors.length];
 
   return (
-    <section className="bg-black text-white pt-24 pb-28 relative overflow-hidden">
-      {/* Layout constrained within the dual vertical guide lines */}
-      <div className="max-w-[1440px] mx-auto border-x border-[#232328] relative px-4 sm:px-8">
+    <section className="bg-black text-white pt-24 pb-28 relative overflow-hidden border-b border-[#232328]">
+      {/* Layout strictly contained within the dual vertical guide lines with overflow-hidden */}
+      <div className="max-w-[1440px] mx-auto border-x border-[#232328] relative overflow-hidden px-4 sm:px-8 lg:px-12">
         
         {/* Section Heading */}
         <div className="text-center mb-14 sm:mb-20 max-w-3xl mx-auto">
@@ -146,123 +156,153 @@ export function GenAIExpertsCarouselSection() {
           </p>
         </div>
 
-        {/* Carousel Viewport Container */}
-        <div className="relative w-full max-w-5xl mx-auto flex items-center justify-center">
-          
-          {/* Peeking Left Card (Faded) */}
-          <div className="hidden lg:block absolute -left-72 w-80 h-[480px] bg-[#0c0c0e] border border-white/5 rounded-2xl opacity-20 pointer-events-none overflow-hidden scale-90 blur-[1px]">
-            <div className="relative w-full h-full p-6 flex flex-col justify-between">
-              <span className="font-editorial text-xl text-white">{prevMentor.name}</span>
-              <div className="relative w-full h-64">
-                <Image src={prevMentor.photo} alt={prevMentor.name} fill className="object-cover grayscale" />
-              </div>
-            </div>
-          </div>
-
-          {/* Main Active Card */}
-          <div className="relative w-full max-w-3xl bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl flex flex-col md:flex-row gap-8 items-center md:items-start z-10">
+        {/* Carousel Viewport Container (contained within the 1440px guide lines) */}
+        <div
+          className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div className="relative w-full flex items-center justify-center">
             
-            {/* Left Column: Portrait Photo with Subtle Halo */}
-            <div className="relative w-52 h-64 sm:w-64 sm:h-80 shrink-0 rounded-xl overflow-hidden bg-zinc-900 border border-white/10 shadow-inner">
-              <Image
-                src={currentMentor.photo}
-                alt={currentMentor.name}
-                fill
-                className="object-cover grayscale hover:grayscale-0 transition-all duration-300"
-                sizes="(max-width: 768px) 208px, 256px"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-            </div>
-
-            {/* Right Column: Bio & Metadata */}
-            <div className="flex-1 flex flex-col justify-between h-full text-left">
-              <div>
-                {/* Mentor Name */}
-                <h3 className="font-editorial text-[30px] sm:text-[34px] font-normal text-white leading-tight mb-1.5">
-                  {currentMentor.name}
-                </h3>
-
-                {/* Role and Current Company with Logo */}
-                <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-zinc-300 font-normal mb-6">
-                  <span>{currentMentor.role}</span>
-                  <span className="text-zinc-500 font-light">@</span>
-                  <div className="flex items-center gap-1.5">
-                    {currentMentor.companyLogo && (
-                      <div className="relative w-5 h-5 shrink-0">
-                        <Image
-                          src={currentMentor.companyLogo}
-                          alt={currentMentor.companyName}
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
-                    )}
-                    <span className="font-medium text-white">{currentMentor.companyName}</span>
-                  </div>
-                </div>
-
-                {/* Bio Paragraphs */}
-                <div className="space-y-3.5 mb-8">
-                  {currentMentor.bio.map((para, i) => (
-                    <p key={i} className="text-zinc-300 text-xs sm:text-[13px] md:text-sm font-light leading-relaxed">
-                      {para}
-                    </p>
-                  ))}
+            {/* Peeking Left Card (Contained within bounds, faded) */}
+            <div
+              onClick={prevSlide}
+              className="hidden xl:block absolute -left-20 2xl:-left-12 w-80 h-[460px] bg-[#0c0c0e] border border-white/5 rounded-2xl opacity-20 hover:opacity-40 transition-opacity cursor-pointer overflow-hidden scale-90 blur-[1px] pointer-events-auto"
+            >
+              <div className="relative w-full h-full p-6 flex flex-col justify-between">
+                <span className="font-editorial text-xl text-white">{prevMentor.name}</span>
+                <div className="relative w-full h-64">
+                  <Image src={prevMentor.photo} alt={prevMentor.name} fill className="object-cover grayscale" />
                 </div>
               </div>
+            </div>
 
-              {/* Experience and Past Logos Footer */}
-              <div className="pt-6 border-t border-zinc-800/80">
-                <p className="text-[11px] uppercase tracking-wider text-zinc-400 font-semibold mb-3">
-                  {currentMentor.experience}
-                </p>
+            {/* Main Active Card */}
+            <div className="relative w-full max-w-3xl bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl flex flex-col md:flex-row gap-8 items-center md:items-start z-10 transition-all duration-300">
+              
+              {/* Left Column: Portrait Photo with Subtle Halo */}
+              <div className="relative w-52 h-64 sm:w-64 sm:h-80 shrink-0 rounded-xl overflow-hidden bg-zinc-900 border border-white/10 shadow-inner">
+                <Image
+                  key={`photo-${currentMentor.id}`}
+                  src={currentMentor.photo}
+                  alt={currentMentor.name}
+                  fill
+                  className="object-cover grayscale hover:grayscale-0 transition-all duration-500 animate-in fade-in zoom-in-95"
+                  sizes="(max-width: 768px) 208px, 256px"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+              </div>
 
-                {currentMentor.pastCompanies && currentMentor.pastCompanies.length > 0 && (
-                  <div className="flex items-center gap-5">
-                    {currentMentor.pastCompanies.map((comp, idx) => (
-                      <span
-                        key={idx}
-                        className="text-xs sm:text-sm font-bold tracking-tight opacity-80"
-                        style={{ color: comp.color || '#fff' }}
-                      >
-                        {comp.name}
-                      </span>
+              {/* Right Column: Bio & Metadata */}
+              <div className="flex-1 flex flex-col justify-between h-full text-left">
+                <div>
+                  {/* Mentor Name */}
+                  <h3 className="font-editorial text-[30px] sm:text-[34px] font-normal text-white leading-tight mb-1.5">
+                    {currentMentor.name}
+                  </h3>
+
+                  {/* Role and Current Company with Logo */}
+                  <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-zinc-300 font-normal mb-6">
+                    <span>{currentMentor.role}</span>
+                    <span className="text-zinc-500 font-light">@</span>
+                    <div className="flex items-center gap-1.5">
+                      {currentMentor.companyLogo && (
+                        <div className="relative w-5 h-5 shrink-0">
+                          <Image
+                            src={currentMentor.companyLogo}
+                            alt={currentMentor.companyName}
+                            fill
+                            className="object-contain"
+                          />
+                        </div>
+                      )}
+                      <span className="font-medium text-white">{currentMentor.companyName}</span>
+                    </div>
+                  </div>
+
+                  {/* Bio Paragraphs */}
+                  <div className="space-y-3.5 mb-8">
+                    {currentMentor.bio.map((para, i) => (
+                      <p key={i} className="text-zinc-300 text-xs sm:text-[13px] md:text-sm font-light leading-relaxed">
+                        {para}
+                      </p>
                     ))}
                   </div>
-                )}
+                </div>
+
+                {/* Experience and Past Logos Footer */}
+                <div className="pt-6 border-t border-zinc-800/80">
+                  <p className="text-[11px] uppercase tracking-wider text-zinc-400 font-semibold mb-3">
+                    {currentMentor.experience}
+                  </p>
+
+                  {currentMentor.pastCompanies && currentMentor.pastCompanies.length > 0 && (
+                    <div className="flex items-center gap-5">
+                      {currentMentor.pastCompanies.map((comp, idx) => (
+                        <span
+                          key={idx}
+                          className="text-xs sm:text-sm font-bold tracking-tight opacity-80"
+                          style={{ color: comp.color || '#fff' }}
+                        >
+                          {comp.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
               </div>
 
             </div>
 
-          </div>
-
-          {/* Peeking Right Card (Faded) */}
-          <div className="hidden lg:block absolute -right-72 w-80 h-[480px] bg-[#0c0c0e] border border-white/5 rounded-2xl opacity-20 pointer-events-none overflow-hidden scale-90 blur-[1px]">
-            <div className="relative w-full h-full p-6 flex flex-col justify-between">
-              <span className="font-editorial text-xl text-white">{nextMentor.name}</span>
-              <div className="relative w-full h-64">
-                <Image src={nextMentor.photo} alt={nextMentor.name} fill className="object-cover grayscale" />
+            {/* Peeking Right Card (Contained within bounds, faded) */}
+            <div
+              onClick={nextSlide}
+              className="hidden xl:block absolute -right-20 2xl:-right-12 w-80 h-[460px] bg-[#0c0c0e] border border-white/5 rounded-2xl opacity-20 hover:opacity-40 transition-opacity cursor-pointer overflow-hidden scale-90 blur-[1px] pointer-events-auto"
+            >
+              <div className="relative w-full h-full p-6 flex flex-col justify-between">
+                <span className="font-editorial text-xl text-white">{nextMentor.name}</span>
+                <div className="relative w-full h-64">
+                  <Image src={nextMentor.photo} alt={nextMentor.name} fill className="object-cover grayscale" />
+                </div>
               </div>
             </div>
+
+            {/* Navigation Buttons (Placed cleanly inside the 1440px guide lines) */}
+            <button
+              onClick={prevSlide}
+              aria-label="Previous mentor"
+              className="absolute left-1 sm:-left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-zinc-900/90 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white flex items-center justify-center transition-all shadow-xl cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+
+            <button
+              onClick={nextSlide}
+              aria-label="Next mentor"
+              className="absolute right-1 sm:-right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-zinc-900/90 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white flex items-center justify-center transition-all shadow-xl cursor-pointer"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
           </div>
 
-          {/* Navigation Buttons */}
-          <button
-            onClick={prevSlide}
-            aria-label="Previous mentor"
-            className="absolute left-2 sm:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-zinc-900/90 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white flex items-center justify-center transition-all shadow-xl cursor-pointer"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-
-          <button
-            onClick={nextSlide}
-            aria-label="Next mentor"
-            className="absolute right-2 sm:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-zinc-900/90 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white flex items-center justify-center transition-all shadow-xl cursor-pointer"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+          {/* Carousel Dots Indicator */}
+          <div className="flex items-center justify-center gap-2 mt-8 z-20">
+            {genaiMentors.map((mentor, index) => (
+              <button
+                key={`dot-${mentor.id}`}
+                onClick={() => setCurrentIndex(index)}
+                aria-label={`Go to slide ${index + 1}`}
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  index === currentIndex
+                    ? 'w-6 h-2 bg-purple-500'
+                    : 'w-2 h-2 bg-zinc-700 hover:bg-zinc-500'
+                }`}
+              />
+            ))}
+          </div>
 
         </div>
 
