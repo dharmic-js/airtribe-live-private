@@ -14,154 +14,154 @@ interface GenAIToolItem {
 }
 
 const genaiToolsData: GenAIToolItem[] = [
-  // Wave 1: Outer perimeter & corners (scrollProgress: 0.08 - 0.28)
+  // Wave 1: Outer perimeter & corners (scrollProgress: 0.02 - 0.16)
   {
     id: 'chatgpt',
     name: 'ChatGPT / OpenAI',
-    top: '12.5%',
-    left: '19.2%',
+    top: '18%',
+    left: '18%',
     image: '/tools/genai-stack/chatgpt.png',
-    startP: 0.08,
-    endP: 0.26,
+    startP: 0.02,
+    endP: 0.14,
   },
   {
     id: 'claude',
     name: 'Claude',
-    top: '10.5%',
-    left: '34.6%',
+    top: '16%',
+    left: '34%',
     image: '/tools/genai-stack/claude.png',
-    startP: 0.09,
-    endP: 0.27,
+    startP: 0.03,
+    endP: 0.15,
   },
   {
     id: 'gemini',
     name: 'Gemini',
-    top: '10.5%',
-    left: '52.3%',
+    top: '16%',
+    left: '52%',
     image: '/tools/genai-stack/gemini.png',
-    startP: 0.10,
-    endP: 0.28,
+    startP: 0.04,
+    endP: 0.16,
   },
   {
     id: 'replit',
     name: 'Replit',
-    top: '13.8%',
-    left: '72.8%',
+    top: '18%',
+    left: '72%',
     image: '/tools/genai-stack/replit.png',
-    startP: 0.11,
-    endP: 0.29,
+    startP: 0.03,
+    endP: 0.15,
   },
   {
     id: 'invader',
     name: 'AI Agent',
-    top: '78.9%',
-    left: '17.4%',
+    top: '72%',
+    left: '18%',
     image: '/tools/genai-stack/invader.png',
-    startP: 0.08,
-    endP: 0.26,
-  },
-  {
-    id: 'terminal',
-    name: 'Terminal / CLI',
-    top: '64.5%',
-    left: '76.4%',
-    image: '/tools/genai-stack/terminal.png',
-    startP: 0.10,
-    endP: 0.28,
-  },
-
-  // Wave 2: Mid-ring (scrollProgress: 0.18 - 0.40)
-  {
-    id: 'mistral',
-    name: 'Mistral AI',
-    top: '38.4%',
-    left: '29.4%',
-    image: '/tools/genai-stack/mistral.png',
-    startP: 0.18,
-    endP: 0.36,
-  },
-  {
-    id: 'n8n',
-    name: 'n8n Workflow Automation',
-    top: '29.1%',
-    left: '61.1%',
-    image: '/tools/genai-stack/n8n.png',
-    startP: 0.20,
-    endP: 0.38,
-  },
-  {
-    id: 'clay',
-    name: 'Clay Data Enrichment',
-    top: '53.5%',
-    left: '72.0%',
-    image: '/tools/genai-stack/clay.png',
-    startP: 0.19,
-    endP: 0.37,
-  },
-  {
-    id: 'vercel',
-    name: 'Vercel Deployment',
-    top: '61.9%',
-    left: '21.5%',
-    image: '/tools/genai-stack/vercel.png',
-    startP: 0.21,
-    endP: 0.39,
-  },
-  {
-    id: 'elevenlabs',
-    name: 'ElevenLabs Voice AI',
-    top: '74.5%',
-    left: '29.2%',
-    image: '/tools/genai-stack/elevenlabs.png',
-    startP: 0.22,
-    endP: 0.40,
+    startP: 0.02,
+    endP: 0.14,
   },
   {
     id: 'snake',
     name: 'v0 / UI Generator',
-    top: '75.8%',
-    left: '69.5%',
+    top: '72%',
+    left: '76%',
     image: '/tools/genai-stack/snake.png',
-    startP: 0.20,
-    endP: 0.38,
+    startP: 0.04,
+    endP: 0.16,
   },
 
-  // Wave 3: Inner Core (scrollProgress: 0.26 - 0.48)
+  // Wave 2: Mid-tier (scrollProgress: 0.08 - 0.22)
+  {
+    id: 'mistral',
+    name: 'Mistral AI',
+    top: '32%',
+    left: '24%',
+    image: '/tools/genai-stack/mistral.png',
+    startP: 0.08,
+    endP: 0.20,
+  },
   {
     id: 'bolt',
     name: 'Bolt / Workflow',
-    top: '32.8%',
-    left: '45.1%',
+    top: '28%',
+    left: '44%',
     image: '/tools/genai-stack/bolt.png',
-    startP: 0.26,
-    endP: 0.46,
+    startP: 0.09,
+    endP: 0.21,
+  },
+  {
+    id: 'n8n',
+    name: 'n8n Workflow Automation',
+    top: '28%',
+    left: '62%',
+    image: '/tools/genai-stack/n8n.png',
+    startP: 0.10,
+    endP: 0.22,
+  },
+  {
+    id: 'clay',
+    name: 'Clay Data Enrichment',
+    top: '34%',
+    left: '78%',
+    image: '/tools/genai-stack/clay.png',
+    startP: 0.08,
+    endP: 0.20,
+  },
+  {
+    id: 'vercel',
+    name: 'Vercel Deployment',
+    top: '56%',
+    left: '20%',
+    image: '/tools/genai-stack/vercel.png',
+    startP: 0.09,
+    endP: 0.21,
+  },
+  {
+    id: 'terminal',
+    name: 'Terminal / CLI',
+    top: '58%',
+    left: '80%',
+    image: '/tools/genai-stack/terminal.png',
+    startP: 0.10,
+    endP: 0.22,
+  },
+
+  // Wave 3: Bottom cluster (scrollProgress: 0.14 - 0.28)
+  {
+    id: 'elevenlabs',
+    name: 'ElevenLabs Voice AI',
+    top: '74%',
+    left: '30%',
+    image: '/tools/genai-stack/elevenlabs.png',
+    startP: 0.14,
+    endP: 0.26,
   },
   {
     id: 'perplexity',
     name: 'Perplexity / GPT-4',
-    top: '74.8%',
-    left: '41.0%',
+    top: '74%',
+    left: '42%',
     image: '/tools/genai-stack/perplexity.png',
-    startP: 0.28,
-    endP: 0.48,
+    startP: 0.15,
+    endP: 0.27,
   },
   {
     id: 'prism',
     name: 'Cursor AI',
-    top: '77.2%',
-    left: '51.7%',
+    top: '75%',
+    left: '52%',
     image: '/tools/genai-stack/prism.png',
-    startP: 0.27,
-    endP: 0.47,
+    startP: 0.16,
+    endP: 0.28,
   },
   {
     id: 'writer',
     name: 'Writer / Substack',
-    top: '74.8%',
-    left: '60.6%',
+    top: '74%',
+    left: '64%',
     image: '/tools/genai-stack/writer.png',
-    startP: 0.29,
-    endP: 0.49,
+    startP: 0.15,
+    endP: 0.27,
   },
 ];
 
@@ -293,30 +293,29 @@ export function GenAIToolsConstellationSection() {
 
               const eased = Math.min(Math.max(itemProgress, 0), 1);
               const smoothEased = eased * eased * (3 - 2 * eased);
-              const scale = 0.35 + 0.65 * smoothEased;
+              const scale = 0.70 + 0.30 * smoothEased;
               const opacity = Math.min(smoothEased * 1.15, 1);
-              const blur = (1 - smoothEased) * 8;
 
               return (
                 <div
                   key={tool.id}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 transition-transform duration-200"
+                  className="absolute -translate-x-1/2 -translate-y-1/2"
                   style={{
                     top: tool.top,
                     left: tool.left,
                     opacity: opacity,
                     transform: `translate(-50%, -50%) scale(${scale})`,
-                    filter: `blur(${blur}px)`,
-                    visibility: opacity <= 0.02 ? 'hidden' : 'visible',
+                    willChange: 'transform, opacity',
                   }}
                 >
-                  <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.85)] border border-white/10 hover:scale-110 hover:border-white/30 transition-all cursor-pointer">
+                  <div className="relative w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.85)] border border-white/10 hover:scale-110 hover:border-white/30 transition-transform duration-200 cursor-pointer bg-[#0e0e12] pointer-events-auto">
                     <Image
                       src={tool.image}
                       alt={tool.name}
                       fill
-                      className="object-contain p-1"
+                      className="object-contain p-1.5 select-none"
                       sizes="64px"
+                      priority
                     />
                   </div>
                 </div>

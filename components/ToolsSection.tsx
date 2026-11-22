@@ -282,30 +282,29 @@ export function ToolsSection() {
             // Smoothstep ease function for organic materialization from thin air
             const eased = Math.min(Math.max(itemProgress, 0), 1);
             const smoothEased = eased * eased * (3 - 2 * eased);
-            const scale = 0.35 + 0.65 * smoothEased;
+            const scale = 0.70 + 0.30 * smoothEased;
             const opacity = Math.min(smoothEased * 1.15, 1);
-            const blur = (1 - smoothEased) * 8;
 
             return (
               <div
                 key={tool.id}
-                className="absolute -translate-x-1/2 -translate-y-1/2 transition-transform duration-200"
+                className="absolute -translate-x-1/2 -translate-y-1/2"
                 style={{
                   top: tool.top,
                   left: tool.left,
                   opacity: opacity,
                   transform: `translate(-50%, -50%) scale(${scale})`,
-                  filter: `blur(${blur}px)`,
-                  visibility: opacity <= 0.02 ? 'hidden' : 'visible',
+                  willChange: 'transform, opacity',
                 }}
               >
-                <div className="relative w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.85)] border border-white/10 hover:scale-110 hover:border-white/30 transition-all cursor-pointer">
+                <div className="relative w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.85)] border border-white/10 hover:scale-110 hover:border-white/30 transition-transform duration-200 cursor-pointer bg-[#0e0e12] pointer-events-auto">
                   <Image
                     src={`/images/tools/${tool.image}`}
                     alt={tool.name}
                     fill
-                    className="object-cover"
+                    className="object-cover select-none"
                     sizes="64px"
+                    priority
                   />
                 </div>
               </div>
