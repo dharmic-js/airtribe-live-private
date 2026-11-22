@@ -147,62 +147,67 @@ export default function BackendEngineeringLaunchpadPage() {
         {/* Ambient Backlight Aura */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/3 w-[720px] h-[520px] bg-gradient-to-tr from-blue-600/20 via-indigo-600/20 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-[1440px] mx-auto border-x border-[#232328] px-4 sm:px-8 lg:px-12 relative z-10 flex flex-col items-center text-center">
+        <div className="max-w-[1440px] mx-auto border-x border-[#232328] relative z-10 flex flex-col items-center">
 
-          {/* GitHub Partner Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/15 bg-white/5 backdrop-blur-sm mb-8 hover:border-white/30 transition-colors">
-            <div className="w-4 h-4 relative">
-              <Image
-                src="/github-partner.webp"
-                alt="GitHub"
-                fill
-                className="object-contain"
+          {/* Centered Top Content with standard padding */}
+          <div className="w-full px-4 sm:px-8 lg:px-12 flex flex-col items-center text-center">
+            {/* GitHub Partner Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/15 bg-white/5 backdrop-blur-sm mb-8 hover:border-white/30 transition-colors">
+              <div className="w-4 h-4 relative">
+                <Image
+                  src="/github-partner.webp"
+                  alt="GitHub"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <span className="text-xs sm:text-[13px] text-zinc-300 font-medium">
+                Official <span className="font-bold text-white">GitHub</span> Education Program Partner
+              </span>
+            </div>
+
+            {/* Hero Heading */}
+            <h1 className="text-[44px] sm:text-[68px] lg:text-[84px] font-normal leading-[1.0] tracking-[-0.04em] text-white max-w-4xl mb-6">
+              Become an
+              <span className="block font-editorial italic font-normal text-white mt-1">
+                AI-First Software Engineer
+              </span>
+            </h1>
+
+            {/* Hero Subtitle */}
+            <p className="text-zinc-400 text-sm sm:text-base lg:text-[18px] leading-[1.65] max-w-2xl mx-auto mb-10 font-light">
+              Software engineering is evolving fast. In the AI era, the best engineers don&apos;t just write code. They design systems, automate intelligently, and deploy AI-native solutions at scale.
+            </p>
+
+            {/* Hero CTAs */}
+            <div className="flex flex-wrap items-center justify-center gap-4 mb-16 sm:mb-20">
+              <button
+                onClick={() => setCurriculumModalOpen(true)}
+                className="px-6 py-3 rounded-md text-sm font-medium text-white bg-transparent border border-[#333] hover:border-zinc-400 transition-colors cursor-pointer"
+              >
+                Get the full curriculum
+              </button>
+
+              <AirtribeButton
+                text="Apply now"
+                onClick={() => openModal('AI-First Software Engineering')}
+                className="!w-36 !h-11"
               />
             </div>
-            <span className="text-xs sm:text-[13px] text-zinc-300 font-medium">
-              Official <span className="font-bold text-white">GitHub</span> Education Program Partner
-            </span>
-          </div>
 
-          {/* Hero Heading */}
-          <h1 className="text-[44px] sm:text-[68px] lg:text-[84px] font-normal leading-[1.0] tracking-[-0.04em] text-white max-w-4xl mb-6">
-            Become an
-            <span className="block font-editorial italic font-normal text-white mt-1">
-              AI-First Software Engineer
-            </span>
-          </h1>
-
-          {/* Hero Subtitle */}
-          <p className="text-zinc-400 text-sm sm:text-base lg:text-[18px] leading-[1.65] max-w-2xl mx-auto mb-10 font-light">
-            Software engineering is evolving fast. In the AI era, the best engineers don&apos;t just write code. They design systems, automate intelligently, and deploy AI-native solutions at scale.
-          </p>
-
-          {/* Hero CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-16 sm:mb-20">
-            <button
-              onClick={() => setCurriculumModalOpen(true)}
-              className="px-6 py-3 rounded-md text-sm font-medium text-white bg-transparent border border-[#333] hover:border-zinc-400 transition-colors cursor-pointer"
-            >
-              Get the full curriculum
-            </button>
-
-            <AirtribeButton
-              text="Apply now"
-              onClick={() => openModal('AI-First Software Engineering')}
-              className="!w-36 !h-11"
-            />
-          </div>
-
-          {/* Cohort Badges */}
-          <div className="inline-flex items-center gap-3 text-xs sm:text-sm text-zinc-400 font-medium mb-12">
-            <span className="text-white font-medium">6 Months</span>
-            <span className="text-zinc-600">|</span>
-            <span>Enrolment ends 22 Nov</span>
+            {/* Cohort Badges */}
+            <div className="inline-flex items-center gap-3 text-xs sm:text-sm text-zinc-400 font-medium mb-8">
+              <span className="text-white font-medium">6 Months</span>
+              <span className="text-zinc-600">|</span>
+              <span>Enrolment ends 22 Nov</span>
+            </div>
           </div>
 
           {/* HERO VISUAL: COSMIC GLOWING VORTEX VIDEO */}
-          <div className="relative w-full max-w-[1100px] h-[360px] sm:h-[460px] lg:h-[540px] flex items-end justify-center overflow-hidden select-none pb-0">
-            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-[540px] h-[320px] bg-gradient-to-t from-blue-600/35 via-indigo-600/20 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
+          {/* Sized larger and aligned flush with the right border line */}
+          <div className="relative w-full max-w-[1240px] ml-auto h-[440px] sm:h-[560px] lg:h-[660px] flex items-end justify-end overflow-hidden select-none pb-0">
+            {/* Ambient Backlight Aura shifted to the bottom right under vortex */}
+            <div className="absolute bottom-10 right-12 w-[640px] h-[400px] bg-gradient-to-t from-blue-600/40 via-indigo-600/25 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
 
             <video
               autoPlay
@@ -211,11 +216,11 @@ export default function BackendEngineeringLaunchpadPage() {
               playsInline
               preload="auto"
               poster="/hero-bel-poster.webp"
-              className="w-full h-full object-cover object-bottom pointer-events-none select-none"
+              className="w-full h-full object-cover object-right-bottom pointer-events-none select-none"
               style={{
                 mixBlendMode: 'screen',
-                WebkitMaskImage: 'radial-gradient(ellipse 95% 85% at 50% 100%, black 50%, transparent 100%)',
-                maskImage: 'radial-gradient(ellipse 95% 85% at 50% 100%, black 50%, transparent 100%)',
+                WebkitMaskImage: 'radial-gradient(ellipse 95% 85% at 85% 90%, black 45%, transparent 85%)',
+                maskImage: 'radial-gradient(ellipse 95% 85% at 85% 90%, black 45%, transparent 85%)',
               }}
             >
               <source src="/videos/hero-bel.mp4" type="video/mp4" />
