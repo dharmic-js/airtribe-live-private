@@ -260,11 +260,10 @@ export function BELCurriculumSection({ onOpenCurriculumModal }: BELCurriculumSec
                       setActivePhaseId(phase.id);
                       setIsExpanded(true);
                     }}
-                    className={`w-full text-left transition-all cursor-pointer border-b border-[#e5e7eb] last:border-b-0 ${
-                      isActive
-                        ? 'bg-black text-white p-6 relative shadow-md'
-                        : 'p-4 sm:p-5 text-zinc-600 hover:text-black hover:bg-zinc-200/50 font-medium'
-                    }`}
+                    className={`w-full text-left transition-all cursor-pointer border-b border-[#e5e7eb] last:border-b-0 ${isActive
+                      ? 'bg-black text-white p-6 relative shadow-md'
+                      : 'p-4 sm:p-5 text-zinc-600 hover:text-black hover:bg-zinc-200/50 font-medium'
+                      }`}
                   >
                     {isActive ? (
                       <div className="space-y-2">
@@ -301,11 +300,10 @@ export function BELCurriculumSection({ onOpenCurriculumModal }: BELCurriculumSec
                         <button
                           key={langTab.id}
                           onClick={() => setSelectedLang((prev) => ({ ...prev, [activePhase.id]: langTab.id }))}
-                          className={`flex-1 py-4 sm:py-5 px-4 text-center font-medium text-xs sm:text-[15px] transition-colors border-r border-[#e5e7eb] last:border-r-0 cursor-pointer ${
-                            isCurrentLang
-                              ? 'bg-[#6366f1] text-white font-semibold'
-                              : 'text-zinc-600 hover:text-black bg-white hover:bg-zinc-50'
-                          }`}
+                          className={`flex-1 py-4 sm:py-5 px-4 text-center font-medium text-xs sm:text-[15px] transition-colors border-r border-[#e5e7eb] last:border-r-0 cursor-pointer ${isCurrentLang
+                            ? 'bg-[#6366f1] text-white font-semibold'
+                            : 'text-zinc-600 hover:text-black bg-white hover:bg-zinc-50'
+                            }`}
                         >
                           {langTab.label}
                         </button>
@@ -321,9 +319,8 @@ export function BELCurriculumSection({ onOpenCurriculumModal }: BELCurriculumSec
                     return (
                       <div
                         key={idx}
-                        className={`p-6 sm:p-8 flex flex-col justify-start border-b border-[#e5e7eb] ${
-                          isEven ? 'md:border-r md:border-[#e5e7eb]' : ''
-                        }`}
+                        className={`p-6 sm:p-8 flex flex-col justify-start border-b border-[#e5e7eb] ${isEven ? 'md:border-r md:border-[#e5e7eb]' : ''
+                          }`}
                       >
                         <span className="text-[11px] font-mono font-bold tracking-wider text-zinc-400 uppercase mb-3">
                           {mod.tag}

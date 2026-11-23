@@ -57,12 +57,12 @@ export function GenAISpectrumWaveCanvas() {
           const x = i * sliceW;
           const sx = i * srcSliceW;
 
-          // Traveling wave phase across fins
+          // Traveling wave phase across fins (smooth, gentle ambient pace)
           const progress = i / numSlices;
-          const wavePhase = progress * Math.PI * 3.5 - t * 2.2;
+          const wavePhase = progress * Math.PI * 3.5 - t * 0.85;
 
           // Gentle undulating wave displacement (up and down)
-          const wave = (Math.sin(wavePhase) * 14.0 + Math.cos(wavePhase * 0.65 + t * 0.9) * 5.0) * dprScale;
+          const wave = (Math.sin(wavePhase) * 13.0 + Math.cos(wavePhase * 0.65 + t * 0.35) * 4.5) * dprScale;
 
           // Height of this fin slice anchored at the bottom baseline
           const baseH = height * 0.90;

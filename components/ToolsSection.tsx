@@ -218,7 +218,7 @@ export function ToolsSection() {
     >
       {/* Pinned Sticky Viewport Screen */}
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden bg-black select-none">
-        
+
         {/* Authentic Pixelated Background Texture */}
         <div
           className="absolute inset-0 pointer-events-none opacity-85"
@@ -272,48 +272,48 @@ export function ToolsSection() {
 
           {/* 3. SCATTERED CONSTELLATION OF 15 AUTHENTIC TOOL ICONS EMERGING OUT OF THIN AIR */}
           <div className="absolute inset-0 pointer-events-none">
-          {toolsData.map((tool) => {
-            // Compute item individual emergence progress:
-            // 0 before startP, transitions to 1 by endP, stays 1 thereafter
-            let itemProgress = 0;
-            if (scrollProgress >= tool.endP) {
-              itemProgress = 1;
-            } else if (scrollProgress > tool.startP) {
-              itemProgress = (scrollProgress - tool.startP) / (tool.endP - tool.startP);
-            }
+            {toolsData.map((tool) => {
+              // Compute item individual emergence progress:
+              // 0 before startP, transitions to 1 by endP, stays 1 thereafter
+              let itemProgress = 0;
+              if (scrollProgress >= tool.endP) {
+                itemProgress = 1;
+              } else if (scrollProgress > tool.startP) {
+                itemProgress = (scrollProgress - tool.startP) / (tool.endP - tool.startP);
+              }
 
-            // Smoothstep ease function for organic materialization from thin air
-            const eased = Math.min(Math.max(itemProgress, 0), 1);
-            const smoothEased = eased * eased * (3 - 2 * eased);
-            const scale = 0.70 + 0.30 * smoothEased;
-            const opacity = Math.min(smoothEased * 1.15, 1);
+              // Smoothstep ease function for organic materialization from thin air
+              const eased = Math.min(Math.max(itemProgress, 0), 1);
+              const smoothEased = eased * eased * (3 - 2 * eased);
+              const scale = 0.70 + 0.30 * smoothEased;
+              const opacity = Math.min(smoothEased * 1.15, 1);
 
-            return (
-              <div
-                key={tool.id}
-                className="absolute -translate-x-1/2 -translate-y-1/2"
-                style={{
-                  top: tool.top,
-                  left: tool.left,
-                  opacity: opacity,
-                  transform: `translate(-50%, -50%) scale(${scale})`,
-                  willChange: 'transform, opacity',
-                }}
-              >
-                <div className="relative w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.85)] border border-white/10 hover:scale-110 hover:border-white/30 transition-transform duration-200 cursor-pointer bg-[#0e0e12] pointer-events-auto">
-                  <Image
-                    src={`/images/tools/${tool.image}`}
-                    alt={tool.name}
-                    fill
-                    className="object-cover select-none"
-                    sizes="64px"
-                    priority
-                  />
+              return (
+                <div
+                  key={tool.id}
+                  className="absolute -translate-x-1/2 -translate-y-1/2"
+                  style={{
+                    top: tool.top,
+                    left: tool.left,
+                    opacity: opacity,
+                    transform: `translate(-50%, -50%) scale(${scale})`,
+                    willChange: 'transform, opacity',
+                  }}
+                >
+                  <div className="relative w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.85)] border border-white/10 hover:scale-110 hover:border-white/30 transition-transform duration-200 cursor-pointer bg-[#0e0e12] pointer-events-auto">
+                    <Image
+                      src={`/images/tools/${tool.image}`}
+                      alt={tool.name}
+                      fill
+                      className="object-cover select-none"
+                      sizes="64px"
+                      priority
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
         </div>
 

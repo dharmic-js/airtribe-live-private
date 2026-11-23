@@ -240,9 +240,8 @@ export function BELExpertsCarouselSection({ onOpenCurriculumModal }: BELExpertsP
                 <button
                   key={idx}
                   onClick={() => setCurrentIndex(idx)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
-                    idx === currentIndex ? 'w-8 bg-purple-500' : 'bg-zinc-700 hover:bg-zinc-500'
-                  }`}
+                  className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${idx === currentIndex ? 'w-8 bg-purple-500' : 'bg-zinc-700 hover:bg-zinc-500'
+                    }`}
                   aria-label={`Go to slide ${idx + 1}`}
                 />
               ))}

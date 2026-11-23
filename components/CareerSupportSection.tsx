@@ -101,15 +101,14 @@ export function CareerSupportSection() {
         {/* Desktop Split Card View (Hidden on mobile) */}
         <div className="hidden lg:block">
           <div className="border-y border-zinc-200 relative flex min-h-[576px] w-full overflow-hidden bg-white">
-            
+
             {/* Background Graphic Layer (Right-aligned illustrations) */}
             <div className="pointer-events-none absolute inset-0 z-0">
               {careerTabs.map((tab, idx) => (
                 <div
                   key={`bg-${tab.id}`}
-                  className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-                    idx === activeTabIdx ? 'opacity-100' : 'opacity-0'
-                  }`}
+                  className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${idx === activeTabIdx ? 'opacity-100' : 'opacity-0'
+                    }`}
                 >
                   <Image
                     src={tab.rightGraphic}
@@ -263,9 +262,8 @@ export function CareerSupportSection() {
             return (
               <div
                 key={stat.label}
-                className={`flex flex-1 flex-col items-center justify-center py-10 sm:py-12 px-6 overflow-hidden ${
-                  !isLast ? 'border-b sm:border-b-0 sm:border-r border-zinc-200' : ''
-                }`}
+                className={`flex flex-1 flex-col items-center justify-center py-10 sm:py-12 px-6 overflow-hidden ${!isLast ? 'border-b sm:border-b-0 sm:border-r border-zinc-200' : ''
+                  }`}
               >
                 <div className="flex items-baseline sm:items-center gap-4 text-black">
                   <p className="font-editorial text-[56px] sm:text-[72px] leading-none whitespace-nowrap tracking-tight">
