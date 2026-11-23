@@ -4,6 +4,8 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ApplyModalProvider } from '@/components/ApplyModalContext';
 import { ApplyModal } from '@/components/ApplyModal';
+import { UserProvider } from '@/components/UserContext';
+import { ProfileModal } from '@/components/ProfileModal';
 
 export const metadata: Metadata = {
   title: 'Airtribe - Learn from top industry practitioners',
@@ -29,14 +31,17 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-black text-white antialiased selection:bg-[#585DFF] selection:text-white min-h-screen flex flex-col justify-between">
-        <ApplyModalProvider>
-          <Navbar />
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Footer />
-          <ApplyModal />
-        </ApplyModalProvider>
+        <UserProvider>
+          <ApplyModalProvider>
+            <Navbar />
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+            <ApplyModal />
+            <ProfileModal />
+          </ApplyModalProvider>
+        </UserProvider>
       </body>
     </html>
   );

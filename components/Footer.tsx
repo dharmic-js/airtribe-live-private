@@ -203,12 +203,14 @@ export const Footer: React.FC = () => {
                 Company
               </p>
               <div className="flex flex-col gap-3.5">
-                <Link
-                  href="/reviews"
+                <a
+                  href="https://www.airtribe.live/reviews"
+                  target="_blank"
+                  rel="noreferrer noopener"
                   className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
                 >
                   Reviews
-                </Link>
+                </a>
                 <a
                   href="https://lp.airtribe.live/community"
                   target="_blank"
@@ -225,12 +227,14 @@ export const Footer: React.FC = () => {
                 >
                   Hire from us
                 </a>
-                <Link
-                  href="/business"
+                <a
+                  href="https://www.airtribe.live/business"
+                  target="_blank"
+                  rel="noreferrer noopener"
                   className="text-zinc-400 hover:text-white text-[14px] font-medium transition-colors"
                 >
                   Business
-                </Link>
+                </a>
                 <a
                   href="https://wellfound.com/company/airtribe"
                   target="_blank"

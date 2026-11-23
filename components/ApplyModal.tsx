@@ -8,9 +8,9 @@ export const ApplyModal: React.FC = () => {
   const { isOpen, selectedCourse, closeModal } = useApplyModal();
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
+    name: 'Dhruv Malhotra',
+    email: 'dhruv.tapmiblr2024@learner.manipal.edu',
+    phone: '+91 84880 08438',
     course: selectedCourse,
     experience: '1-3 years',
     goal: 'Career Transition',
